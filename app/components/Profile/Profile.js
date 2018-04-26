@@ -41,9 +41,9 @@ export class Profile extends Component {
             index: 0,
             routes: [
                 {key: '1', title: 'Activities', count: '0'},
-                {key: '2', title: 'like', count: 86},
-                {key: '3', title: 'following', count: 95},
-                {key: '4', title: 'followers', count: '1.3 K'},
+                {key: '2', title: 'Events', count: '0'},
+                {key: '3', title: 'Following', count: '0'},
+                {key: '4', title: 'Followers', count: '0'},
             ],
         },
     };
@@ -228,12 +228,12 @@ const mapStateToProps = (state, ownProps) => {
     if (state.user.loaded && state.user && state.user.profile) profile = state.user.profile;
 
     return {
-        name: loaded && profile ? profile.firstName + ' ' + profile.lastName : '',
+        name: loaded && profile && profile.firstName && profile.lastName ? profile.firstName + ' ' + profile.lastName : profile.email,
         avatar: loaded && profile ? profile.pic : '',
         avatarBackground: loaded && profile ? profile.backgroundPic : '',
         address: {
-            city: loaded && profile ? profile.location.details.city : '',
-            country: loaded && profile ? profile.location.details.country : '',
+            city: loaded && profile && profile.location && profile.location.details ? profile.location.details.city : '',
+            country: loaded && profile && profile.location && profile.location.details ? profile.location.details.country : '',
         },
         activities: loaded && profile ? profile.activities : [],
     }
