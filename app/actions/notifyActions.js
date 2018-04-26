@@ -13,31 +13,31 @@ import * as types from './../constants/actionTypes'
 
 // Get all notifications from database
 export const dbGetNotifies = () => {
-  return (dispatch, getState) => {
-      refresh((newToken) => {
-          console.log('dbGetNotifies token', newToken);
-          // newToken.idToken = newToken.idToken.replace(' ','');
-          console.log('newToken.idToken', newToken.idToken);
+    return (dispatch, getState) => {
+        refresh((newToken) => {
+            console.log('dbGetNotifies token', newToken);
+            // newToken.idToken = newToken.idToken.replace(' ','');
+            console.log('newToken.idToken', newToken.idToken);
 
-          let url = 'http://justjoin1.ru/api/notifications';
+            let url = 'http://justjoin1.ru/api/notifications';
 
-          fetch(url, {
-              method: 'GET',
-              headers: {
-                  'Content-Type': 'application/json',
-                  'Authorization': newToken.idToken
-              }
-          }).then(res => {
-              return res.json();
-          })
-              .catch(error => console.log('Error: ', error))
-              .then(response => {
-                  let notifications = response || {};
-                  console.log('notifications111', response);
-                  dispatch(addNotifyList(notifications))
-              });
-      });
-  }
+            fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': newToken.idToken
+                }
+            }).then(res => {
+                return res.json();
+            })
+                .catch(error => console.log('Error: ', error))
+                .then(response => {
+                    let notifications = response || {};
+                    console.log('notifications111', response);
+                    dispatch(addNotifyList(notifications))
+                });
+        });
+    }
 };
 
 /* _____________ CRUD State _____________ */
@@ -45,10 +45,10 @@ export const dbGetNotifies = () => {
 // Add notification list
 export const addNotifyList = (userNotifies) => {
 
-  return {
-    type: types.ADD_NOTIFY_LIST,
-    payload: userNotifies
-  }
+    return {
+        type: types.ADD_NOTIFY_LIST,
+        payload: userNotifies
+    }
 };
 
 

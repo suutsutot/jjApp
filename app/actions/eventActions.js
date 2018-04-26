@@ -20,9 +20,6 @@ export const dbGetEventsList = () => {
             refresh((newToken) => {
                 console.log('dbGetEventsList token', newToken);
 
-                // newToken.idToken = newToken.idToken.replace(' ','');
-                console.log('newToken.idToken', newToken.idToken);
-
                 let url = 'http://justjoin1.ru/api/events/joinedEvents';
 
                 fetch(url, {
@@ -37,7 +34,7 @@ export const dbGetEventsList = () => {
                     .catch(error => console.log('Error: ', error))
                     .then(response => {
                         let eventsList = response.joined || {};
-                        console.log('responseNEW', response);
+                        console.log('eventsList', response);
                         dispatch(addUserEventsListInfo(userId, eventsList))
                     });
             });

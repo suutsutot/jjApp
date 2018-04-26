@@ -111,59 +111,6 @@ export const dbGetUserInfo = (userId) => {
     }
 };
 
-
-// ЭТО РЕШЕНИЕ !!!!
-export const dbGetUserInfoByUserId = (uid, sw) => {
-    return (dispatch, getState) => {
-        if (uid) {
-            var userInfoRef = firebaseRef.child(`users/${uid}/info`);
-
-            return userInfoRef.once('value').then((snapshot) => {
-                var userInfo = snapshot.val() || {};
-                dispatch(addUserInfo(uid, userInfo))
-                switch (sw) {
-                    case 'header':
-                        dispatch(globalActions.setHeaderTitle(userInfo.fullName))
-
-                        break;
-
-                    default:
-                        break;
-                }
-            }, error => console.log(error));
-
-        }
-    }
-}
-
-export const dbUpdateUserInfo = (newInfo) => {
-    return (dispatch, getState) => {
-
-        // Get current user id
-        var uid = getState().authorize.uid
-
-        // Write the new data simultaneously in the list
-        let updates = {};
-        let info = getState().user.info[uid]
-        let updatedInfo = {
-            avatar: newInfo.avatar || info.avatar,
-            email: newInfo.email || info.email,
-            fullName: newInfo.fullName || info.fullName,
-            tagLine: newInfo.tagLine || info.tagLine,
-            birthday: newInfo.birthday || info.birthday
-        }
-        updates[`users/${uid}/info`] = updatedInfo
-        return firebaseRef.update(updates).then((result) => {
-
-            dispatch(updateUserInfo(uid, updatedInfo))
-            dispatch(globalActions.closeEditProfile())
-        }, (error) => {
-            dispatch(globalActions.showErrorMessage(error.message))
-        })
-    }
-
-}
-
 /* _____________ CRUD State _____________ */
 
 // - Set user avatar
@@ -174,36 +121,12 @@ export const addProfile = (email, info) => {
     }
 };
 
-/**
- * Add user information
- * @param {string} email is the user identifier
- * @param {object} info is the information about user
- */
 export const addUserInfo = (email, info) => {
     return {
         type: types.ADD_PROFILE,
         payload: {email, info}
     }
 };
-
-/**
- * Update user information
- * @param {string} uid is the user identifier
- * @param {object} info is the information about user
- */
-export const updateUserInfo = (uid, info) => {
-    return {
-        type: types.UPDATE_USER_INFO,
-        payload: {uid, info}
-    }
-}
-
-export const clearAllUsers = () => {
-    return {
-        type: types.CLEAR_ALL_DATA_USER
-    }
-}
-
 
 // export const dbGetUserInfo = () => {
 //     return (dispatch, getState) => {

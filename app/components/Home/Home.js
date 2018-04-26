@@ -32,6 +32,7 @@ export class Home extends Component {
 
     renderEventList = () => {
         const {events} = this.props;
+        console.log('events123', events);
 
         return <View>
             {

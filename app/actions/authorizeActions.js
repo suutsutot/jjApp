@@ -78,71 +78,6 @@ export let dbLogout = () => {
     }
 };
 
-/**
- * Register user in database
- * @param {object} user
- */
-export var dbSignup = (user) => {
-    return (dispatch, getState) => {
-        dispatch(globalActions.showNotificationRequest())
-        return firebaseAuth().createUserWithEmailAndPassword(user.email, user.password).then((signupResult) => {
-            firebaseRef.child(`users/${signupResult.uid}/info`).set({
-                ...user,
-                avatar: 'noImage'
-            }).then((result) => {
-
-                dispatch(globalActions.showNotificationSuccess())
-
-            }, (error) => dispatch(globalActions.showErrorMessageWithTimeout(error.code)))
-
-            dispatch(signup({
-                uid: signupResult.uid,
-                ...user
-            }))
-            const resetAction = NavigationActions.reset({
-                index: 0,
-                actions: [
-                    NavigationActions.navigate({routeName: 'Tabs'})
-                ]
-            })
-            dispatch(resetAction)
-        }, (error) => dispatch(globalActions.showErrorMessageWithTimeout(error.code)))
-    }
-
-};
-
-/**
- * Change user's password
- * @param {string} newPassword
- */
-export const dbUpdatePassword = (newPassword) => {
-    return (dispatch, getState) => {
-        dispatch(globalActions.showNotificationRequest())
-        firebaseAuth().onAuthStateChanged((user) => {
-            if (user) {
-
-                user.updatePassword(newPassword).then(() => {
-                    // Update successful.
-                    dispatch(globalActions.showNotificationSuccess())
-                    dispatch(updatePassword())
-                    // TODO: Change to home page
-                }, (error) => {
-                    // An error happened.
-                    switch (error.code) {
-                        case 'auth/requires-recent-login':
-                            dispatch(globalActions.showErrorMessageWithTimeout(error.code))
-                            dispatch(dbLogout())
-                            break;
-                        default:
-
-                    }
-                })
-            }
-
-        })
-    }
-};
-
 /* _____________ CRUD State _____________ */
 
 export let login = (email) => {
@@ -158,21 +93,6 @@ export const getUserId = (userId, email) => {
         type: types.GET_USER_ID,
         payload: {userId, email}
     }
-};
-
-export var signup = (user) => {
-    return {
-        type: types.SIGNUP,
-        ...user
-    }
-
-};
-
-/**
- * Update user's password
- */
-export const updatePassword = () => {
-    return {type: types.UPDATE_PASSWORD}
 };
 
 function refreshToken(user, callback) {

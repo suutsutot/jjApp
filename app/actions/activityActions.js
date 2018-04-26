@@ -11,11 +11,10 @@ import * as types from './../constants/actionTypes'
 // - Get activities list from database
 export const dbGetActivitiesList = () => {
     return (dispatch, getState) => {
-        console.log('dbGetActivitiesListDone');
         let userId = getState().global.userId;
         if (userId) {
             getToken().then((token) => {
-                // console.log('token', token);
+                console.log('dbGetActivitiesList token', token);
 
                 let url = 'http://justjoin1.ru/api/activities';
 
@@ -32,7 +31,7 @@ export const dbGetActivitiesList = () => {
                     .then(response => {
                         response = keyBy(response, 'id');
                         let activityList = response || {};
-                        console.log('response activityList');
+                        console.log('activityList');
                         dispatch(addActivitiesListInfo(activityList))
                     });
             });
