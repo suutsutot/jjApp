@@ -4,7 +4,8 @@ import * as types from './../constants/actionTypes'
 let defaultState = {
     email: '',
     userId: '',
-    authed: false
+    authed: false,
+    profile: {}
 };
 
 export let authorizeReducer = (state = defaultState, action) => {
@@ -14,7 +15,8 @@ export let authorizeReducer = (state = defaultState, action) => {
             return {
                 ...state,
                 email: action.email,
-                authed: true
+                authed: true,
+                profile: action.user
             };
         case types.GET_USER_ID:
             return {

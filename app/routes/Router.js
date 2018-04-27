@@ -21,6 +21,7 @@ import Notifications from './../components/Notifications'
 import Settings from './../components/Settings'
 
 import Login from './../components/Login'
+import Wizard from './../components/Wizard'
 
 import AuthLoadingScreen from './../components/AuthLoadingScreen'
 
@@ -104,7 +105,7 @@ const AppStack = StackNavigator({ Tabs: Tabs}, {
     mode: 'modal',
     headerMode: 'none'
 });
-const AuthStack = StackNavigator({ Login: Login, Tabs: Tabs }, {
+const AuthStack = StackNavigator({ Wizard: Wizard, Login: Login, Tabs: Tabs }, {
     mode: 'modal',
     headerMode: 'none'
 });

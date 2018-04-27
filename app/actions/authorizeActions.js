@@ -17,42 +17,83 @@ import * as globalActions from './globalActions'
 
 export let dbLogin = () => {
     return (dispatch, getState) => {
-        console.log('start login');
         dispatch(globalActions.showLoading());
 
         // get tokens from Auth0
         auth0.webAuth
             .authorize({
-                // connection: 'google-oauth2',
                 scope: 'openid email profile offline_access',
-                audience: 'https://' + credentials.domain + '/userinfo',
-                // responseType: 'id_token',
+                audience: 'https://' + credentials.domain + '/userinfo'
             })
             .then(credentials => {
-                console.log('credentials123', credentials);
+                console.log('credentials', credentials);
+                AsyncStorage.setItem('refreshToken', credentials.refreshToken);
 
                 refreshToken(credentials, (newToken) => {
-                    // setItem to AsyncStorage
-                    AsyncStorage.setItem('refreshToken', credentials.refreshToken);
                     AsyncStorage.setItem('accessToken', newToken.accessToken);
                     AsyncStorage.setItem('idToken', newToken.idToken);
 
-                    // get user profile from Auth0
+                    // get user from Auth0
                     auth0.auth
                         .userInfo({token: newToken.accessToken})
                         .then(profile => {
                             console.log('profile', profile);
-                            console.log('Success auth!');
-                            dispatch(globalActions.showNotificationSuccess());
-                            dispatch(login(profile.email));
-                            const resetAction = NavigationActions.reset({
-                                index: 0,
-                                actions: [
-                                    NavigationActions.navigate({routeName: 'Tabs'})
-                                ]
-                            });
-                            dispatch(resetAction);
-                            dispatch(globalActions.hideLoading());
+
+                            // get user profile from db
+                            let url = 'http://justjoin1.ru/api/users/duplicate-auth0';
+                            let email = profile.email;
+                            let data = {email};
+
+                            fetch(url, {
+                                method: 'POST',
+                                body: JSON.stringify(data),
+                                headers: {
+                                    'Accept': 'application/json',
+                                    'Content-Type': 'application/json',
+                                    'Authorization': newToken.idToken
+                                }
+                            }).then(res => {
+                                return res.json();
+                            })
+                                .catch(error => {
+                                    console.log('AuthorizeActionError:', error);
+                                    dispatch(globalActions.hideLoading());
+                                    dispatch(globalActions.showErrorMessageWithTimeout(error.code));
+                                })
+                                .then(response => {
+                                    let userInfo = response.user || {};
+                                    console.log('userInfo', userInfo);
+
+                                    // setItem to AsyncStorage
+                                    AsyncStorage.setItem('userId', userInfo._id);
+                                    AsyncStorage.setItem('email', userInfo.email);
+
+                                    console.log('Success auth!');
+                                    dispatch(globalActions.showNotificationSuccess());
+                                    dispatch(login(userInfo.email, userInfo));
+
+                                    let resetAction;
+
+                                    if (!userInfo.wizardSteps.personal || !userInfo.wizardSteps.activities) {
+                                        resetAction = NavigationActions.reset({
+                                            index: 0,
+                                            actions: [
+                                                NavigationActions.navigate({routeName: 'Wizard'})
+                                            ]
+                                        });
+                                    }
+                                    else {
+                                        resetAction = NavigationActions.reset({
+                                            index: 0,
+                                            actions: [
+                                                NavigationActions.navigate({routeName: 'Tabs'})
+                                            ]
+                                        });
+                                    }
+                                    dispatch(resetAction);
+                                    dispatch(globalActions.hideLoading());
+
+                                });
                         })
                         .catch(error => {
                             dispatch(globalActions.hideLoading());
@@ -80,8 +121,8 @@ export let dbLogout = () => {
 
 /* _____________ CRUD State _____________ */
 
-export let login = (email) => {
-    return {type: types.LOGIN, authed: true, email}
+export let login = (email, user) => {
+    return {type: types.LOGIN, authed: true, email, profile: user}
 };
 
 export let logout = () => {
