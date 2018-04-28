@@ -12,7 +12,6 @@ let defaultState = {
 // Notify actions
 export let notifyReducer = (state = defaultState, action) => {
     let {payload} = action;
-    console.log('payloadpayload', payload);
     switch (action.type) {
         case types.ADD_NOTIFY:
             return state;

@@ -1,4 +1,5 @@
 import keyBy from 'lodash/keyBy'
+import filter from 'lodash/filter'
 
 import {AsyncStorage} from 'react-native';
 const getToken = () => AsyncStorage.getItem("idToken");
@@ -11,31 +12,35 @@ import * as types from './../constants/actionTypes'
 // - Get activities list from database
 export const dbGetActivitiesList = () => {
     return (dispatch, getState) => {
-        let userId = getState().global.userId;
-        if (userId) {
-            getToken().then((token) => {
-                console.log('dbGetActivitiesList token', token);
+        console.log('dbGetActivitiesList')
+        // let userId = getState().global.userId;
+        // if (userId) {
+        //     getToken().then((token) => {
+        //         console.log('dbGetActivitiesList token', token);
 
-                let url = 'http://justjoin1.ru/api/activities';
+                let url = 'http://justjoin1.ru/public-api/activities';
 
                 fetch(url, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': token
+                        // 'Authorization': token
                     }
                 }).then(res => {
                     return res.json();
                 })
-                    .catch(error => console.log('Error: ', error))
+                    .catch(error => console.log('ErrorActivities: ', error))
                     .then(response => {
+                        response = filter(response, function(val){
+                            if ( val.id) return val;
+                        });
                         response = keyBy(response, 'id');
                         let activityList = response || {};
                         console.log('activityList');
                         dispatch(addActivitiesListInfo(activityList))
                     });
-            });
-        }
+            // });
+        // }
     }
 };
 

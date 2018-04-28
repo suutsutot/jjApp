@@ -13,7 +13,7 @@ export let activityReducer = (state = defaultState, action) => {
     const { payload } = action;
     switch (action.type) {
         case types.GET_ACTIVITIES_LIST_INFO:
-            console.log('payload123', payload.info)
+            // console.log('payload123', payload.info);
             return {
                 ...state,
                 activitiesList: [
