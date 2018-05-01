@@ -34,6 +34,7 @@
     "react-native-modal-datetime-picker": "^5.1.0",
     "react-native-parallax-scroll-view": "^0.21.0",
     "react-native-progress": "^3.3.0",
+    "react-native-select-multiple": "^1.2.0",
     "react-native-stager": "^1.0.0",
     "react-native-step-indicator": "0.0.8",
     "react-native-svg": "^6.3.1",

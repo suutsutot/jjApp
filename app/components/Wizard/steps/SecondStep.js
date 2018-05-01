@@ -1,104 +1,200 @@
 // - Import react components
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {View, Text, ScrollView, TextInput,ListView} from 'react-native'
-import  {ListItem} from 'react-native-elements'
+import {
+    View,
+    Text,
+    ScrollView,
+    TextInput,
+    TouchableOpacity,
+    Dimensions
+} from 'react-native'
+import  {Avatar} from 'react-native-elements'
 
-import styles from './../styles'
+import Icon from 'react-native-vector-icons/Ionicons';
+
+// - Import API
+import ActivitiesAPI from './../../../api/ActivitiesAPI'
+
 
 export class SecondStep extends Component {
 
     constructor(props) {
-        super(props)
+        super(props);
 
-        const ds = new ListView.DataSource({rowHasChanged: (r1,r2) => r1 !== r2})
         this.state = {
-            dataSource: ds.cloneWithRows(props.activities),
-            text:'',
-            activities: props.activities
-        }
+            activitiesList: {},
+            pageWidth: Dimensions.get('window').width,
+            pageHeight: Dimensions.get('window').height,
+            searchText: null,
+            selected: []
+        };
     }
 
     componentWillMount() {
-        console.log('------------ USER PROFILE -------------------');
-    }
-
-    componentWillRecieveProps({ activities }) {
-        this.setState({ activities });
-    }
-
-    onLearnMore = (rowData) => {
-        this.props.navigation.navigate('Details', { ...rowData });
-    };
-    renderRow(rowData){
-        console.log('rowData', rowData);
-
-        if (rowData)
-        return(
-            <ListItem
-                key={rowData.id}
-                roundAvatar
-                avatar={{ uri: rowData.location }}
-                title={`${rowData.name.toUpperCase()}`}
-                // subtitle={rowData.email}
-                // onPress={() => this.onLearnMore(rowData)}
-            />
-        );
-        // else return(
-        //     <Text>123</Text>
-        // );
-    }
-    filterSearch(text){
-        const newData = this.props.activities.filter(function(item){
-            const itemData = item.email.toUpperCase();
-            const textData = text.toUpperCase();
-            return itemData.indexOf(textData) > -1
+        ActivitiesAPI.getActivities().then((act) => {
+            this.setState({activitiesList: act});
         });
-        this.setState({
-            dataSource: this.state.dataSource.cloneWithRows(newData),
-            text: text
-        })
     }
+
+    componentDidMount = () => {
+        // !!! get user activities and check list on 'selected'
+
+        // const selected = this.props.selected;
+        // if(typeof selected === "object"){
+        //     selected.map(select => {
+        //         this._onSelect(select)
+        //     })
+        // } else {
+        //     this._onSelect(selected)
+        // }
+    };
+
+    _onSelect = (item) => {
+        let selected = this.state.selected;
+
+        if (selected.indexOf(item) === -1) {
+            selected.push(item);
+            this.setState({
+                selected: selected
+            })
+        } else {
+            selected = selected.filter(i => i !== item);
+            this.setState({
+                selected: selected
+            })
+        }
+    };
+
+    getNewDimensions(event) {
+        let pageHeight = event.nativeEvent.layout.height;
+        let pageWidth = event.nativeEvent.layout.width;
+        this.setState({pageHeight, pageWidth})
+    };
+
+    _onSearch = (text) => {
+        this.setState({
+            searchText: text.length > 0 ? text.toLowerCase() : null
+        })
+    };
+
+    _isSelected = (item) => {
+        const selected = this.state.selected;
+        if (selected.indexOf(item) === -1) {
+            return false
+        }
+        return true
+    };
+
+    filterObjectByValue = (obj, predicate) => {
+        return Object.keys(obj)
+            .filter(key => predicate(obj[key]))
+            .reduce((res, key) => (res[key] = obj[key], res), {})
+    };
+
+    renderList() {
+        const {activitiesList} = this.state;
+        let list;
+        let labels;
+
+        if (activitiesList) {
+            list = this.state.searchText ? this.filterObjectByValue(activitiesList, activity => activity.name.toLowerCase().includes(this.state.searchText)) : activitiesList;
+            labels = Object.keys(list).map(i => list[i]);
+
+            return <ScrollView style={{padding: 5}}>
+                {labels.map((label, index) => {
+                    const itemKey = label;
+                    return (
+                        <TouchableOpacity
+                            key={Math.round(Math.random() * 1000000)}
+                            style={{
+                                padding: 7,
+                                marginTop: 0,
+                                marginLeft: 2,
+                                marginRight: 2,
+                                marginBottom: 6,
+                                height: 40,
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                            }}
+                            onPress={() => {
+                                this._onSelect(itemKey)
+                            }}
+                        >
+
+                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                <Avatar source={{uri: label.location}}/>
+                                <Text style={{paddingLeft: 10}}>{label.name}</Text>
+                            </View>
+
+
+                            {
+                                this._isSelected(itemKey) ?
+                                    <Icon name='ios-checkmark-circle-outline'
+                                          style={{
+                                              color: '#00bcd4',
+                                              fontSize: 30
+                                          }}
+                                    />
+                                    : null
+                            }
+                        </TouchableOpacity>
+                    )
+                })}
+            </ScrollView>
+        }
+        else {
+            return null
+        }
+    };
 
     render() {
-
         return (
-            <ScrollView>
-                <View style={styles.description}>
-                    <Text> Tell us about sports activities you would like to manage. We will search events and users for
-                        you that match your selected items. Do you play basketball with friends? Can you play tennis? Or
-                        maybe you would like to be invited to try sea kayaking?</Text>
-                </View>
-                <View style={{flex:1}}>
+            <View onLayout={(evt) => {
+                this.getNewDimensions(evt)
+            }}>
+                <View style={{flexDirection: 'row', height: 55}}>
+                    <View style={{marginTop: 15, marginLeft: 15, backgroundColor: 'transparent'}}>
+                        <Icon name="ios-search-outline" color='#00bcd4' size={25}/>
+                    </View>
                     <TextInput
-                        onChangeText={(text) => this.filterSearch(text)}
-                        value={this.state.text}
-                    />
-                    <ListView
-                        enableEmptySections={true}
-                        style={{marginHorizontal:10}}
-                        renderRow={this.renderRow.bind(this)}
-                        dataSource={this.state.dataSource}
+                        style={{
+                            width: this.state.pageWidth - 20,
+                            height: 35,
+                            margin: 0,
+                            marginTop: 10,
+                            marginLeft: -25,
+                            padding: 5,
+                            paddingLeft: 30,
+                            borderColor: '#00bcd4',
+                            borderWidth: 1,
+                            borderRadius: 5
+                        }}
+                        onChangeText={(text) => {
+                            this._onSearch(text)
+                        }}
+                        clearButtonMode={'always'}
+                        placeholder="Search"
+                        placeholderTextColor='#00bcd4'
+                        underlineColorAndroid={'transparent'}
                     />
                 </View>
-            </ScrollView>
-        )
 
+                {this.renderList()}
+
+            </View>
+
+        )
     }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-    console.log('dispatch444', dispatch)
-    console.log('ownProps444', ownProps)
     return {}
 };
 
 const mapStateToProps = (state, ownProps) => {
-    if (state && state.activity && state.activity.loading && state.activity.activitiesList) console.log('state.activity' ,state.activity.activitiesList);
-    else console.log('netu');
-    return {
-        activities: state.activity.loading && state.activity.activitiesList ? state.activity.activitiesList : {}
-    }
+    return {}
 };
 
 // - Connect component to redux store

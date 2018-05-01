@@ -58,6 +58,22 @@ const styles = StyleSheet.create({
     //     borderWidth: 0,
     //     color: '#121212',
     // },
+
+
+
+    style_row_view: {
+        flex: 1,
+        flexDirection: 'row',
+        height: 57,
+        backgroundColor: '#FFFFFF',
+    },
+    style_text: {
+        flex: 1,
+        marginLeft: 12,
+        fontSize: 16,
+        color: '#333333',
+        alignSelf: 'center',
+    },
 });
 
 export default styles

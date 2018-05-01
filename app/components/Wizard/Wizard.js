@@ -20,7 +20,8 @@ import SecondStep from './steps/SecondStep'
 import ThirdStep from './steps/ThirdStep'
 
 
-const PAGES = ['FirstPage', 'SecondPage', 'ThirdPage'];
+// const PAGES = ['FirstPage', 'SecondPage', 'ThirdPage'];
+const PAGES = ['FirstPage', 'SecondPage'];
 
 export class Wizard extends Component {
 
@@ -28,20 +29,11 @@ export class Wizard extends Component {
         super(props);
 
         this.state = {
-            firstName: '',
-            lastName: '',
-            gender: '',
-            birthDate: new Date(),
-            isDateTimePickerVisible: false,
-
             currentPage: 0,
-            firstStepDone: false
-        }
+        };
     }
 
     componentWillMount() {
-        const {getActivities} = this.props;
-        getActivities();
     }
 
     componentDidMount() {
@@ -56,7 +48,8 @@ export class Wizard extends Component {
     }
 
     renderDotIndicator() {
-        return <PagerDotIndicator pageCount={3}/>;
+        // return <PagerDotIndicator pageCount={3}/>;
+        return <PagerDotIndicator pageCount={2}/>;
     }
 
     renderViewPagerPage = (data, index) => {
@@ -70,26 +63,14 @@ export class Wizard extends Component {
                 <SecondStep />
             </View>
         );
-        else if (data === 'ThirdPage') return (
-            <View>
-                <ThirdStep data={data}/>
-            </View>
-        );
-        // return (<View>
-        //     <View style={styles.description}>
-        //         <Text>Registration requires a few more details. Please
-        //             introduce yourself to proceed. This will help us adjust service just for
-        //             you.</Text>
+        // else if (data === 'ThirdPage') return (
+        //     <View>
+        //         <ThirdStep data={data}/>
         //     </View>
-        //     <View style={styles.page}>
-        //         <Text>{data}</Text>
-        //     </View>
-        // </View>)
+        // );
     };
 
     render() {
-        // const {activitiesList, loading} = this.props;
-        // console.log('activitiesList123', activitiesList);
         return (
             <View style={styles.container}>
                 <Header title="Welcome to JustJoin!"/>
@@ -113,16 +94,12 @@ export class Wizard extends Component {
 // - Map dispatch to props
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        getActivities: () => dispatch(activityActions.dbGetActivitiesList())
+        // getActivities: () => dispatch(activityActions.dbGetActivitiesList())
     }
 };
 
 const mapStateToProps = ({activity}) => {
-    console.log('activity555', activity.activitiesList ? activity.activitiesList[0] : '')
-    // const {activitiesList, loading} = activity;
-    return {
-        // activities: activity.activitiesList ? activity.activitiesList[0] : ''
-    }
+    return {}
 };
 
 
