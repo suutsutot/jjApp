@@ -1,5 +1,6 @@
 import {AsyncStorage} from 'react-native';
 const refreshToken = () => AsyncStorage.getItem("refreshToken");
+const getUserId = () => AsyncStorage.getItem("userId");
 
 // Auth0
 import Auth0 from 'react-native-auth0';
@@ -16,26 +17,27 @@ export const dbGetNotifies = () => {
     return (dispatch, getState) => {
         refresh((newToken) => {
             console.log('dbGetNotifies token', newToken);
-            // newToken.idToken = newToken.idToken.replace(' ','');
-            console.log('newToken.idToken', newToken.idToken);
 
-            let url = 'http://justjoin1.ru/api/notifications';
+            getUserId().then((userId) => {
 
-            fetch(url, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': newToken.idToken
-                }
-            }).then(res => {
-                return res.json();
-            })
-                .catch(error => console.log('Error: ', error))
-                .then(response => {
-                    let notifications = response || {};
-                    console.log('notifications111', response);
-                    dispatch(addNotifyList(notifications))
-                });
+                let url = 'http://justjoin1.ru/public-api/'+ userId +'/getNotifications';
+                console.log('eee444', url);
+                fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': newToken.idToken
+                    }
+                }).then(res => {
+                    return res.json();
+                })
+                    .catch(error => console.log('Error notifications:', error))
+                    .then(response => {
+                        let notifications = response || {};
+                        console.log('notifications111', response);
+                        dispatch(addNotifyList(notifications))
+                    });
+            });
         });
     }
 };

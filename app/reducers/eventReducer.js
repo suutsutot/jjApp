@@ -23,7 +23,8 @@ export let eventReducer = (state = defaultState, action) => {
         case types.ADD_USER_EVENTS_LIST_INFO:
             return {
                 ...state,
-                info: [...payload.info]
+                info: payload.info,
+                loaded: true
             };
         default:
             return state;

@@ -2,7 +2,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {
-    addNavigationHelpers,
     TabNavigator,
     StackNavigator,
     TabBarBottom,
@@ -76,36 +75,11 @@ export const Tabs = TabNavigator(
     }
 );
 
-// export const MasterNavigator = StackNavigator({
-//     // Login: {
-//     //     screen: Login,
-//     // },
-//     // Signup: {
-//     //     screen: Signup,
-//     // },
-//     Tabs: {
-//         screen: Tabs,
-//     },
-// }, {
+// const AppStack = StackNavigator({ Tabs: Tabs}, {
 //     mode: 'modal',
 //     headerMode: 'none'
 // });
-//
-// const Router = ({dispatch, nav}) => (
-//     <MasterNavigator navigation={addNavigationHelpers({dispatch, state: nav})}/>
-// );
-//
-// export const LoginStack = StackNavigator({
-//     Login: {
-//         screen: Login
-//     }
-// });
-
-const AppStack = StackNavigator({ Tabs: Tabs}, {
-    mode: 'modal',
-    headerMode: 'none'
-});
-const AuthStack = StackNavigator({ Wizard: Wizard, Login: Login, Tabs: Tabs }, {
+const AuthStack = StackNavigator({ Login: Login, Wizard: Wizard, Tabs: Tabs }, {
     mode: 'modal',
     headerMode: 'none'
 });

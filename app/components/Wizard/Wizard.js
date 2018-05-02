@@ -98,8 +98,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     }
 };
 
-const mapStateToProps = ({activity}) => {
-    return {}
+const mapStateToProps = ({user}) => {
+    console.log('user123', user);
+    return {
+        profile: user.loaded && user.profile ? user.profile : {}
+    }
 };
 
 
