@@ -32,7 +32,7 @@ export class Home extends Component {
     }
 
     _onSelect = (event) => {
-
+        this.props.navigation.navigate('InfoEvent', {event: event})
     };
 
     renderEventList = () => {

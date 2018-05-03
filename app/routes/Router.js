@@ -19,6 +19,8 @@ import Profile from './../components/Profile'
 import Notifications from './../components/Notifications'
 import Settings from './../components/Settings'
 
+import InfoEvent from './../components/InfoEvent'
+
 import Login from './../components/Login'
 import Wizard from './../components/Wizard'
 
@@ -75,10 +77,13 @@ export const Tabs = TabNavigator(
     }
 );
 
-// const AppStack = StackNavigator({ Tabs: Tabs}, {
-//     mode: 'modal',
-//     headerMode: 'none'
-// });
+const AppStack = StackNavigator({
+    Tabs: Tabs,
+    InfoEvent: InfoEvent
+}, {
+    mode: 'modal',
+    headerMode: 'none'
+});
 const AuthStack = StackNavigator({ Login: Login, Wizard: Wizard, Tabs: Tabs }, {
     mode: 'modal',
     headerMode: 'none'
@@ -87,7 +92,7 @@ const AuthStack = StackNavigator({ Login: Login, Wizard: Wizard, Tabs: Tabs }, {
 export const MasterNavigator = SwitchNavigator(
     {
         AuthLoading: AuthLoadingScreen,
-        App: Tabs,
+        App: AppStack,
         Auth: AuthStack,
     },
     {
