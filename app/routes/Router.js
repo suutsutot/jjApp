@@ -79,7 +79,8 @@ export const Tabs = TabNavigator(
 
 const AppStack = StackNavigator({
     Tabs: Tabs,
-    InfoEvent: InfoEvent
+    InfoEvent: InfoEvent,
+    Login: Login
 }, {
     mode: 'modal',
     headerMode: 'none'
