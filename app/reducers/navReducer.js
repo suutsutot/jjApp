@@ -9,4 +9,3 @@ export let navReducer = (state, action) => {
     }
     return nextState || state;
 };
-

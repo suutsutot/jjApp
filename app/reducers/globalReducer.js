@@ -81,33 +81,33 @@ export const globalReducer = (state = defaultState, action) => {
                 error: '',
                 messageOpen: false,
                 messageColor: ''
-            }
+            };
         case types.SET_HEADER_TITLE:
             return {
                 ...state,
                 headerTitle: action.payload
-            }
+            };
         case types.CLOSE_EDIT_PROFILE:
             return {
                 ...state,
                 editProfileOpen: false
-            }
+            };
 
         case types.OPEN_EDIT_PROFILE:
             return {
                 ...state,
                 editProfileOpen: true
-            }
+            };
         case types.SHOW_LOADING:
             return {
                 ...state,
                 loading: true
-            }
+            };
         case types.HIDE_LOADING:
             return {
                 ...state,
                 loading: false
-            }
+            };
         case types.CHANGE_DATA:
             return {
                 ...state,
@@ -115,22 +115,21 @@ export const globalReducer = (state = defaultState, action) => {
                     ...state.changeData,
                     ...payload
                 }
-            }
+            };
         case types.CHANGE_WINDOW_SIZE:
             return {
                 ...state,
                 windowSize: {
                     ...payload
                 }
-            }
+            };
         case types.SET_UID:
             return {
                 ...state,
                 uid: payload.uid
-            }
+            };
         default:
             return state
     }
-
 
 };

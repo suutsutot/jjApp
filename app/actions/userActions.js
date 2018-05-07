@@ -21,9 +21,8 @@ export const dbGetProfile = () => {
                         'Content-Type': 'application/json',
                         'Authorization': token
                     }
-                }).then(res => {
-                    return res.json();
                 })
+                    .then(r => r.json())
                     .catch(error => console.log('Error: ', error))
                     .then(response => {
                         let userInfo = response.user || {};
@@ -52,9 +51,8 @@ export const dbGetProfile = () => {
                             'Content-Type': 'application/json',
                             'Authorization': token
                         }
-                    }).then(res => {
-                        return res.json();
                     })
+                        .then(r => r.json())
                         .catch(error => console.log('Error: ', error))
                         .then(response => {
                             let userInfo = response.user || {};
@@ -87,9 +85,7 @@ export const dbGetUserInfo = (userId) => {
                         'Authorization': token
                     }
                 })
-                    .then(res => {
-                        return res.json()
-                    })
+                    .then(r => r.json())
                     .catch(error => console.log('Error: ', error))
                     .then(response => {
                         let userInfo = response.user || {};

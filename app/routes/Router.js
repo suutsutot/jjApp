@@ -7,7 +7,7 @@ import {
     SwitchNavigator
 } from 'react-navigation'
 
-import { addListener } from '../config/redux';
+import {addListener} from '../config/redux';
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
@@ -62,13 +62,13 @@ export const Tabs = TabNavigator(
 );
 
 const AppStack = StackNavigator({
-    Tabs: Tabs,
-    Login: Login
+    Tabs,
+    Login
 }, {
     mode: 'modal',
     headerMode: 'none'
 });
-const AuthStack = StackNavigator({ Login: Login, Wizard: Wizard, Tabs: Tabs }, {
+const AuthStack = StackNavigator({Login, Wizard, Tabs}, {
     mode: 'modal',
     headerMode: 'none'
 });

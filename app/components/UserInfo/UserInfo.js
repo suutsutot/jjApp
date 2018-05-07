@@ -1,7 +1,6 @@
-// - Import react components
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {View, Text, TouchableOpacity, ScrollView} from 'react-native'
+import {ScrollView} from 'react-native'
 import { Tile, List, ListItem } from 'react-native-elements';
 
 

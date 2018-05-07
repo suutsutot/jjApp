@@ -11,7 +11,7 @@ const service = {
                     'Content-Type': 'application/json',
                 }
             })
-            .then((response) => response.json())
+            .then(r => r.json())
             .then((responseData) => {
                 responseData = filter(responseData, function (val) {
                     if (val.id) return val;

@@ -24,9 +24,8 @@ export const dbGetNotifies = () => {
                         'Content-Type': 'application/json',
                         'Authorization': newToken.idToken
                     }
-                }).then(res => {
-                    return res.json();
                 })
+                    .then(r => r.json())
                     .catch(error => console.log('Error notifications:', error))
                     .then(response => {
                         let notifications = response || {};

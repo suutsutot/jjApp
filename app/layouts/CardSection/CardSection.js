@@ -10,5 +10,3 @@ export const CardSection = (props) => {
         </View>
     )
 };
-
-

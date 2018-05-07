@@ -12,4 +12,3 @@ export const Button = ({onPress, children, textStyle, buttonStyle}) => {
         </TouchableOpacity>
     )
 };
-

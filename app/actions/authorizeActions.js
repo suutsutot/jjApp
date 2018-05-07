@@ -43,9 +43,8 @@ export let dbLogin = () => {
                                     'Content-Type': 'application/json',
                                     'Authorization': newToken.idToken
                                 }
-                            }).then(res => {
-                                return res.json();
                             })
+                                .then(r => r.json())
                                 .catch(error => {
                                     console.log('AuthorizeActionError:', error);
                                     dispatch(globalActions.hideLoading());

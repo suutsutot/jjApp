@@ -25,9 +25,8 @@ export const dbGetEventsList = () => {
                         'Content-Type': 'application/json',
                         'Authorization': newToken.idToken
                     }
-                }).then(res => {
-                    return res.json();
                 })
+                    .then(r => r.json())
                     .catch(error => console.log('Error: ', error))
                     .then(response => {
                         let eventsList = response || {};
