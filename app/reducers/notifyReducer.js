@@ -1,15 +1,12 @@
-// - Import react components
-import _ from 'lodash'
+import merge from 'lodash/merge'
 
-// - Import action types
 import * as types from './../constants/actionTypes'
 
 let defaultState = {
-    userNotifies: {},
+    userNotifies: [],
     loaded: false
 };
 
-// Notify actions
 export let notifyReducer = (state = defaultState, action) => {
     let {payload} = action;
     switch (action.type) {
@@ -40,7 +37,7 @@ export let notifyReducer = (state = defaultState, action) => {
             var parsedNotifies = {};
             Object.keys(state.userNotifies).map((id) => {
                 if (id !== payload) {
-                    _.merge(parsedNotifies, {[id]: {...state.userNotifies[id]}})
+                    merge(parsedNotifies, {[id]: {...state.userNotifies[id]}})
                 }
 
             });

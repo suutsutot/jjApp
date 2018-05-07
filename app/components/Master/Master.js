@@ -1,13 +1,10 @@
-// - Import react components
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {Dimensions, AsyncStorage} from 'react-native'
 
-// - Import Actions
 import * as globalActions from './../../actions/globalActions'
 import * as authorizeActions from './../../actions/authorizeActions'
 
-// - Import app components
 import Router from './../../routes/Router'
 
 export class Master extends Component {
@@ -28,16 +25,14 @@ export class Master extends Component {
 
         const {getUserId} = this.props;
         AsyncStorage.multiGet(['userId', 'email'], (err, stores) => {
-            let userId;
-            if (stores[0][1]) userId = stores[0][1];
-            else userId = null;
 
-            let email;
-            if (stores[1][1]) email = stores[1][1];
-            else email = null;
-
+            const [[userId], [email]] = stores;
             getUserId(userId, email);
         });
+    }
+
+    componentWillUnmount() {
+        Dimensions.removeEventListener('change', this.resize);
     }
 
     render() {
@@ -45,7 +40,6 @@ export class Master extends Component {
     }
 }
 
-// - Map dispatch to props
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         windowResize: (height, width) => {

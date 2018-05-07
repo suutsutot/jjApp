@@ -1,13 +1,10 @@
-// - Import react components
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {ScrollView, View, Text, Image} from 'react-native'
 import {CardSection, Button} from './../../layouts'
 
-// - Import component styles 
 import styles from './styles'
 
-// - Import Actions
 import * as authorizeActions from './../../actions/authorizeActions'
 
 
@@ -16,7 +13,6 @@ export class Login extends Component {
     constructor(props) {
         super(props);
 
-        // Default state
         this.state = {
             loading: false,
             isLogin: false,

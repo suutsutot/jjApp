@@ -1,5 +1,4 @@
-// - Import react components
-import { StyleSheet } from 'react-native'
+import {StyleSheet} from 'react-native'
 
 const styles = StyleSheet.create({
     buttons: {
@@ -10,4 +9,5 @@ const styles = StyleSheet.create({
 
     },
 })
+
 export default styles

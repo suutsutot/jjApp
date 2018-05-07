@@ -1,4 +1,3 @@
-// - Import react components
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {View, Text, ScrollView} from 'react-native'
@@ -39,5 +38,4 @@ const mapStateToProps = (state, ownProps) => {
     return {}
 };
 
-// - Connect component to redux store
 export default connect(mapStateToProps, mapDispatchToProps)(ThirdStep)

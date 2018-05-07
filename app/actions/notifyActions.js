@@ -2,17 +2,13 @@ import {AsyncStorage} from 'react-native';
 const refreshToken = () => AsyncStorage.getItem("refreshToken");
 const getUserId = () => AsyncStorage.getItem("userId");
 
-// Auth0
 import Auth0 from 'react-native-auth0';
 let credentials = require('../config/auth0-credentials');
 const auth0 = new Auth0(credentials);
 
-// - Import action types
 import * as types from './../constants/actionTypes'
 
-/* _____________ CRUD DB _____________ */
 
-// Get all notifications from database
 export const dbGetNotifies = () => {
     return (dispatch, getState) => {
         refresh((newToken) => {
@@ -21,7 +17,7 @@ export const dbGetNotifies = () => {
             getUserId().then((userId) => {
 
                 let url = 'http://justjoin1.ru/public-api/'+ userId +'/getNotifications';
-                console.log('eee444', url);
+
                 fetch(url, {
                     method: 'GET',
                     headers: {
@@ -42,9 +38,7 @@ export const dbGetNotifies = () => {
     }
 };
 
-/* _____________ CRUD State _____________ */
 
-// Add notification list
 export const addNotifyList = (userNotifies) => {
 
     return {

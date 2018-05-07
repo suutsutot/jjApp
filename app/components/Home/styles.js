@@ -1,4 +1,3 @@
-// - Import react components
 import { StyleSheet } from 'react-native'
 
 const styles = StyleSheet.create({
@@ -45,9 +44,6 @@ const styles = StyleSheet.create({
     headerContainer: {
         alignItems: 'center',
         backgroundColor: 'transparent',
-        // marginBottom: 10,
-        // marginTop: 25,
-
     },
     userRow: {
         alignItems: 'center',

@@ -1,27 +1,18 @@
-// - Import react components
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {View, Text, ScrollView, TouchableOpacity, StyleSheet} from 'react-native'
-import {Button} from './../../layouts'
+import {View} from 'react-native'
 
 import {IndicatorViewPager, PagerDotIndicator} from 'rn-viewpager';
 
-import * as activityActions from './../../actions/activityActions'
-
-// - Import component styles
 import styles from './styles'
 import Header from "./../Header";
 
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-
-// steps
 import FirstStep from './steps/FirstStep'
 import SecondStep from './steps/SecondStep'
 import ThirdStep from './steps/ThirdStep'
 
 
-// const PAGES = ['FirstPage', 'SecondPage', 'ThirdPage'];
-const PAGES = ['FirstPage', 'SecondPage'];
+const PAGES = ['FirstPage', 'SecondPage', 'ThirdPage'];
 
 export class Wizard extends Component {
 
@@ -48,8 +39,7 @@ export class Wizard extends Component {
     }
 
     renderDotIndicator() {
-        // return <PagerDotIndicator pageCount={3}/>;
-        return <PagerDotIndicator pageCount={2}/>;
+        return <PagerDotIndicator pageCount={3}/>;
     }
 
     renderViewPagerPage = (data, index) => {
@@ -63,11 +53,11 @@ export class Wizard extends Component {
                 <SecondStep />
             </View>
         );
-        // else if (data === 'ThirdPage') return (
-        //     <View>
-        //         <ThirdStep data={data}/>
-        //     </View>
-        // );
+        else if (data === 'ThirdPage') return (
+            <View>
+                <ThirdStep data={data}/>
+            </View>
+        );
     };
 
     render() {
@@ -91,18 +81,12 @@ export class Wizard extends Component {
     }
 }
 
-// - Map dispatch to props
 const mapDispatchToProps = (dispatch, ownProps) => {
-    return {
-        // getActivities: () => dispatch(activityActions.dbGetActivitiesList())
-    }
+    return {}
 };
 
 const mapStateToProps = ({user}) => {
-    console.log('user123', user);
-    return {
-        profile: user.loaded && user.profile ? user.profile : {}
-    }
+    return {}
 };
 
 

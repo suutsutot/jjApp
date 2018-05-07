@@ -1,4 +1,3 @@
-// - Import action types
 import * as types from './../constants/actionTypes'
 
 let defaultState = {

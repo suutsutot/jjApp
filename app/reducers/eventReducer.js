@@ -1,10 +1,8 @@
-// - Import action types
 import * as types from './../constants/actionTypes'
 
 let defaultState = {
     info: {},
-    loaded: false,
-    openEditProfile: false
+    loaded: false
 };
 
 export let eventReducer = (state = defaultState, action) => {

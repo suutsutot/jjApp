@@ -1,4 +1,3 @@
-// - Import react components
 import { StyleSheet } from 'react-native'
 
 const styles = StyleSheet.create({
@@ -18,16 +17,28 @@ const styles = StyleSheet.create({
     blackColorText: {
         color: '#000',
         fontSize: 14,
-        fontFamily: 'Roboto',
+        // fontFamily: 'Roboto',
     },
     grayColorText: {
         color: '#78909c',
         fontSize: 14,
-        fontFamily: 'Roboto',
+        // fontFamily: 'Roboto',
     },
     leftPaddingText: {
         paddingLeft: 10
     },
+    backgroundColorContentWhite: {
+        backgroundColor: '#fff'
+    },
+    backgroundColorContentGray: {
+        backgroundColor: '#f0eff4'
+    },
+    marginFooter: {
+        marginVertical: 25
+    },
+    marginBottom: {
+        marginBottom: 25
+    }
 });
 
 export default styles

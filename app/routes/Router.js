@@ -1,4 +1,3 @@
-// - Import react components
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {
@@ -12,14 +11,10 @@ import { addListener } from '../config/redux';
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-// - Import app components
 import Home from './../components/Home'
-import Search from './../components/Search'
 import Profile from './../components/Profile'
 import Notifications from './../components/Notifications'
 import Settings from './../components/Settings'
-
-import InfoEvent from './../components/InfoEvent'
 
 import Login from './../components/Login'
 import Wizard from './../components/Wizard'
@@ -29,13 +24,9 @@ import AuthLoadingScreen from './../components/AuthLoadingScreen'
 export const Tabs = TabNavigator(
     {
         Home: {screen: Home},
-        // Search: {screen: Search},
         Profile: {screen: Profile},
         Notifications: {screen: Notifications},
         Settings: {screen: Settings},
-
-        // in next versions
-        // Messages: { screen: Messages },
     },
     {
         navigationOptions: ({navigation}) => ({
@@ -45,9 +36,6 @@ export const Tabs = TabNavigator(
                 if (routeName === 'Home') {
                     iconName = `home`;
                 }
-                else if (routeName === 'Search') {
-                    iconName = `search`;
-                }
                 else if (routeName === 'Profile') {
                     iconName = `account-circle`;
                 }
@@ -56,10 +44,6 @@ export const Tabs = TabNavigator(
                 }
                 else if (routeName === 'Settings') {
                     iconName = `format-list-bulleted`;
-                }
-                // in next versions
-                else if (routeName === 'Messages') {
-                    iconName = `chat`;
                 }
 
                 return <MaterialIcons name={iconName} size={25} color={tintColor}/>;
@@ -79,7 +63,6 @@ export const Tabs = TabNavigator(
 
 const AppStack = StackNavigator({
     Tabs: Tabs,
-    InfoEvent: InfoEvent,
     Login: Login
 }, {
     mode: 'modal',

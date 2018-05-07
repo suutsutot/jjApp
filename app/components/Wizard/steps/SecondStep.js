@@ -1,19 +1,10 @@
-// - Import react components
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {
-    View,
-    Text,
-    ScrollView,
-    TextInput,
-    TouchableOpacity,
-    Dimensions
-} from 'react-native'
+import {View, Text, ScrollView, TextInput, TouchableOpacity, Dimensions} from 'react-native'
 import  {Avatar} from 'react-native-elements'
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
-// - Import API
 import ActivitiesAPI from './../../../api/ActivitiesAPI'
 
 
@@ -197,5 +188,4 @@ const mapStateToProps = (state, ownProps) => {
     return {}
 };
 
-// - Connect component to redux store
 export default connect(mapStateToProps, mapDispatchToProps)(SecondStep)

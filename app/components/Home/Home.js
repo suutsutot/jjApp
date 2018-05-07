@@ -1,19 +1,17 @@
-// - Import react components
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {View, Text, TouchableOpacity} from 'react-native'
+import {View, Text, TouchableOpacity, AsyncStorage, Linking} from 'react-native'
 import {Avatar} from 'react-native-elements'
 import moment from 'moment'
 
+const getToken = () => AsyncStorage.getItem("idToken");
+
 import Header from './../Header'
 
-// - Import Actions
 import * as userActions from './../../actions/userActions'
 import * as notifyActions from './../../actions/notifyActions'
 import * as eventActions from './../../actions/eventActions'
-import * as activityActions from './../../actions/activityActions'
 
-// - Import component styles 
 import styles from './styles'
 
 
@@ -31,13 +29,28 @@ export class Home extends Component {
     componentDidMount() {
     }
 
-    _onSelect = (event) => {
-        this.props.navigation.navigate('InfoEvent', {event: event})
+    goToEvent = (id) => {
+        getToken().then((token) => {
+            // let url = 'http://justjoin1.ru/redirect?type=event&id=' + id + '&token=' + token;
+            let url = 'http://justjoin1.ru/events/'+ id + '/information';
+            console.log('url', url);
+
+            Linking.canOpenURL(url).then(supported => {
+                if (supported) {
+                    Linking.openURL(url);
+                } else {
+                    console.log("Don't know how to open URI: " + url);
+                }
+            });
+        });
+
+
+
+
     };
 
     renderEventList = () => {
         const {joinedEvents, managedEvents} = this.props;
-        // console.log('events123', events);
 
         return <View>
             {
@@ -45,7 +58,7 @@ export class Home extends Component {
                     <TouchableOpacity
                         key={i}
                         style={[styles.TouchableOpacityStyles]}
-                        onPress={() => {this._onSelect(event)}}
+                        onPress={() => {this.goToEvent(event._id)}}
                     >
                         <View style={[styles.layoutRow]}>
                             <Avatar height={60} source={{uri: event.backgroundPic ? event.backgroundPic : 'https://static-cdn.jtvnw.net/jtv_user_pictures/welovegames-profile_image-15afef2e74a108da-70x70.png'}}/>
@@ -70,6 +83,11 @@ export class Home extends Component {
         return (
             <View>
                 <Header title='Events'/>
+                <TouchableOpacity onPress={this.goToEvent}>
+                    <View style={styles.button}>
+                        <Text style={styles.text}>Open</Text>
+                    </View>
+                </TouchableOpacity>
                 {this.renderEventList()}
             </View>
             )
@@ -78,7 +96,6 @@ export class Home extends Component {
     }
 }
 
-// - Map dispatch to props
 const mapDispatchToProps = (dispatch, ownProps) => {
 
     return {
@@ -99,9 +116,7 @@ const mapStateToProps = ({events}) => {
 
     let joinedEvents = [];
     let managedEvents = [];
-    console.log('infoqqq', loaded,  info)
     if (loaded && info) {
-
         joinedEvents = info.joined;
         managedEvents = info.managed;
     }

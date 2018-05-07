@@ -2,13 +2,8 @@ import {AsyncStorage} from 'react-native';
 const getToken = () => AsyncStorage.getItem("idToken");
 const getEmail = () => AsyncStorage.getItem("email");
 
-// - Import action types
 import * as types from './../constants/actionTypes'
 
-
-/* _____________ CRUD DB _____________ */
-
-// - Get profile after login
 export const dbGetProfile = () => {
     return (dispatch, getState) => {
         if (getState().authorize.email) {
@@ -34,7 +29,6 @@ export const dbGetProfile = () => {
                         let userInfo = response.user || {};
                         console.log('userInfo111', response.user);
 
-                        // setItem to AsyncStorage
                         AsyncStorage.setItem('userId', response.user._id);
                         AsyncStorage.setItem('email', response.user.email);
                         dispatch(addProfile(response.user.email, userInfo))
@@ -66,7 +60,6 @@ export const dbGetProfile = () => {
                             let userInfo = response.user || {};
                             console.log('userInfo222', response);
 
-                            // setItem to AsyncStorage
                             AsyncStorage.setItem('userId', response.user._id);
                             AsyncStorage.setItem('email', response.user.email);
                             dispatch(addProfile(response.user.email, userInfo))
@@ -77,7 +70,6 @@ export const dbGetProfile = () => {
     }
 };
 
-// - Get user info from database
 export const dbGetUserInfo = (userId) => {
     return (dispatch, getState) => {
         console.log('dbGetUserInfoDone', userId);
@@ -111,9 +103,6 @@ export const dbGetUserInfo = (userId) => {
     }
 };
 
-/* _____________ CRUD State _____________ */
-
-// - Set user avatar
 export const addProfile = (email, info) => {
     return {
         type: types.ADD_PROFILE,
@@ -127,44 +116,3 @@ export const addUserInfo = (email, info) => {
         payload: {email, info}
     }
 };
-
-// export const dbGetUserInfo = () => {
-//     return (dispatch, getState) => {
-//         console.log('dbGetUserInfoDone');
-//         // let uid = getState().authorize.uid;
-//         let email = getState().global.email;
-//         let userId = getState().global.userId;
-//         if (email) {
-//             getToken().then((token) => {
-//                 console.log('token', token);
-//
-//                 // let email = uid;
-//                 let url = 'http://justjoin1.ru/api/users/duplicate-auth0';
-//                 let data = {email};
-//
-//                 fetch(url, {
-//                     method: 'POST',
-//                     body: JSON.stringify(data),
-//                     headers: {
-//                         'Content-Type': 'application/json',
-//                         'Authorization': token
-//                     }
-//                 }).then(res => {
-//                     return res.json();
-//                 })
-//                     .catch(error => console.log('Error: ', error))
-//                     .then(response => {
-//                         let userInfo = response.user || {};
-//                         // console.log('userInfo111', userInfo);
-//                         // setItem to AsyncStorage
-//                         AsyncStorage.setItem('isLogin', true);
-//                         AsyncStorage.setItem('userId', response.user._id);
-//                         AsyncStorage.setItem('email', response.user.email);
-//                         dispatch(addUserInfo(userId, userInfo))
-//                     });
-//             });
-//         }
-//     }
-// };
-
-

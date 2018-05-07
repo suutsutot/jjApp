@@ -1,10 +1,6 @@
-// - Import action types
 import * as types from './../constants/actionTypes'
 
-/**
- * Default state
- */
-var defaultState = {
+let defaultState = {
     percent: '',
     visible: false,
     loading: false,
@@ -27,33 +23,12 @@ var defaultState = {
         error: '',
         loading: false
     },
-    windowSize: {},
-    // userId: null,
-    // email: null
+    windowSize: {}
 };
 
-/**
- * Global reducer
- * @param {object} state
- * @param {object} action
- */
 export const globalReducer = (state = defaultState, action) => {
     const {payload} = action;
     switch (action.type) {
-        // case types.GET_USER_ID:
-        //     // console.log('www', payload)
-        //     return {
-        //         ...state,
-        //         userId: payload.userId,
-        //         email: payload.email
-        //     };
-        // case types.LOGIN:
-        //     return{
-        //         ...state,
-        //         uid: action.uid,
-        //         userId: payload.userId,
-        //         email: payload.email
-        //     };
         case types.LOGOUT:
             return {
                 ...state,
@@ -158,4 +133,4 @@ export const globalReducer = (state = defaultState, action) => {
     }
 
 
-}
+};

@@ -1,4 +1,3 @@
-// - Import react components
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import moment from 'moment'
@@ -29,7 +28,6 @@ export class FirstStep extends Component {
     _hideDateTimePicker = () => this.setState({isDateTimePickerVisible: false});
 
     _handleDatePicked = (date) => {
-        // console.log('A date has been picked: ', date);
         this.setState({birthDate: date});
         this._hideDateTimePicker();
     };
@@ -132,13 +130,13 @@ export class FirstStep extends Component {
                         </View>
                     </View>
                 </ScrollView>
-                <View style={{marginTop: 20 }}>
+                <View style={{marginTop: 20}}>
                     {
                         this._isValid() ?
                             <Button onPress={this.nextStep.bind(this)}>
                                 Next
                             </Button>
-                            : <Button >Next!</Button>
+                            : <Button >Next</Button>
                     }
                 </View>
             </View>
@@ -155,5 +153,4 @@ const mapStateToProps = (state, ownProps) => {
     return {}
 };
 
-// - Connect component to redux store
 export default connect(mapStateToProps, mapDispatchToProps)(FirstStep)

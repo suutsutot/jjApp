@@ -1,7 +1,5 @@
-// - Import react components
 import {combineReducers} from 'redux'
 
-// - Import reducers
 import {activityReducer} from './activityReducer'
 import {authorizeReducer} from './authorizeReducer'
 import {globalReducer} from './globalReducer'

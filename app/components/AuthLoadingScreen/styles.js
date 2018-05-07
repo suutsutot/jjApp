@@ -1,4 +1,3 @@
-// - Import react components
 import { StyleSheet } from 'react-native'
 
 const styles = StyleSheet.create({
@@ -10,7 +9,6 @@ const styles = StyleSheet.create({
     },
     logo: {
         alignSelf: 'center',
-        // borderRadius: 100,
         height: 80,
         paddingVertical: 20,
         marginTop: 20,

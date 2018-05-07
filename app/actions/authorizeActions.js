@@ -1,25 +1,18 @@
-// - Import react components
 import {AsyncStorage} from 'react-native';
 import {NavigationActions} from 'react-navigation'
 
-// Auth0
 import Auth0 from 'react-native-auth0';
 let credentials = require('../config/auth0-credentials');
 const auth0 = new Auth0(credentials);
 
-// - Import action types
 import * as types from './../constants/actionTypes'
 
-// - Import actions
 import * as globalActions from './globalActions'
-
-/* _____________ CRUD DB _____________ */
 
 export let dbLogin = () => {
     return (dispatch, getState) => {
         dispatch(globalActions.showLoading());
 
-        // get tokens from Auth0
         auth0.webAuth
             .authorize({
                 scope: 'openid email profile offline_access',
@@ -33,13 +26,11 @@ export let dbLogin = () => {
                     AsyncStorage.setItem('accessToken', newToken.accessToken);
                     AsyncStorage.setItem('idToken', newToken.idToken);
 
-                    // get user from Auth0
                     auth0.auth
                         .userInfo({token: newToken.accessToken})
                         .then(profile => {
                             console.log('profile', profile);
 
-                            // get user profile from db
                             let url = 'http://justjoin1.ru/api/users/duplicate-auth0';
                             let email = profile.email;
                             let data = {email};
@@ -64,7 +55,6 @@ export let dbLogin = () => {
                                     let userInfo = response.user || {};
                                     console.log('userInfo', userInfo);
 
-                                    // setItem to AsyncStorage
                                     AsyncStorage.setItem('userId', userInfo._id);
                                     AsyncStorage.setItem('email', userInfo.email);
 
@@ -119,10 +109,8 @@ export let dbLogout = () => {
     }
 };
 
-/* _____________ CRUD State _____________ */
-
 export let login = (email, user) => {
-    return {type: types.LOGIN, authed: true, email, profile: user}
+    return {type: types.LOGIN, email, profile: user}
 };
 
 export let logout = () => {

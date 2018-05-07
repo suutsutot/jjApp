@@ -1,16 +1,12 @@
-// - Import react components
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {View, Text, TouchableOpacity, ScrollView} from 'react-native'
-import IOSIcon from "react-native-vector-icons/Ionicons";
+import {View, ScrollView} from 'react-native'
 import {CardSection, Button} from './../../layouts'
 
 import Header from './../Header'
 
-// - Import component styles 
 import styles from './styles'
 
-// - Import Actions
 import * as authorizeActions from './../../actions/authorizeActions'
 
 export class Settings extends Component {

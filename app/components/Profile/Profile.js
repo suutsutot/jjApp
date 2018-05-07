@@ -1,24 +1,11 @@
-// - Import react components
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {
-    Animated,
-    ScrollView,
-    View,
-    Text,
-    Image,
-    ImageBackground,
-    TouchableOpacity,
-    Platform,
-    AsyncStorage
-} from 'react-native'
+import {Animated, ScrollView, View, Text, Image, ImageBackground, Platform} from 'react-native'
 import {TabViewAnimated, TabBar, TabViewPagerScroll, TabViewPagerPan} from 'react-native-tab-view'
 import {SocialIcon, ListItem} from 'react-native-elements'
 
-// - Import component styles 
 import styles from './styles'
 
-// - Import Actions
 import * as userActions from './../../actions/userActions'
 
 import Header from './../Header'
@@ -27,13 +14,6 @@ export class Profile extends Component {
 
     constructor(props) {
         super(props);
-
-    }
-
-    componentWillMount() {
-        // const {loadUserProfile, userId} = this.props;
-        // console.log('this.props', this.props);
-        // loadUserProfile(userId)
     }
 
     state = {
@@ -48,7 +28,6 @@ export class Profile extends Component {
         },
     };
 
-    // header
     renderContactHeader = () => {
         const {avatar, avatarBackground, name, address: {city, country}} = this.props;
 
@@ -98,7 +77,6 @@ export class Profile extends Component {
         )
     };
 
-    // content of tabs
     _renderScene = ({route: {key}}) => {
         const {activities} = this.props;
 
@@ -129,7 +107,6 @@ export class Profile extends Component {
         }
     };
 
-    // hz 4e eto
     _renderPager = props => {
         return Platform.OS === 'ios' ? (
             <TabViewPagerScroll {...props} />
@@ -138,7 +115,6 @@ export class Profile extends Component {
         )
     };
 
-    // hz 4e eto
     _renderLabel = props => ({route, index}) => {
         const inputRange = props.navigationState.routes.map((x, i) => i);
         const outputRange = inputRange.map(
@@ -161,7 +137,6 @@ export class Profile extends Component {
         )
     };
 
-    // tabs
     _renderHeader = props => {
         return (
             <TabBar
@@ -174,7 +149,6 @@ export class Profile extends Component {
         )
     };
 
-    // tabs change index
     _handleIndexChange = index => {
         this.setState({
             tabs: {
@@ -209,7 +183,6 @@ export class Profile extends Component {
     }
 }
 
-// - Map dispatch to props
 const mapDispatchToProps = (dispatch, ownProps) => {
 
     return {
@@ -222,10 +195,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
 const mapStateToProps = (state, ownProps) => {
     const loaded = state.user.loaded;
-    const userId = state.global.userId;
 
     let profile = {};
-    if (state.user.loaded && state.user && state.user.profile) profile = state.user.profile;
+    if (loaded) profile = state.user.profile;
 
     return {
         name: loaded && profile && profile.firstName && profile.lastName ? profile.firstName + ' ' + profile.lastName : profile.email,
