@@ -3,7 +3,8 @@ import {connect} from 'react-redux'
 import {Dimensions, AsyncStorage} from 'react-native'
 
 import * as globalActions from './../../actions/globalActions'
-import * as authorizeActions from './../../actions/authorizeActions'
+// import * as authorizeActions from './../../actions/authorizeActions'
+import { authorizationActions } from '../../data/authorization'
 
 import Router from './../../routes/Router'
 
@@ -45,7 +46,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         windowResize: (height, width) => {
             dispatch(globalActions.changeWindowSize(height, width))
         },
-        getUserId: (userId, email) => dispatch(authorizeActions.getUserId(userId, email))
+        getUserId: (userId, email) => dispatch(authorizationActions.getUserId(userId, email))
     }
 };
 

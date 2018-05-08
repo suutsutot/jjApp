@@ -3,12 +3,11 @@ import {connect} from 'react-redux'
 import {Animated, ScrollView, View, Text, Image, ImageBackground, Platform} from 'react-native'
 import {TabViewAnimated, TabBar, TabViewPagerScroll, TabViewPagerPan} from 'react-native-tab-view'
 import {SocialIcon, ListItem} from 'react-native-elements'
-
+import {HeaderSection} from './../../pureComponents'
 import styles from './styles'
 
-import * as userActions from './../../actions/userActions'
-
-import Header from './../Header'
+// import * as userActions from './../../actions/userActions'
+import {userActions } from '../../data/user'
 
 export class Profile extends Component {
 
@@ -163,7 +162,7 @@ export class Profile extends Component {
 
         return (
             <ScrollView style={styles.scroll}>
-                <Header title={name}/>
+                <HeaderSection title={name}/>
                 <View style={styles.container}>
                     <View style={styles.cardContainer}>
                         {this.renderContactHeader()}

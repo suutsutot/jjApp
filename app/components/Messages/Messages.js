@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 
-import Header from './../Header'
+import {HeaderSection} from './../../pureComponents'
 
 import styles from './styles'
 
@@ -14,7 +14,7 @@ export class Search extends Component {
 
     render() {
         return (
-            <Header title={'Messages'}/>
+            <HeaderSection title={'Messages'}/>
         );
     }
 }

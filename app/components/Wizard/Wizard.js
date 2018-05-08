@@ -1,16 +1,13 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {View} from 'react-native'
-
+import {HeaderSection} from './../../pureComponents'
 import {IndicatorViewPager, PagerDotIndicator} from 'rn-viewpager';
-
 import styles from './styles'
-import Header from "./../Header";
 
 import FirstStep from './steps/FirstStep'
 import SecondStep from './steps/SecondStep'
 import ThirdStep from './steps/ThirdStep'
-
 
 const PAGES = ['FirstPage', 'SecondPage', 'ThirdPage'];
 
@@ -63,7 +60,7 @@ export class Wizard extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Header title="Welcome to JustJoin!"/>
+                <HeaderSection title="Welcome to JustJoin!"/>
                 <IndicatorViewPager
                     style={{height: 200, flexGrow: 1}}
                     ref={(viewPager) => {

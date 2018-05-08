@@ -1,13 +1,12 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {View, ScrollView} from 'react-native'
-import {CardSection, Button} from './../../layouts'
-
-import Header from './../Header'
+import {CardSection, Button, HeaderSection} from './../../pureComponents'
 
 import styles from './styles'
 
-import * as authorizeActions from './../../actions/authorizeActions'
+// import * as authorizeActions from './../../actions/authorizeActions'
+import { authorizationActions } from '../../data/authorization'
 
 export class Settings extends Component {
 
@@ -31,7 +30,7 @@ export class Settings extends Component {
     render() {
         return (
             <View style={styles.profile}>
-                <Header title={'Settings'}/>
+                <HeaderSection title={'Settings'}/>
                 <ScrollView>
                     <View>{this.renderButton()}</View>
 
@@ -43,7 +42,7 @@ export class Settings extends Component {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        logout: () => dispatch(authorizeActions.dbLogout())
+        logout: () => dispatch(authorizationActions.dbLogout())
     }
 };
 

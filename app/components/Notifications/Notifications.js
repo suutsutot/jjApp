@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {ScrollView, View, Text, TouchableOpacity} from 'react-native'
 import {ListItem, Avatar} from 'react-native-elements';
-import Header from './../Header'
+import {HeaderSection} from './../../pureComponents'
 import moment from 'moment'
 import forEach from 'lodash/forEach'
 
@@ -205,7 +205,7 @@ export class Notifications extends Component {
 
         return (
             <View style={[styles.backgroundColorContentWhite]}>
-                <Header title={'Notifications'}/>
+                <HeaderSection title={'Notifications'}/>
 
                 {this.renderNotifications(viewedNotifications, newNotifications)}
 

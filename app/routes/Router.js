@@ -1,11 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {
-    TabNavigator,
-    StackNavigator,
-    TabBarBottom,
-    SwitchNavigator
-} from 'react-navigation'
+import {TabNavigator, StackNavigator, TabBarBottom, SwitchNavigator} from 'react-navigation'
 
 import {addListener} from '../config/redux';
 
@@ -61,10 +56,7 @@ export const Tabs = TabNavigator(
     }
 );
 
-const AppStack = StackNavigator({
-    Tabs,
-    Login
-}, {
+const AppStack = StackNavigator({Tabs, Login}, {
     mode: 'modal',
     headerMode: 'none'
 });

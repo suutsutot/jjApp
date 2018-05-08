@@ -6,11 +6,14 @@ import moment from 'moment'
 
 const getToken = () => AsyncStorage.getItem("idToken");
 
-import Header from './../Header'
+import {HeaderSection} from './../../pureComponents'
 
-import * as userActions from './../../actions/userActions'
-import * as notifyActions from './../../actions/notifyActions'
-import * as eventActions from './../../actions/eventActions'
+// import * as userActions from './../../actions/userActions'
+// import * as notifyActions from './../../actions/notifyActions'
+// import * as eventActions from './../../actions/eventActions'
+import { eventActions } from '../../data/event'
+import { userActions } from '../../data/user'
+import { notificationActions } from '../../data/notification'
 
 import styles from './styles'
 
@@ -82,12 +85,7 @@ export class Home extends Component {
     render() {
         return (
             <View>
-                <Header title='Events'/>
-                <TouchableOpacity onPress={this.goToEvent}>
-                    <View style={styles.button}>
-                        <Text style={styles.text}>Open</Text>
-                    </View>
-                </TouchableOpacity>
+                <HeaderSection title='Events'/>
                 {this.renderEventList()}
             </View>
             )
@@ -102,7 +100,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         loadData: () => {
             dispatch(userActions.dbGetProfile());
             dispatch(eventActions.dbGetEventsList());
-            dispatch(notifyActions.dbGetNotifies());
+            dispatch(notificationActions.dbGetNotifies());
 
             // dispatch(activityActions.dbGetActivitiesList());
 

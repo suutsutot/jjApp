@@ -1,11 +1,12 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {ScrollView, View, Text, Image} from 'react-native'
-import {CardSection, Button} from './../../layouts'
+import {CardSection, Button} from './../../pureComponents'
 
 import styles from './styles'
 
-import * as authorizeActions from './../../actions/authorizeActions'
+// import * as authorizeActions from './../../actions/authorizeActions'
+import { authorizationActions } from '../../data/authorization'
 
 
 export class Login extends Component {
@@ -66,7 +67,7 @@ export class Login extends Component {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        login: () => dispatch(authorizeActions.dbLogin())
+        login: () => dispatch(authorizationActions.dbLogin())
     }
 };
 
