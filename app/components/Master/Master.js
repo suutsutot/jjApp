@@ -1,10 +1,10 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {Dimensions, AsyncStorage} from 'react-native'
-
 import * as globalActions from './../../actions/globalActions'
-// import * as authorizeActions from './../../actions/authorizeActions'
-import { authorizationActions } from '../../data/authorization'
+import { authorizationActions } from 'app/data/authorization'
+
+import socket from 'app/config/socketStore'
 
 import Router from './../../routes/Router'
 
@@ -12,6 +12,8 @@ export class Master extends Component {
 
     constructor(props) {
         super(props);
+
+        socket('123')
     }
 
     resize = ({window}) => {
@@ -27,7 +29,7 @@ export class Master extends Component {
         const {getUserId} = this.props;
         AsyncStorage.multiGet(['userId', 'email'], (err, stores) => {
 
-            const [[userId], [email]] = stores;
+            const [[, userId], [, email]] = stores;
             getUserId(userId, email);
         });
     }

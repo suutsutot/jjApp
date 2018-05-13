@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {ScrollView, View, Text, TouchableOpacity} from 'react-native'
+import {ScrollView, View, Text, TouchableOpacity, AppState, Picker, Platform} from 'react-native'
 import {ListItem, Avatar} from 'react-native-elements';
 import {HeaderSection} from './../../pureComponents'
 import moment from 'moment'
@@ -8,17 +8,26 @@ import forEach from 'lodash/forEach'
 
 import styles from './styles'
 
+import PushNotification from 'react-native-push-notification';
+import PushController from './PushController';
+
 
 export class Notifications extends Component {
     constructor(props) {
         super(props);
 
-    }
-
-    componentWillMount() {
+        this.handleAppStateChange = this.handleAppStateChange.bind(this);
+        this.state = {
+            seconds: 5,
+        };
     }
 
     componentDidMount() {
+        AppState.addEventListener('change', this.handleAppStateChange);
+    }
+
+    componentWillUnmount() {
+        AppState.removeEventListener('change', this.handleAppStateChange);
     }
 
     _onSelect = (notification) => {
@@ -189,6 +198,21 @@ export class Notifications extends Component {
         </ScrollView>
     };
 
+    handleAppStateChange(appState) {
+        if (appState === 'background') {
+            let date = new Date(Date.now() + (this.state.seconds * 1000));
+
+            if (Platform.OS === 'ios') {
+                date = date.toISOString();
+            }
+
+            PushNotification.localNotificationSchedule({
+                message: "My Notification Message",
+                date,
+            });
+        }
+    }
+
     render() {
         const {notifications} = this.props;
         let viewedNotifications = [];
@@ -208,6 +232,17 @@ export class Notifications extends Component {
                 <HeaderSection title={'Notifications'}/>
 
                 {this.renderNotifications(viewedNotifications, newNotifications)}
+
+                <Picker
+                    style={styles.picker}
+                    selectedValue={this.state.seconds}
+                    onValueChange={(seconds) => this.setState({ seconds })}
+                >
+                    <Picker.Item label="5" value={5} />
+                    <Picker.Item label="10" value={10} />
+                    <Picker.Item label="15" value={15} />
+                </Picker>
+                <PushController />
 
             </View>
         );

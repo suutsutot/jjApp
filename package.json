@@ -34,6 +34,7 @@
     "react-native-modal-datetime-picker": "^5.1.0",
     "react-native-parallax-scroll-view": "^0.21.0",
     "react-native-progress": "^3.3.0",
+    "react-native-push-notification": "^3.0.2",
     "react-native-select-multiple": "^1.2.0",
     "react-native-stager": "^1.0.0",
     "react-native-step-indicator": "0.0.8",
@@ -50,6 +51,7 @@
     "redux-logger": "3.0.6",
     "redux-thunk": "2.2.0",
     "rn-viewpager": "^1.2.9",
+    "socket.io-client": "^2.1.0",
     "uuid": "3.1.0"
   },
   "devDependencies": {

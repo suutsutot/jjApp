@@ -38,7 +38,10 @@ const styles = StyleSheet.create({
     },
     marginBottom: {
         marginBottom: 25
-    }
+    },
+    picker: {
+        width: 100,
+    },
 });
 
 export default styles

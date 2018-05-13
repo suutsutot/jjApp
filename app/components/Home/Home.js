@@ -33,9 +33,11 @@ export class Home extends Component {
     }
 
     goToEvent = (id) => {
-        getToken().then((token) => {
-            // let url = 'http://justjoin1.ru/redirect?type=event&id=' + id + '&token=' + token;
-            let url = 'http://justjoin1.ru/events/'+ id + '/information';
+        AsyncStorage.multiGet(['idToken', 'accessToken'], (err, stores) => {
+
+            const [[, idToken], [, accessToken]] = stores;
+            // console.log(idToken, accessToken);
+            let url = 'http://justjoin1.ru/redirect?type=event&id=' + id  + '&idToken=' + idToken + '&accessToken=' + accessToken;
             console.log('url', url);
 
             Linking.canOpenURL(url).then(supported => {
@@ -45,11 +47,21 @@ export class Home extends Component {
                     console.log("Don't know how to open URI: " + url);
                 }
             });
-        });
+        })
 
-
-
-
+        // getToken().then((token) => {
+        //     // let url = 'http://justjoin1.ru/redirect?type=event&id=' + id + '&token=' + token;
+        //     let url = 'http://justjoin1.ru/events/'+ id + '/information';
+        //     console.log('url', url);
+        //
+        //     Linking.canOpenURL(url).then(supported => {
+        //         if (supported) {
+        //             Linking.openURL(url);
+        //         } else {
+        //             console.log("Don't know how to open URI: " + url);
+        //         }
+        //     });
+        // });
     };
 
     renderEventList = () => {
