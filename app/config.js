@@ -1,6 +1,6 @@
 const config = {
     'local': {
-        server: 'http://localhost:8080'
+        server: 'http://192.168.56.1:3000'
     },
     'dev': {
         server: 'http://justjoin1.ru'
@@ -10,4 +10,4 @@ const config = {
     }
 };
 
-export default config.dev;
+export default config.local;

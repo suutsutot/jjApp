@@ -4,16 +4,11 @@ import {View, Text, TouchableOpacity, AsyncStorage, Linking} from 'react-native'
 import {Avatar} from 'react-native-elements'
 import moment from 'moment'
 
-const getToken = () => AsyncStorage.getItem("idToken");
+import {HeaderSection} from 'app/pureComponents'
 
-import {HeaderSection} from './../../pureComponents'
-
-// import * as userActions from './../../actions/userActions'
-// import * as notifyActions from './../../actions/notifyActions'
-// import * as eventActions from './../../actions/eventActions'
-import { eventActions } from '../../data/event'
-import { userActions } from '../../data/user'
-import { notificationActions } from '../../data/notification'
+import { eventActions } from 'app/data/event'
+import { userActions } from 'app/data/user'
+import { notificationActions } from 'app/data/notification'
 
 import styles from './styles'
 
@@ -29,14 +24,10 @@ export class Home extends Component {
         loadData();
     }
 
-    componentDidMount() {
-    }
-
     goToEvent = (id) => {
         AsyncStorage.multiGet(['idToken', 'accessToken'], (err, stores) => {
 
             const [[, idToken], [, accessToken]] = stores;
-            // console.log(idToken, accessToken);
             let url = 'http://justjoin1.ru/redirect?type=event&id=' + id  + '&idToken=' + idToken + '&accessToken=' + accessToken;
             console.log('url', url);
 

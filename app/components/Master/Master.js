@@ -13,7 +13,7 @@ export class Master extends Component {
     constructor(props) {
         super(props);
 
-        socket('123')
+
     }
 
     resize = ({window}) => {
@@ -27,9 +27,10 @@ export class Master extends Component {
         this.resize({window});
 
         const {getUserId} = this.props;
-        AsyncStorage.multiGet(['userId', 'email'], (err, stores) => {
+        AsyncStorage.multiGet(['userId', 'email', 'idToken'], (err, stores) => {
 
-            const [[, userId], [, email]] = stores;
+            const [[, userId], [, email], [, idToken]] = stores;
+            socket(idToken)
             getUserId(userId, email);
         });
     }
