@@ -9,11 +9,19 @@ let defaultState = {
 
 export let notifyReducer = (state = defaultState, action) => {
     let {payload} = action;
+    console.log('payloadqwerty', payload)
     switch (action.type) {
         case types.ADD_NOTIFY:
             return state;
 
         case types.ADD_NOTIFY_LIST:
+            return {
+                ...state,
+                userNotifies: [...payload],
+                loaded: true
+            };
+
+        case types.UPDATE_NOTIFICATIONS:
             return {
                 ...state,
                 userNotifies: [...payload],

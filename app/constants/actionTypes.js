@@ -8,6 +8,7 @@ export const ADD_NOTIFY_LIST = 'ADD_NOTIFY_LIST'
 export const DELETE_NOTIFY = 'DELETE_NOTIFY'
 export const SEEN_NOTIFY = 'SEEN_NOTIFY'
 export const CLEAR_ALL_DATA_NOTIFY = 'CLEAR_ALL_DATA_NOTIFY'
+export const UPDATE_NOTIFICATIONS = 'UPDATE_NOTIFICATIONS';
 
 /* authorize actions */
 export const GET_USER_ID = 'GET_USER_ID';

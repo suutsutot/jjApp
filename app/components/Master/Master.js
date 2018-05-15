@@ -3,7 +3,6 @@ import {connect} from 'react-redux'
 import {Dimensions, AsyncStorage} from 'react-native'
 import * as globalActions from './../../actions/globalActions'
 import { authorizationActions } from 'app/data/authorization'
-
 import socket from 'app/config/socketStore'
 
 import Router from './../../routes/Router'
@@ -30,7 +29,7 @@ export class Master extends Component {
         AsyncStorage.multiGet(['userId', 'email', 'idToken'], (err, stores) => {
 
             const [[, userId], [, email], [, idToken]] = stores;
-            socket(idToken)
+            // socket(idToken)
             getUserId(userId, email);
         });
     }
