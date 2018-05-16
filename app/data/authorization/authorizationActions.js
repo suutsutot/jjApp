@@ -2,12 +2,14 @@ import {AsyncStorage} from 'react-native';
 import {NavigationActions} from 'react-navigation'
 
 import Auth0 from 'react-native-auth0';
-let credentials = require('../../config/auth0-credentials');
+let credentials = require('app/config/auth0-credentials');
 const auth0 = new Auth0(credentials);
 
-import * as types from './../../constants/actionTypes'
+import {refreshByCredentials} from 'app/api/refreshTokenAPI'
+import config from 'app/config';
 
-import * as globalActions from './../../actions/globalActions'
+import * as types from 'app/constants/actionTypes'
+import * as globalActions from 'app/data/global/globalActions'
 
 export let dbLogin = () => {
     return (dispatch, getState) => {
@@ -22,7 +24,7 @@ export let dbLogin = () => {
                 console.log('credentials', credentials);
                 AsyncStorage.setItem('refreshToken', credentials.refreshToken);
 
-                refreshToken(credentials, (newToken) => {
+                refreshByCredentials(credentials).then((newToken) => {
                     AsyncStorage.setItem('accessToken', newToken.accessToken);
                     AsyncStorage.setItem('idToken', newToken.idToken);
 
@@ -31,7 +33,7 @@ export let dbLogin = () => {
                         .then(profile => {
                             console.log('profile', profile);
 
-                            let url = 'http://justjoin1.ru/api/users/duplicate-auth0';
+                            let url = config.server + '/api/users/duplicate-auth0';
                             let email = profile.email;
                             let data = {email};
 
@@ -122,18 +124,3 @@ export const getUserId = (userId, email) => {
         payload: {userId, email}
     }
 };
-
-function refreshToken(user, callback) {
-
-    if (!user.refreshToken) return callback(null);
-
-    auth0
-        .auth
-        .refreshToken({refreshToken: user.refreshToken})
-        .then(refreshUser => {
-            callback(refreshUser);
-        })
-        .catch(error => {
-            console.error('Error: ', error)
-        });
-}

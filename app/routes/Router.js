@@ -1,20 +1,22 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {TabNavigator, StackNavigator, TabBarBottom, SwitchNavigator} from 'react-navigation'
+import {Text} from 'react-native'
+import IconBadge from 'react-native-icon-badge';
 
-import {addListener} from '../config/redux';
+import {addListener} from 'app/config/redux';
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-import Home from './../components/Home'
-import Profile from './../components/Profile'
-import Notifications from './../components/Notifications'
-import Settings from './../components/Settings'
+import Home from 'app/components/Home'
+import Profile from 'app/components/Profile'
+import Notifications from 'app/components/Notifications'
+import Settings from 'app/components/Settings'
 
-import Login from './../components/Login'
-import Wizard from './../components/Wizard'
+import Login from 'app/components/Login'
+import Wizard from 'app/components/Wizard'
 
-import AuthLoadingScreen from './../components/AuthLoadingScreen'
+import AuthLoadingScreen from 'app/components/AuthLoadingScreen'
 
 export const Tabs = TabNavigator(
     {
@@ -27,6 +29,7 @@ export const Tabs = TabNavigator(
         navigationOptions: ({navigation}) => ({
             tabBarIcon: ({focused, tintColor}) => {
                 const {routeName} = navigation.state;
+                console.log('navigation222', navigation.state)
                 let iconName;
                 if (routeName === 'Home') {
                     iconName = `home`;
@@ -41,7 +44,17 @@ export const Tabs = TabNavigator(
                     iconName = `format-list-bulleted`;
                 }
 
-                return <MaterialIcons name={iconName} size={25} color={tintColor}/>;
+                if (routeName === 'Notifications') {
+                    return <IconBadge
+                        MainElement={<MaterialIcons name={iconName} size={35} color={tintColor}/>}
+                        BadgeElement={<Text style={{ color: 'white' }}>5</Text>}
+                        // Hidden={notifications === 0}
+                    />
+                }
+                else {
+                    return <MaterialIcons name={iconName} size={25} color={tintColor}/>;
+                }
+
             },
         }),
         tabBarOptions: {

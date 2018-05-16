@@ -1,17 +1,14 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {Dimensions, AsyncStorage} from 'react-native'
-import * as globalActions from './../../actions/globalActions'
+import { globalActions } from 'app/data/global'
 import { authorizationActions } from 'app/data/authorization'
-import socket from 'app/config/socketStore'
-
-import Router from './../../routes/Router'
+import Router from 'app/routes/Router'
 
 export class Master extends Component {
 
     constructor(props) {
         super(props);
-
 
     }
 
@@ -26,10 +23,8 @@ export class Master extends Component {
         this.resize({window});
 
         const {getUserId} = this.props;
-        AsyncStorage.multiGet(['userId', 'email', 'idToken'], (err, stores) => {
-
-            const [[, userId], [, email], [, idToken]] = stores;
-            // socket(idToken)
+        AsyncStorage.multiGet(['userId', 'email'], (err, stores) => {
+            const [[, userId], [, email]] = stores;
             getUserId(userId, email);
         });
     }
@@ -45,9 +40,7 @@ export class Master extends Component {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        windowResize: (height, width) => {
-            dispatch(globalActions.changeWindowSize(height, width))
-        },
+        windowResize: (height, width) => dispatch(globalActions.changeWindowSize(height, width)),
         getUserId: (userId, email) => dispatch(authorizationActions.getUserId(userId, email))
     }
 };

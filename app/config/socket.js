@@ -1,13 +1,11 @@
 import 'app/config/userAgent';
-import React, {Component} from 'react'
-import {AsyncStorage, View} from 'react-native'
-const getToken = () => AsyncStorage.getItem("idToken");
-// import {bindActionCreators} from 'redux'
-import {connect} from 'react-redux'
+import React, {Component} from 'react';
+import {View} from 'react-native';
+import {connect} from 'react-redux';
 import io from 'socket.io-client';
 import config from 'app/config';
-import NotificationsAPI from 'app/api/NotificationsAPI'
-
+import {getNotifications} from 'app/api/NotificationsAPI';
+import {refresh} from 'app/api/refreshTokenAPI';
 const socket = io(config.server, {jsonp: false, transports: ['websocket']});
 
 const updateNotifications = payload => ({
@@ -15,54 +13,30 @@ const updateNotifications = payload => ({
     payload
 });
 
-// const handleNotificationsMessage = payload => dispatch => {
-//     const {action, data} = payload;
-//     console.log('payload321', payload);
-//
-//
-//     // NotificationsAPI.getNotifications().then((response) => {
-//     //     dispatch(updateNotifications(response.data));
-//     // });
-//
-// };
-//
-// ----------------------
-//
-// const types = {
-//     eventInvitation: handleNotificationsMessage,
-//     communityInvitation: handleNotificationsMessage,
-// };
-
 const handleSocketMessage = payload => dispatch => {
-    const {type} = payload;
-    console.log('channel123', payload.type);
-    // NotificationsAPI.getNotifications().then((response) => {
-    //     console.log('response222', response)
-    //     dispatch(updateNotifications(response.data));
-    // });
+    getNotifications().then((data) => {
+        dispatch(updateNotifications(data));
+    })
 };
-
-//----------------
 
 export class SocketListener extends Component {
     componentDidMount() {
         const {handleSocketMessage} = this.props;
 
         socket.on('connect', function () {
-            getToken().then((token) => {
-                socket.emit('authenticate', {token: token});
+            refresh().then((newToken) => {
+                socket.emit('authenticate', {token: newToken.idToken});
             });
-
         });
 
         socket.on('notification added', function (data) {
-            console.log('qwerty added', data);
+            console.log('notification added');
             handleSocketMessage(data);
         });
 
         socket.on('notification updated', function (data) {
-            console.log('qwerty updated', data);
-            // handleSocketMessage(data);
+            console.log('notification updated');
+            handleSocketMessage(data);
         });
     }
 

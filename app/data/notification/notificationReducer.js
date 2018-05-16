@@ -1,6 +1,6 @@
 import merge from 'lodash/merge'
 
-import * as types from './../../constants/actionTypes'
+import * as types from 'app/constants/actionTypes'
 
 let defaultState = {
     userNotifies: [],
@@ -9,7 +9,7 @@ let defaultState = {
 
 export let notifyReducer = (state = defaultState, action) => {
     let {payload} = action;
-    console.log('payloadqwerty', payload)
+    console.log('NOTIFICATIONSSS', payload)
     switch (action.type) {
         case types.ADD_NOTIFY:
             return state;

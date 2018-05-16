@@ -1,12 +1,11 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {View, ScrollView} from 'react-native'
-import {CardSection, Button, HeaderSection} from './../../pureComponents'
+import {CardSection, Button, HeaderSection} from 'app/pureComponents'
 
 import styles from './styles'
 
-// import * as authorizeActions from './../../actions/authorizeActions'
-import { authorizationActions } from '../../data/authorization'
+import { authorizationActions } from 'app/data/authorization'
 
 export class Settings extends Component {
 

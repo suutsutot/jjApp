@@ -5,7 +5,7 @@ import  {Avatar} from 'react-native-elements'
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
-import ActivitiesAPI from './../../../api/ActivitiesAPI'
+import ActivitiesAPI from 'app/api/ActivitiesAPI'
 
 
 export class SecondStep extends Component {

@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {ScrollView, View, Text, TouchableOpacity, AppState, Picker, Platform} from 'react-native'
 import {ListItem, Avatar} from 'react-native-elements';
-import {HeaderSection} from './../../pureComponents'
+import {HeaderSection} from 'app/pureComponents'
 import moment from 'moment'
 import forEach from 'lodash/forEach'
 

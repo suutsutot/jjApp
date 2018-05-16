@@ -7,7 +7,7 @@ import {Dropdown} from 'react-native-material-dropdown';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import {Divider} from 'react-native-elements';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
-import {Button} from './../../../pureComponents'
+import {Button} from 'app/pureComponents'
 import styles from './../styles'
 
 export class FirstStep extends Component {

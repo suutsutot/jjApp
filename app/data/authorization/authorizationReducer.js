@@ -1,4 +1,4 @@
-import * as types from './../../constants/actionTypes'
+import * as types from 'app/constants/actionTypes'
 
 let defaultState = {
     email: '',
@@ -34,4 +34,3 @@ export let authorizeReducer = (state = defaultState, action) => {
             return state
     }
 };
-

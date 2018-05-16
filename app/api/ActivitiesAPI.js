@@ -1,9 +1,12 @@
 import keyBy from 'lodash/keyBy'
 import filter from 'lodash/filter'
+import config from 'app/config';
 
 const service = {
     getActivities(){
-        return fetch('http://justjoin1.ru/public-api/activities',
+        let url = config.server + '/public-api/activities';
+
+        return fetch(url,
             {
                 method: "GET",
                 headers: {

@@ -1,22 +1,18 @@
 import keyBy from 'lodash/keyBy'
 import filter from 'lodash/filter'
-
-import {AsyncStorage} from 'react-native';
-const getToken = () => AsyncStorage.getItem("idToken");
-
-import * as types from './../../constants/actionTypes'
+import * as types from 'app/constants/actionTypes'
+import config from 'app/config'
 
 export const dbGetActivitiesList = () => {
     return (dispatch, getState) => {
         console.log('dbGetActivitiesList');
 
-        let url = 'http://justjoin1.ru/public-api/activities';
+        let url = config.server + '/public-api/activities';
 
         fetch(url, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                // 'Authorization': token
             }
         })
             .then(r => r.json())

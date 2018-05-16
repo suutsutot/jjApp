@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {View} from 'react-native'
-import {HeaderSection} from './../../pureComponents'
+import {HeaderSection} from 'app/pureComponents'
 import {IndicatorViewPager, PagerDotIndicator} from 'rn-viewpager';
 import styles from './styles'
 

@@ -3,11 +3,10 @@ import {connect} from 'react-redux'
 import {Animated, ScrollView, View, Text, Image, ImageBackground, Platform} from 'react-native'
 import {TabViewAnimated, TabBar, TabViewPagerScroll, TabViewPagerPan} from 'react-native-tab-view'
 import {SocialIcon, ListItem} from 'react-native-elements'
-import {HeaderSection} from './../../pureComponents'
+import {HeaderSection} from 'app/pureComponents'
 import styles from './styles'
 
-// import * as userActions from './../../actions/userActions'
-import {userActions } from '../../data/user'
+import {userActions } from 'app/data/user'
 
 export class Profile extends Component {
 

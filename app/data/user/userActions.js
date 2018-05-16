@@ -2,16 +2,19 @@ import {AsyncStorage} from 'react-native';
 const getToken = () => AsyncStorage.getItem("idToken");
 const getEmail = () => AsyncStorage.getItem("email");
 
-import * as types from './../../constants/actionTypes'
+import {refresh} from 'app/api/refreshTokenAPI'
+import config from 'app/config';
+
+import * as types from 'app/constants/actionTypes'
 
 export const dbGetProfile = () => {
     return (dispatch, getState) => {
         if (getState().authorize.email) {
             let email = getState().authorize.email;
-            getToken().then((token) => {
-                console.log('dbGetProfile token', token);
+            refresh().then((newToken) => {
+                console.log('dbGetProfile token', newToken);
 
-                let url = 'http://justjoin1.ru/api/users/duplicate-auth0';
+                let url = config.server + '/api/users/duplicate-auth0';
                 let data = {email};
 
                 fetch(url, {
@@ -19,14 +22,14 @@ export const dbGetProfile = () => {
                     body: JSON.stringify(data),
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': token
+                        'Authorization': newToken.idToken
                     }
                 })
                     .then(r => r.json())
                     .catch(error => console.log('Error: ', error))
                     .then(response => {
                         let userInfo = response.user || {};
-                        console.log('userInfo111', response.user);
+                        // console.log('userInfo111', response.user);
 
                         AsyncStorage.setItem('userId', response.user._id);
                         AsyncStorage.setItem('email', response.user.email);
@@ -36,27 +39,25 @@ export const dbGetProfile = () => {
         }
         else {
             getEmail().then((email) => {
-                getToken().then((token) => {
-                    console.log('dbGetProfile token', token);
+                refresh().then((newToken) => {
+                    console.log('dbGetProfile token', newToken);
 
-                    let url = 'http://justjoin1.ru/api/users/duplicate-auth0';
+                    let url = config.server + '/api/users/duplicate-auth0';
                     let data = {email};
-
-                    console.log('emailemail', email);
 
                     fetch(url, {
                         method: 'POST',
                         body: JSON.stringify(data),
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': token
+                            'Authorization': newToken.idToken
                         }
                     })
                         .then(r => r.json())
                         .catch(error => console.log('Error: ', error))
                         .then(response => {
                             let userInfo = response.user || {};
-                            console.log('userInfo222', response);
+                            // console.log('userInfo222', response);
 
                             AsyncStorage.setItem('userId', response.user._id);
                             AsyncStorage.setItem('email', response.user.email);
@@ -76,7 +77,7 @@ export const dbGetUserInfo = (userId) => {
             getToken().then((token) => {
                 console.log('token', token);
 
-                let url = 'http://justjoin1.ru/api/users/profile/' + userId;
+                let url = config.server + '/api/users/profile/' + userId;
 
                 fetch(url, {
                     method: 'GET',

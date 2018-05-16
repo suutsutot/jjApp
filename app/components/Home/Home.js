@@ -21,7 +21,7 @@ export class Home extends Component {
 
     componentWillMount() {
         const {loadData} = this.props;
-        loadData();
+        // loadData();
     }
 
     goToEvent = (id) => {
@@ -39,20 +39,6 @@ export class Home extends Component {
                 }
             });
         })
-
-        // getToken().then((token) => {
-        //     // let url = 'http://justjoin1.ru/redirect?type=event&id=' + id + '&token=' + token;
-        //     let url = 'http://justjoin1.ru/events/'+ id + '/information';
-        //     console.log('url', url);
-        //
-        //     Linking.canOpenURL(url).then(supported => {
-        //         if (supported) {
-        //             Linking.openURL(url);
-        //         } else {
-        //             console.log("Don't know how to open URI: " + url);
-        //         }
-        //     });
-        // });
     };
 
     renderEventList = () => {
@@ -104,6 +90,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch(userActions.dbGetProfile());
             dispatch(eventActions.dbGetEventsList());
             dispatch(notificationActions.dbGetNotifies());
+
 
             // dispatch(activityActions.dbGetActivitiesList());
 

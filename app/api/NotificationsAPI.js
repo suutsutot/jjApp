@@ -1,30 +1,30 @@
 import orderBy from 'lodash/filter'
-import refreshTokenAPI from './refreshTokenAPI'
+import {refresh} from './refreshTokenAPI'
+import config from 'app/config';
 
-const service = {
-    getNotifications(){
-        // return fetch('http://justjoin1.ru/public-api/activities',
-        //     {
-        //         method: "GET",
-        //         headers: {
-        //             'Accept': 'application/json',
-        //             'Content-Type': 'application/json',
-        //         }
-        //     })
-        //     .then(r => r.json())
-        //     .then((responseData) => {
-        //         // responseData = filter(responseData, function (val) {
-        //         //     if (val.id) return val;
-        //         // });
-        //         // responseData = keyBy(responseData, 'id');
-        //         return responseData;
-        //
-        //     })
-        //     .catch((error) => {
-        //         console.warn(error)
-        //     })
+export const getNotifications = async() =>{
+    const newToken = await refresh();
 
-    }
+    return new Promise((resolve, reject) => {
+        let url = config.server + '/api/notifications';
+        fetch(url,
+            {
+                method: "GET",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': newToken.idToken
+                }
+            })
+            .then(r => r.json())
+            .then((responseData) => {
+                // responseData = orderBy(responseData, ['viewed', 'dateOfCreate'], ['asc', 'desc']);
+                // console.log('responseData', responseData)
+                resolve(responseData);
+
+            })
+            .catch((error) => {
+                console.warn(error)
+            })
+    });
 };
-
-export default service;

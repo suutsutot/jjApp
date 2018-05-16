@@ -1,12 +1,11 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {ScrollView, View, Text, Image} from 'react-native'
-import {CardSection, Button} from './../../pureComponents'
+import {CardSection, Button} from 'app/pureComponents'
 
 import styles from './styles'
 
-// import * as authorizeActions from './../../actions/authorizeActions'
-import { authorizationActions } from '../../data/authorization'
+import {authorizationActions} from 'app/data/authorization'
 
 
 export class Login extends Component {
@@ -20,10 +19,11 @@ export class Login extends Component {
         }
     }
 
-    componentDidMount() {}
+    componentDidMount() {
+    }
 
     onLoginButton() {
-        const { login } = this.props;
+        const {login} = this.props;
         login()
     }
 
@@ -48,20 +48,20 @@ export class Login extends Component {
     }
 
     render() {
-            return (
-                <View style={[styles.container]}>
-                    <ScrollView style={styles.auth_content}>
-                        <Image
-                            style={styles.logo}
-                            source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}
-                        />
-                        <View style={{height: 10}}/>
-                        <Text style={styles.logo_title}>JustJoin</Text>
-                        <View style={{height: 10}}/>
-                    </ScrollView>
-                    <View>{this.renderButton()}</View>
-                </View>
-            )
+        return (
+            <View style={[styles.container]}>
+                <ScrollView style={styles.auth_content}>
+                    <Image
+                        style={styles.logo}
+                        source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}
+                    />
+                    <View style={{height: 10}}/>
+                    <Text style={styles.logo_title}>JustJoin</Text>
+                    <View style={{height: 10}}/>
+                </ScrollView>
+                <View>{this.renderButton()}</View>
+            </View>
+        )
     }
 }
 
