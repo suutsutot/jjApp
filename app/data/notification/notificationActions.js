@@ -6,7 +6,7 @@ import * as types from 'app/constants/actionTypes'
 export const dbGetNotifies = () => {
     return (dispatch, getState) => {
         refresh().then((newToken) => {
-            console.log('dbGetNotifies token', newToken);
+            console.log('dbGetNotifies');
 
             let url = config.server + '/api/notifications';
 
@@ -21,7 +21,6 @@ export const dbGetNotifies = () => {
                 .catch(error => console.log('Error notifications:', error))
                 .then(response => {
                     let notifications = response || {};
-                    console.log('notifications111', response);
                     dispatch(addNotifyList(notifications))
                 });
         });

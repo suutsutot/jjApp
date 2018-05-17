@@ -26,10 +26,10 @@ export const Tabs = TabNavigator(
         Settings: {screen: Settings},
     },
     {
-        navigationOptions: ({navigation}) => ({
+        navigationOptions: ({navigation, screenProps}) => ({
             tabBarIcon: ({focused, tintColor}) => {
                 const {routeName} = navigation.state;
-                console.log('navigation222', navigation.state)
+
                 let iconName;
                 if (routeName === 'Home') {
                     iconName = `home`;
@@ -47,12 +47,12 @@ export const Tabs = TabNavigator(
                 if (routeName === 'Notifications') {
                     return <IconBadge
                         MainElement={<MaterialIcons name={iconName} size={35} color={tintColor}/>}
-                        BadgeElement={<Text style={{ color: 'white' }}>5</Text>}
-                        // Hidden={notifications === 0}
+                        BadgeElement={<Text style={{ color: 'white' }}>{screenProps.notifications.length}</Text>}
+                        Hidden={screenProps.notifications.length === 0}
                     />
                 }
                 else {
-                    return <MaterialIcons name={iconName} size={25} color={tintColor}/>;
+                    return <MaterialIcons name={iconName} size={35} color={tintColor}/>;
                 }
 
             },
@@ -89,16 +89,21 @@ export const MasterNavigator = SwitchNavigator(
     }
 );
 
-const Router = ({dispatch, nav}) => (
-    <MasterNavigator navigation={{
+const Router = ({dispatch, nav, notifications}) => (
+    <MasterNavigator screenProps={{ notifications }} navigation={{
         dispatch,
         state: nav,
-        addListener,
+        addListener
     }}/>
 );
 
-const mapStateToProps = state => ({
-    nav: state.nav
-});
+const mapStateToProps = state => {
+    const {nav, notifications} = state;
+
+    return {
+        nav,
+        notifications: notifications.userNotifies
+    }
+};
 
 export default connect(mapStateToProps)(Router)

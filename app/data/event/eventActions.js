@@ -9,7 +9,7 @@ export const dbGetEventsList = () => {
     return (dispatch, getState) => {
         getUserId().then((userId) => {
             refresh().then((newToken) => {
-                console.log('dbGetEventsList token', newToken);
+                console.log('dbGetEventsList');
 
                 // let url = config.server + '/public-api/' + userId +'/getEvents';
                 // let url = 'http://10.8.0.10:3000/api/events/joinedEvents';
@@ -26,7 +26,6 @@ export const dbGetEventsList = () => {
                     .catch(error => console.log('Error: ', error))
                     .then(response => {
                         let eventsList = response || {};
-                        console.log('eventsList', response);
                         dispatch(addUserEventsListInfo(userId, eventsList))
                     });
             })

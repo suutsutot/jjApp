@@ -21,7 +21,6 @@ export let dbLogin = () => {
                 audience: 'https://' + credentials.domain + '/userinfo'
             })
             .then(credentials => {
-                console.log('credentials', credentials);
                 AsyncStorage.setItem('refreshToken', credentials.refreshToken);
 
                 refreshByCredentials(credentials).then((newToken) => {
@@ -31,7 +30,6 @@ export let dbLogin = () => {
                     auth0.auth
                         .userInfo({token: newToken.accessToken})
                         .then(profile => {
-                            console.log('profile', profile);
 
                             let url = config.server + '/api/users/duplicate-auth0';
                             let email = profile.email;
@@ -54,12 +52,10 @@ export let dbLogin = () => {
                                 })
                                 .then(response => {
                                     let userInfo = response.user || {};
-                                    console.log('userInfo', userInfo);
 
                                     AsyncStorage.setItem('userId', userInfo._id);
                                     AsyncStorage.setItem('email', userInfo.email);
 
-                                    console.log('Success auth!');
                                     dispatch(globalActions.showNotificationSuccess());
                                     dispatch(login(userInfo.email, userInfo));
 

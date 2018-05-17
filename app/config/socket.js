@@ -22,7 +22,6 @@ const handleSocketMessage = payload => dispatch => {
 export class SocketListener extends Component {
     componentDidMount() {
         const {handleSocketMessage} = this.props;
-
         socket.on('connect', function () {
             refresh().then((newToken) => {
                 socket.emit('authenticate', {token: newToken.idToken});

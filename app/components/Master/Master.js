@@ -1,8 +1,9 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {Dimensions, AsyncStorage} from 'react-native'
+import {AppState, Dimensions, AsyncStorage} from 'react-native'
 import { globalActions } from 'app/data/global'
 import { authorizationActions } from 'app/data/authorization'
+import { notificationActions } from 'app/data/notification'
 import Router from 'app/routes/Router'
 
 export class Master extends Component {
@@ -22,7 +23,8 @@ export class Master extends Component {
         const window = Dimensions.get('window');
         this.resize({window});
 
-        const {getUserId} = this.props;
+        const {getUserId, getNewNotifications} = this.props;
+        getNewNotifications();
         AsyncStorage.multiGet(['userId', 'email'], (err, stores) => {
             const [[, userId], [, email]] = stores;
             getUserId(userId, email);
@@ -41,7 +43,8 @@ export class Master extends Component {
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         windowResize: (height, width) => dispatch(globalActions.changeWindowSize(height, width)),
-        getUserId: (userId, email) => dispatch(authorizationActions.getUserId(userId, email))
+        getUserId: (userId, email) => dispatch(authorizationActions.getUserId(userId, email)),
+        getNewNotifications: () => dispatch(notificationActions.dbGetNotifies())
     }
 };
 

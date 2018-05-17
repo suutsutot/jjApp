@@ -23,7 +23,6 @@ export const dbGetActivitiesList = () => {
                 });
                 response = keyBy(response, 'id');
                 let activityList = response || {};
-                console.log('activityList');
                 dispatch(addActivitiesListInfo(activityList))
             });
     }

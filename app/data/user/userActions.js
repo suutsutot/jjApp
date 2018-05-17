@@ -12,7 +12,7 @@ export const dbGetProfile = () => {
         if (getState().authorize.email) {
             let email = getState().authorize.email;
             refresh().then((newToken) => {
-                console.log('dbGetProfile token', newToken);
+                console.log('dbGetProfile');
 
                 let url = config.server + '/api/users/duplicate-auth0';
                 let data = {email};
@@ -29,7 +29,6 @@ export const dbGetProfile = () => {
                     .catch(error => console.log('Error: ', error))
                     .then(response => {
                         let userInfo = response.user || {};
-                        // console.log('userInfo111', response.user);
 
                         AsyncStorage.setItem('userId', response.user._id);
                         AsyncStorage.setItem('email', response.user.email);
@@ -40,7 +39,7 @@ export const dbGetProfile = () => {
         else {
             getEmail().then((email) => {
                 refresh().then((newToken) => {
-                    console.log('dbGetProfile token', newToken);
+                    console.log('dbGetProfile');
 
                     let url = config.server + '/api/users/duplicate-auth0';
                     let data = {email};
@@ -57,7 +56,6 @@ export const dbGetProfile = () => {
                         .catch(error => console.log('Error: ', error))
                         .then(response => {
                             let userInfo = response.user || {};
-                            // console.log('userInfo222', response);
 
                             AsyncStorage.setItem('userId', response.user._id);
                             AsyncStorage.setItem('email', response.user.email);
@@ -71,11 +69,10 @@ export const dbGetProfile = () => {
 
 export const dbGetUserInfo = (userId) => {
     return (dispatch, getState) => {
-        console.log('dbGetUserInfoDone', userId);
+        console.log('dbGetUserInfoDone');
 
         if (userId) {
             getToken().then((token) => {
-                console.log('token', token);
 
                 let url = config.server + '/api/users/profile/' + userId;
 

@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {View, Text, TouchableOpacity, AsyncStorage, Linking} from 'react-native'
+import {View, Text, TouchableOpacity, Linking} from 'react-native'
 import {Avatar} from 'react-native-elements'
 import moment from 'moment'
 
@@ -21,15 +21,12 @@ export class Home extends Component {
 
     componentWillMount() {
         const {loadData} = this.props;
-        // loadData();
+        loadData();
     }
 
     goToEvent = (id) => {
-        AsyncStorage.multiGet(['idToken', 'accessToken'], (err, stores) => {
-
-            const [[, idToken], [, accessToken]] = stores;
-            let url = 'http://justjoin1.ru/redirect?type=event&id=' + id  + '&idToken=' + idToken + '&accessToken=' + accessToken;
-            console.log('url', url);
+        refresh().then((newToken) => {
+            let url = 'http://justjoin1.ru/redirect?type=event&id=' + id  + '&idToken=' + newToken.idToken + '&accessToken=' + newToken.accessToken;
 
             Linking.canOpenURL(url).then(supported => {
                 if (supported) {
@@ -38,7 +35,7 @@ export class Home extends Component {
                     console.log("Don't know how to open URI: " + url);
                 }
             });
-        })
+        });
     };
 
     renderEventList = () => {
@@ -89,9 +86,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         loadData: () => {
             dispatch(userActions.dbGetProfile());
             dispatch(eventActions.dbGetEventsList());
-            dispatch(notificationActions.dbGetNotifies());
-
-
+            // dispatch(notificationActions.dbGetNotifies());
             // dispatch(activityActions.dbGetActivitiesList());
 
         },

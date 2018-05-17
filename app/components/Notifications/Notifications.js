@@ -1,37 +1,62 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {ScrollView, View, Text, TouchableOpacity, AppState, Picker, Platform} from 'react-native'
-import {ListItem, Avatar} from 'react-native-elements';
+import {ScrollView, View, Text, TouchableOpacity, AppState, Picker, Platform, AsyncStorage, Linking} from 'react-native'
+import {Avatar} from 'react-native-elements';
 import {HeaderSection} from 'app/pureComponents'
 import moment from 'moment'
 import forEach from 'lodash/forEach'
+import config from 'app/config';
+import {refresh} from 'app/api/refreshTokenAPI';
 
 import styles from './styles'
 
-import PushNotification from 'react-native-push-notification';
-import PushController from './PushController';
+// import PushNotification from 'react-native-push-notification';
+// import PushController from './PushController';
 
 
 export class Notifications extends Component {
     constructor(props) {
         super(props);
 
-        this.handleAppStateChange = this.handleAppStateChange.bind(this);
-        this.state = {
-            seconds: 5,
-        };
+        // this.handleAppStateChange = this.handleAppStateChange.bind(this);
+        // this.state = {
+        //     seconds: 5,
+        // };
     }
 
     componentDidMount() {
-        AppState.addEventListener('change', this.handleAppStateChange);
+        // AppState.addEventListener('change', this.handleAppStateChange);
     }
 
     componentWillUnmount() {
-        AppState.removeEventListener('change', this.handleAppStateChange);
+        // AppState.removeEventListener('change', this.handleAppStateChange);
     }
 
-    _onSelect = (notification) => {
+    redirectToWeb = (notification) => {
+        refresh().then((newToken) => {
+            let url;
 
+            if (notification.type === 'eventInvitation' || notification.type === 'oneTimeEventCreate' || notification.type === 'repeatedEventCreate') {
+                url = config.server + '/redirect?type=event&id=' + notification.creatorId + '&idToken=' + newToken.idToken + '&accessToken=' + newToken.accessToken;
+            }
+            else if (notification.type === 'communityInvitation') {
+                url = config.server + '/redirect?type=community&id=' + notification.creatorId + '&idToken=' + newToken.idToken + '&accessToken=' + newToken.accessToken;
+            }
+            else if (notification.type === 'friendRequest' || notification.type === 'friendAccept') {
+                url = config.server + '/redirect?type=user&id=' + notification.creatorId + '&idToken=' + newToken.idToken + '&accessToken=' + newToken.accessToken;
+            }
+            else if (notification.type === 'Comments') {
+
+            }
+
+            Linking.canOpenURL(url).then(supported => {
+                if (supported) {
+                    Linking.openURL(url);
+                } else {
+                    console.log("Don't know how to open URI: " + url);
+                }
+            });
+        });
     };
 
     renderNotifications = (viewedNotifications, newNotifications) => {
@@ -51,7 +76,7 @@ export class Notifications extends Component {
                             key={i}
                             style={[styles.TouchableOpacityStyles, (i === newNotifications.length - 1) ? styles.marginBottom : null]}
                             onPress={() => {
-                                this._onSelect(notification)
+                                this.redirectToWeb(notification)
                             }}
                         >
                             <View style={[styles.layoutRow]}>
@@ -61,7 +86,7 @@ export class Notifications extends Component {
                                         <Text
                                             style={styles.blackColorText}>{notification.details.name ? notification.details.name : notification.details.activity.name}</Text>
                                         <Text style={styles.grayColorText}>
-                                            on {moment(notification.details.date).format('Do MMM')}</Text>
+                                            {' on ' + moment(notification.details.date).format('Do MMM')}</Text>
                                     </View>
                                     <View style={[styles.layoutRow]}>
                                         <Text style={styles.blackColorText}>{notification.creatorName}</Text>
@@ -72,44 +97,120 @@ export class Notifications extends Component {
                         </TouchableOpacity>
                     }
                     else if (notification.type === 'communityInvitation') {
-                        return <ListItem
+                        return <TouchableOpacity
                             key={i}
-                            roundAvatar
-                            avatar={{uri: notification.details.pic}}
-                            title={notification.details.name}
-                        />
+                            style={[styles.TouchableOpacityStyles, (i === newNotifications.length - 1) ? styles.marginBottom : null]}
+                            onPress={() => {
+                                this.redirectToWeb(notification)
+                            }}
+                        >
+                            <View style={[styles.layoutRow]}>
+                                <Avatar height={40} source={{uri: notification.details.pic}}/>
+                                <View style={[styles.layoutColumn, styles.leftPaddingText]}>
+                                    <View style={[styles.layoutRow, {flex: 1}]}>
+                                        <Text style={styles.blackColorText}>{notification.details.name}</Text>
+                                    </View>
+                                    <View style={[styles.layoutRow]}>
+                                        <Text style={styles.blackColorText}>{notification.creatorName}</Text>
+                                        <Text style={[styles.grayColorText]}> invites you to this community</Text>
+                                    </View>
+                                </View>
+                            </View>
+                        </TouchableOpacity>
                     }
                     else if (notification.type === 'friendRequest') {
-                        return <ListItem
+                        return <TouchableOpacity
                             key={i}
-                            roundAvatar
-                            avatar={{uri: notification.details.pic}}
-                            title={notification.details.name}
-                        />
+                            style={[styles.TouchableOpacityStyles, (i === newNotifications.length - 1) ? styles.marginBottom : null]}
+                            onPress={() => {
+                                this.redirectToWeb(notification)
+                            }}
+                        >
+                            <View style={[styles.layoutRow]}>
+                                <Avatar height={40} source={{uri: notification.details.pic}}/>
+                                <View style={[styles.layoutColumn, styles.leftPaddingText]}>
+                                    <View style={[styles.layoutRow, {flex: 1}]}>
+                                        <Text style={styles.blackColorText}>{notification.details.name}</Text>
+                                        <Text style={[styles.grayColorText]}> following you</Text>
+                                    </View>
+                                    {/*<View style={[styles.layoutRow]}>*/}
+                                        {/*<Text style={styles.blackColorText}>{notification.creatorName}</Text>*/}
+                                        {/*<Text style={[styles.grayColorText]}> invites you to this community</Text>*/}
+                                    {/*</View>*/}
+                                </View>
+                            </View>
+                        </TouchableOpacity>
                     }
                     else if (notification.type === 'friendAccept') {
-                        return <ListItem
+                        return <TouchableOpacity
                             key={i}
-                            roundAvatar
-                            avatar={{uri: notification.details.pic}}
-                            title={notification.details.name}
-                        />
+                            style={[styles.TouchableOpacityStyles, (i === newNotifications.length - 1) ? styles.marginBottom : null]}
+                            onPress={() => {
+                                this.redirectToWeb(notification)
+                            }}
+                        >
+                            <View style={[styles.layoutRow]}>
+                                <Avatar height={40} source={{uri: notification.details.pic}}/>
+                                <View style={[styles.layoutColumn, styles.leftPaddingText]}>
+                                    <View style={[styles.layoutRow, {flex: 1}]}>
+                                        <Text style={styles.blackColorText}>{notification.details.name}</Text>
+                                        <Text style={[styles.grayColorText]}> following you</Text>
+                                    </View>
+                                    {/*<View style={[styles.layoutRow]}>*/}
+                                    {/*<Text style={styles.blackColorText}>{notification.creatorName}</Text>*/}
+                                    {/*<Text style={[styles.grayColorText]}> invites you to this community</Text>*/}
+                                    {/*</View>*/}
+                                </View>
+                            </View>
+                        </TouchableOpacity>
                     }
                     else if (notification.type === 'Comments') {
-                        return <ListItem
+                        return <TouchableOpacity
                             key={i}
-                            roundAvatar
-                            avatar={{uri: notification.details.pic}}
-                            title={notification.details.name}
-                        />
+                            style={[styles.TouchableOpacityStyles, (i === newNotifications.length - 1) ? styles.marginBottom : null]}
+                            onPress={() => {
+                                this.redirectToWeb(notification)
+                            }}
+                        >
+                            <View style={[styles.layoutRow]}>
+                                <Avatar height={40} source={{uri: notification.details.pic}}/>
+                                <View style={[styles.layoutColumn, styles.leftPaddingText]}>
+                                    <View style={[styles.layoutRow, {flex: 1}]}>
+                                        <Text style={styles.blackColorText}>{notification.details.name}</Text>
+                                        <Text style={[styles.grayColorText]}> wrote comment</Text>
+                                    </View>
+                                    {/*<View style={[styles.layoutRow]}>*/}
+                                    {/*<Text style={styles.blackColorText}>{notification.creatorName}</Text>*/}
+                                    {/*<Text style={[styles.grayColorText]}> invites you to this community</Text>*/}
+                                    {/*</View>*/}
+                                </View>
+                            </View>
+                        </TouchableOpacity>
                     }
                     else if (notification.type === 'oneTimeEventCreate' || notification.type === 'repeatedEventCreate') {
-                        return <ListItem
+                        return <TouchableOpacity
                             key={i}
-                            roundAvatar
-                            avatar={{uri: notification.details.pic}}
-                            title={notification.details.name}
-                        />
+                            style={[styles.TouchableOpacityStyles, (i === newNotifications.length - 1) ? styles.marginBottom : null]}
+                            onPress={() => {
+                                this.redirectToWeb(notification)
+                            }}
+                        >
+                            <View style={[styles.layoutRow]}>
+                                <Avatar height={40} source={{uri: notification.details.pic}}/>
+                                <View style={[styles.layoutColumn, styles.leftPaddingText]}>
+                                    <View style={[styles.layoutRow, {flex: 1}]}>
+                                        <Text
+                                            style={styles.blackColorText}>{notification.details.name ? notification.details.name : notification.details.activity.name}</Text>
+                                        <Text style={styles.grayColorText}>
+                                            {' on ' + moment(notification.details.date).format('Do MMM')}</Text>
+                                    </View>
+                                    <View style={[styles.layoutRow]}>
+                                        <Text style={styles.blackColorText}>{notification.details.name}</Text>
+                                        <Text style={[styles.grayColorText]}> invites you to this event</Text>
+                                    </View>
+                                </View>
+                            </View>
+                        </TouchableOpacity>
                     }
                 }) : null
             }
@@ -139,7 +240,7 @@ export class Notifications extends Component {
                                         <Text
                                             style={styles.blackColorText}>{notification.details.name ? notification.details.name : notification.details.activity.name}</Text>
                                         <Text style={styles.grayColorText}>
-                                            on {moment(notification.details.date).format('Do MMM')}</Text>
+                                            {' on ' + moment(notification.details.date).format('Do MMM')}</Text>
                                     </View>
                                     <View style={[styles.layoutRow]}>
                                         <Text style={styles.blackColorText}>{notification.creatorName}</Text>
@@ -150,44 +251,120 @@ export class Notifications extends Component {
                         </TouchableOpacity>
                     }
                     else if (notification.type === 'communityInvitation') {
-                        return <ListItem
+                        return <TouchableOpacity
                             key={i}
-                            roundAvatar
-                            avatar={{uri: notification.details.pic}}
-                            title={notification.details.name}
-                        />
+                            style={[styles.TouchableOpacityStyles, (i === viewedNotifications.length - 1) ? styles.marginBottom : null]}
+                            onPress={() => {
+                                this._onSelect(notification)
+                            }}
+                        >
+                            <View style={[styles.layoutRow]}>
+                                <Avatar height={40} source={{uri: notification.details.pic}}/>
+                                <View style={[styles.layoutColumn, styles.leftPaddingText]}>
+                                    <View style={[styles.layoutRow, {flex: 1}]}>
+                                        <Text style={styles.blackColorText}>{notification.details.name}</Text>
+                                    </View>
+                                    <View style={[styles.layoutRow]}>
+                                        <Text style={styles.blackColorText}>{notification.creatorName}</Text>
+                                        <Text style={[styles.grayColorText]}> invites you to this community</Text>
+                                    </View>
+                                </View>
+                            </View>
+                        </TouchableOpacity>
                     }
                     else if (notification.type === 'friendRequest') {
-                        return <ListItem
+                        return <TouchableOpacity
                             key={i}
-                            roundAvatar
-                            avatar={{uri: notification.details.pic}}
-                            title={notification.details.name}
-                        />
+                            style={[styles.TouchableOpacityStyles, (i === viewedNotifications.length - 1) ? styles.marginBottom : null]}
+                            onPress={() => {
+                                this._onSelect(notification)
+                            }}
+                        >
+                            <View style={[styles.layoutRow]}>
+                                <Avatar height={40} source={{uri: notification.details.pic}}/>
+                                <View style={[styles.layoutColumn, styles.leftPaddingText]}>
+                                    <View style={[styles.layoutRow, {flex: 1}]}>
+                                        <Text style={styles.blackColorText}>{notification.details.name}</Text>
+                                        <Text style={[styles.grayColorText]}> following you</Text>
+                                    </View>
+                                    {/*<View style={[styles.layoutRow]}>*/}
+                                    {/*<Text style={styles.blackColorText}>{notification.creatorName}</Text>*/}
+                                    {/*<Text style={[styles.grayColorText]}> invites you to this community</Text>*/}
+                                    {/*</View>*/}
+                                </View>
+                            </View>
+                        </TouchableOpacity>
                     }
                     else if (notification.type === 'friendAccept') {
-                        return <ListItem
+                        return <TouchableOpacity
                             key={i}
-                            roundAvatar
-                            avatar={{uri: notification.details.pic}}
-                            title={notification.details.name}
-                        />
+                            style={[styles.TouchableOpacityStyles, (i === viewedNotifications.length - 1) ? styles.marginBottom : null]}
+                            onPress={() => {
+                                this._onSelect(notification)
+                            }}
+                        >
+                            <View style={[styles.layoutRow]}>
+                                <Avatar height={40} source={{uri: notification.details.pic}}/>
+                                <View style={[styles.layoutColumn, styles.leftPaddingText]}>
+                                    <View style={[styles.layoutRow, {flex: 1}]}>
+                                        <Text style={styles.blackColorText}>{notification.details.name}</Text>
+                                        <Text style={[styles.grayColorText]}> following you</Text>
+                                    </View>
+                                    {/*<View style={[styles.layoutRow]}>*/}
+                                    {/*<Text style={styles.blackColorText}>{notification.creatorName}</Text>*/}
+                                    {/*<Text style={[styles.grayColorText]}> invites you to this community</Text>*/}
+                                    {/*</View>*/}
+                                </View>
+                            </View>
+                        </TouchableOpacity>
                     }
                     else if (notification.type === 'Comments') {
-                        return <ListItem
+                        return <TouchableOpacity
                             key={i}
-                            roundAvatar
-                            avatar={{uri: notification.details.pic}}
-                            title={notification.details.name}
-                        />
+                            style={[styles.TouchableOpacityStyles, (i === viewedNotifications.length - 1) ? styles.marginBottom : null]}
+                            onPress={() => {
+                                this._onSelect(notification)
+                            }}
+                        >
+                            <View style={[styles.layoutRow]}>
+                                <Avatar height={40} source={{uri: notification.details.pic}}/>
+                                <View style={[styles.layoutColumn, styles.leftPaddingText]}>
+                                    <View style={[styles.layoutRow, {flex: 1}]}>
+                                        <Text style={styles.blackColorText}>{notification.details.name}</Text>
+                                        <Text style={[styles.grayColorText]}> wrote comment</Text>
+                                    </View>
+                                    {/*<View style={[styles.layoutRow]}>*/}
+                                    {/*<Text style={styles.blackColorText}>{notification.creatorName}</Text>*/}
+                                    {/*<Text style={[styles.grayColorText]}> invites you to this community</Text>*/}
+                                    {/*</View>*/}
+                                </View>
+                            </View>
+                        </TouchableOpacity>
                     }
                     else if (notification.type === 'oneTimeEventCreate' || notification.type === 'repeatedEventCreate') {
-                        return <ListItem
+                        return <TouchableOpacity
                             key={i}
-                            roundAvatar
-                            avatar={{uri: notification.details.pic}}
-                            title={notification.details.name}
-                        />
+                            style={[styles.TouchableOpacityStyles, (i === viewedNotifications.length - 1) ? styles.marginBottom : null]}
+                            onPress={() => {
+                                this._onSelect(notification)
+                            }}
+                        >
+                            <View style={[styles.layoutRow]}>
+                                <Avatar height={40} source={{uri: notification.details.pic}}/>
+                                <View style={[styles.layoutColumn, styles.leftPaddingText]}>
+                                    <View style={[styles.layoutRow, {flex: 1}]}>
+                                        <Text
+                                            style={styles.blackColorText}>{notification.details.name ? notification.details.name : notification.details.activity.name}</Text>
+                                        <Text style={styles.grayColorText}>
+                                            {' on ' + moment(notification.details.date).format('Do MMM')}</Text>
+                                    </View>
+                                    <View style={[styles.layoutRow]}>
+                                        <Text style={styles.blackColorText}>{notification.details.name}</Text>
+                                        <Text style={[styles.grayColorText]}> invites you to this event</Text>
+                                    </View>
+                                </View>
+                            </View>
+                        </TouchableOpacity>
                     }
                 }) : null
             }
@@ -198,20 +375,20 @@ export class Notifications extends Component {
         </ScrollView>
     };
 
-    handleAppStateChange(appState) {
-        if (appState === 'background') {
-            let date = new Date(Date.now() + (this.state.seconds * 1000));
-
-            if (Platform.OS === 'ios') {
-                date = date.toISOString();
-            }
-
-            PushNotification.localNotificationSchedule({
-                message: "My Notification Message",
-                date,
-            });
-        }
-    }
+    // handleAppStateChange(appState) {
+    //     if (appState === 'background') {
+    //         let date = new Date(Date.now() + (this.state.seconds * 1000));
+    //
+    //         if (Platform.OS === 'ios') {
+    //             date = date.toISOString();
+    //         }
+    //
+    //         PushNotification.localNotificationSchedule({
+    //             message: "My Notification Message",
+    //             date,
+    //         });
+    //     }
+    // }
 
     render() {
         const {notifications} = this.props;
@@ -233,16 +410,16 @@ export class Notifications extends Component {
 
                 {this.renderNotifications(viewedNotifications, newNotifications)}
 
-                <Picker
-                    style={styles.picker}
-                    selectedValue={this.state.seconds}
-                    onValueChange={(seconds) => this.setState({ seconds })}
-                >
-                    <Picker.Item label="5" value={5} />
-                    <Picker.Item label="10" value={10} />
-                    <Picker.Item label="15" value={15} />
-                </Picker>
-                <PushController />
+                {/*<Picker*/}
+                    {/*style={styles.picker}*/}
+                    {/*selectedValue={this.state.seconds}*/}
+                    {/*onValueChange={(seconds) => this.setState({ seconds })}*/}
+                {/*>*/}
+                    {/*<Picker.Item label="5" value={5} />*/}
+                    {/*<Picker.Item label="10" value={10} />*/}
+                    {/*<Picker.Item label="15" value={15} />*/}
+                {/*</Picker>*/}
+                {/*<PushController />*/}
 
             </View>
         );
