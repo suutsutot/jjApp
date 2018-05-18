@@ -1,7 +1,9 @@
 import 'app/config/userAgent';
 import React, {Component} from 'react';
-import {View} from 'react-native';
+import {View, Platform} from 'react-native';
 import {connect} from 'react-redux';
+import PushNotification from 'react-native-push-notification';
+import PushController from './../PushController';
 import io from 'socket.io-client';
 import config from 'app/config';
 import {getNotifications} from 'app/api/NotificationsAPI';
@@ -20,8 +22,15 @@ const handleSocketMessage = payload => dispatch => {
 };
 
 export class SocketListener extends Component {
+
+    constructor(props) {
+        super(props);
+
+    }
+
     componentDidMount() {
         const {handleSocketMessage} = this.props;
+
         socket.on('connect', function () {
             refresh().then((newToken) => {
                 socket.emit('authenticate', {token: newToken.idToken});
@@ -31,16 +40,47 @@ export class SocketListener extends Component {
         socket.on('notification added', function (data) {
             console.log('notification added');
             handleSocketMessage(data);
+
+            // push notifications
+            let date = new Date(Date.now() + 1000);
+
+            if (Platform.OS === 'ios') {
+                date = date.toISOString();
+            }
+
+            let message = data.creatorName + ' invites you to event';
+
+            PushNotification.localNotificationSchedule({
+                title: "You have new notification",
+                message: message,
+                date,
+            });
+
         });
 
         socket.on('notification updated', function (data) {
             console.log('notification updated');
             handleSocketMessage(data);
+
+            // push notifications
+            let date = new Date(Date.now() + 1000);
+
+            if (Platform.OS === 'ios') {
+                date = date.toISOString();
+            }
+
+            let message = data.creatorName + ' invites you to event';
+
+            PushNotification.localNotificationSchedule({
+                title: "You have new notification",
+                message: message,
+                date,
+            });
         });
     }
 
     render() {
-        return <View />;
+        return <View><PushController /></View>;
     }
 }
 

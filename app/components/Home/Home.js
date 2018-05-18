@@ -3,7 +3,8 @@ import {connect} from 'react-redux'
 import {View, Text, TouchableOpacity, Linking} from 'react-native'
 import {Avatar} from 'react-native-elements'
 import moment from 'moment'
-
+import {refresh} from 'app/api/refreshTokenAPI';
+import config from 'app/config';
 import {HeaderSection} from 'app/pureComponents'
 
 import { eventActions } from 'app/data/event'
@@ -26,7 +27,7 @@ export class Home extends Component {
 
     goToEvent = (id) => {
         refresh().then((newToken) => {
-            let url = 'http://justjoin1.ru/redirect?type=event&id=' + id  + '&idToken=' + newToken.idToken + '&accessToken=' + newToken.accessToken;
+            let url = config.client + '/redirect?type=event&id=' + id  + '&idToken=' + newToken.idToken + '&accessToken=' + newToken.accessToken;
 
             Linking.canOpenURL(url).then(supported => {
                 if (supported) {
@@ -50,7 +51,7 @@ export class Home extends Component {
                         onPress={() => {this.goToEvent(event._id)}}
                     >
                         <View style={[styles.layoutRow]}>
-                            <Avatar height={60} source={{uri: event.backgroundPic ? event.backgroundPic : 'https://static-cdn.jtvnw.net/jtv_user_pictures/welovegames-profile_image-15afef2e74a108da-70x70.png'}}/>
+                            <Avatar height={60} source={{uri: event.backgroundPic}}/>
                             <View style={[styles.layoutColumn, styles.leftPaddingText]}>
                                 <View style={[styles.layoutRow]}>
                                     <Text style={styles.blackColorText}>{event.title ? event.title : event.activity.name}</Text>
