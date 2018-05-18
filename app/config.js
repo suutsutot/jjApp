@@ -15,4 +15,4 @@ const config = {
     }
 };
 
-export default config.local;
+export default config.dev;
