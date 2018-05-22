@@ -19,7 +19,7 @@ export class Profile extends Component {
             index: 0,
             routes: [
                 {key: '1', title: 'Activities', count: '0'},
-                {key: '2', title: 'Events', count: '0'},
+                {key: '2', title: 'Communities', count: '0'},
                 {key: '3', title: 'Following', count: '0'},
                 {key: '4', title: 'Followers', count: '0'},
             ],
@@ -34,9 +34,7 @@ export class Profile extends Component {
             <ImageBackground
                 style={styles.headerBackgroundImage}
                 blurRadius={10}
-                source={{
-                    uri: avatarBackground,
-                }}
+                //source={{uri: avatarBackground,}}
             >
                 <View style={styles.headerContainer}>
                     <View style={styles.userRow}>

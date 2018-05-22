@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {View, ScrollView} from 'react-native'
+import {TouchableOpacity, View, ScrollView, Image} from 'react-native'
 import {CardSection, Button, HeaderSection} from 'app/pureComponents'
 
 import styles from './styles'
@@ -14,8 +14,33 @@ export class Settings extends Component {
         logout()
     }
 
+    renderProfile = () => {
+        return <TouchableOpacity
+            style={[styles.TouchableOpacityStyles, styles.backgroundColorContentWhite]}
+            onPress={() => {
+                this.goToEvent(event._id)
+            }}
+        >
+            <View style={[styles.layoutRow]}>
+                {/*<Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 60, width: 60, borderRadius: 50}} containerStyle={{height: 60, width: 60}}  source={{uri: event.backgroundPic}}/>*/}
+                <Image style={{ alignSelf: 'center', height: 60, width: 60, borderRadius: 50}} source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}/>
+                {/*<View style={[styles.layoutColumn, styles.leftPaddingText]}>*/}
+                    {/*<View style={[styles.layoutRow]}>*/}
+                        {/*<Text*/}
+                            {/*style={styles.blackColorText}>{event.title ? event.title : event.activity.name}</Text>*/}
+                        {/*<Text style={styles.grayColorText}>*/}
+                            {/*{' on ' + moment(event.eventDates.startDate).format('Do MMM')}</Text>*/}
+                    {/*</View>*/}
+                    {/*<View style={[styles.layoutColumn]}>*/}
+                        {/*<Text style={styles.grayColorText}>{event.activity.name}</Text>*/}
+                        {/*<Text style={[styles.grayColorText]}>{event.participants.length} participants</Text>*/}
+                    {/*</View>*/}
+                {/*</View>*/}
+            </View>
+        </TouchableOpacity>
+    }
+
     renderButton() {
-        const {navigation} = this.props;
 
         return (
             <CardSection style={styles.buttons}>
@@ -31,8 +56,8 @@ export class Settings extends Component {
             <View style={styles.profile}>
                 <HeaderSection title={'Settings'}/>
                 <ScrollView>
-                    <View>{this.renderButton()}</View>
-
+                    {this.renderProfile()}
+                    <View style={{alignItems: 'center'}}>{this.renderButton()}</View>
                 </ScrollView>
             </View>
         )

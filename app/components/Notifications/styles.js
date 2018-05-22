@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#f0eff4'
     },
     marginFooter: {
-        marginVertical: 25
+        // marginVertical: 25
     },
     marginBottom: {
         marginBottom: 25

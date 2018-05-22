@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {View, Text, TouchableOpacity, Linking, ActivityIndicator} from 'react-native';
+import {View, Text, TouchableOpacity, Linking, ActivityIndicator, Image, ScrollView} from 'react-native';
 import {Avatar} from 'react-native-elements';
 import moment from 'moment';
 import {refresh} from 'app/api/refreshTokenAPI';
@@ -50,7 +50,8 @@ export class Home extends Component {
                         }}
                     >
                         <View style={[styles.layoutRow]}>
-                            <Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 60, width: 60, borderRadius: 50}} containerStyle={{height: 60, width: 60}}  source={{uri: event.backgroundPic}}/>
+                            {/*<Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 60, width: 60, borderRadius: 50}} containerStyle={{height: 60, width: 60}}  source={{uri: event.backgroundPic}}/>*/}
+                            <Image style={{ alignSelf: 'center', height: 60, width: 60, borderRadius: 50}} source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}/>
                             <View style={[styles.layoutColumn, styles.leftPaddingText]}>
                                 <View style={[styles.layoutRow]}>
                                     <Text
@@ -96,10 +97,10 @@ export class Home extends Component {
     };
 
     renderEventScreen = () => {
-        return <View>
+        return <ScrollView>
             {this.renderRecommendedEvents()}
             {this.renderUserEvents()}
-        </View>
+        </ScrollView>
     };
 
     renderProcess = () => {
@@ -116,9 +117,7 @@ export class Home extends Component {
         return (
             <View style={{flex: 1}}>
                 <HeaderSection title='Events'/>
-                {
-                    loaded ? this.renderEventScreen() : this.renderProcess()
-                }
+                {loaded ? this.renderEventScreen() : this.renderProcess()}
             </View>
         )
     }
@@ -146,11 +145,11 @@ const mapStateToProps = ({events}) => {
     let recommendedEvents = [];
 
     if (userEvents.loaded) {
-        joinedEvents = userEvents.list.joined;
+        joinedEvents = userEvents.list;
     }
 
     if (recommended.loaded) {
-        recommendedEvents = recommended.list.recommended;
+        recommendedEvents = recommended.list;
     }
 
     let loaded = false;

@@ -22,7 +22,7 @@ export const dbGetEventsList = () => {
                     .then(r => r.json())
                     .catch(error => console.log('Error: ', error))
                     .then(response => {
-                        let eventsList = response || {};
+                        let eventsList = response.joined || {};
                         dispatch(addUserEventsListInfo(userId, eventsList))
                     });
             })
@@ -48,7 +48,7 @@ export const dbGetRecommendedEvents = () => {
                     .then(r => r.json())
                     .catch(error => console.log('Error: ', error))
                     .then(response => {
-                        let eventsList = response || {};
+                        let eventsList = response.recommended || {};
                         dispatch(addRecommenedEvents(userId, eventsList))
                     });
             })

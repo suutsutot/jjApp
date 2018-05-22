@@ -1,13 +1,11 @@
 import {AsyncStorage} from 'react-native';
 import {NavigationActions} from 'react-navigation'
-
 import Auth0 from 'react-native-auth0';
 let credentials = require('app/config/auth0-credentials');
 const auth0 = new Auth0(credentials);
-
+import {getNotifications} from 'app/api/NotificationsAPI';
 import {refreshByCredentials} from 'app/api/refreshTokenAPI'
 import config from 'app/config';
-
 import * as types from 'app/constants/actionTypes'
 import * as globalActions from 'app/data/global/globalActions'
 
@@ -58,6 +56,10 @@ export let dbLogin = () => {
 
                                     dispatch(globalActions.showNotificationSuccess());
                                     dispatch(login(userInfo.email, userInfo));
+
+                                    getNotifications().then((data) => {
+                                        dispatch(updateNotifications(data));
+                                    });
 
                                     let resetAction;
 
@@ -120,3 +122,8 @@ export const getUserId = (userId, email) => {
         payload: {userId, email}
     }
 };
+
+const updateNotifications = payload => ({
+    type: 'UPDATE_NOTIFICATIONS',
+    payload
+});

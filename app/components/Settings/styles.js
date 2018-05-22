@@ -6,7 +6,19 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-
+        width: '50%'
+    },
+    TouchableOpacityStyles: {
+        margin: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    backgroundColorContentWhite: {
+        backgroundColor: '#fff'
+    },
+    layoutRow: {
+        flexDirection: 'row'
     },
 });
 
