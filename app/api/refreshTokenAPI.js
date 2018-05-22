@@ -1,8 +1,7 @@
 import {AsyncStorage} from 'react-native';
 const refreshToken = () => AsyncStorage.getItem("refreshToken");
-
 import Auth0 from 'react-native-auth0';
-let credentials = require('app/config/auth0-credentials');
+let credentials = require('./../config/auth0-credentials');
 const auth0 = new Auth0(credentials);
 
 export const refresh = () => {

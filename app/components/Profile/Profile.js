@@ -28,6 +28,7 @@ export class Profile extends Component {
 
     renderContactHeader = () => {
         const {avatar, avatarBackground, name, address: {city, country}} = this.props;
+        console.log('avatarBackground123', avatarBackground)
 
         return (
             <ImageBackground
@@ -177,6 +178,7 @@ export class Profile extends Component {
                 </View>
             </ScrollView>
         )
+        // return null
 
     }
 }

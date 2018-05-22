@@ -1,17 +1,16 @@
-import React, {Component} from 'react'
-import {connect} from 'react-redux'
-import {View, Text, TouchableOpacity, Linking} from 'react-native'
-import {Avatar} from 'react-native-elements'
-import moment from 'moment'
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {View, Text, TouchableOpacity, Linking, ActivityIndicator} from 'react-native';
+import {Avatar} from 'react-native-elements';
+import moment from 'moment';
 import {refresh} from 'app/api/refreshTokenAPI';
 import config from 'app/config';
-import {HeaderSection} from 'app/pureComponents'
-
-import { eventActions } from 'app/data/event'
-import { userActions } from 'app/data/user'
-import { notificationActions } from 'app/data/notification'
-
-import styles from './styles'
+import {HeaderSection} from 'app/pureComponents';
+import {eventActions} from 'app/data/event';
+import {userActions} from 'app/data/user';
+import {notificationActions} from 'app/data/notification';
+import {activityActions} from 'app/data/activity'
+import styles from './styles';
 
 
 export class Home extends Component {
@@ -27,7 +26,7 @@ export class Home extends Component {
 
     goToEvent = (id) => {
         refresh().then((newToken) => {
-            let url = config.client + '/redirect?type=event&id=' + id  + '&idToken=' + newToken.idToken + '&accessToken=' + newToken.accessToken;
+            let url = config.client + '/redirect?type=event&id=' + id + '&idToken=' + newToken.idToken + '&accessToken=' + newToken.accessToken;
 
             Linking.canOpenURL(url).then(supported => {
                 if (supported) {
@@ -39,23 +38,25 @@ export class Home extends Component {
         });
     };
 
-    renderEventList = () => {
-        const {joinedEvents, managedEvents} = this.props;
-
+    renderEventList = (events) => {
         return <View>
             {
-                joinedEvents.map((event, i) => (
+                events.map((event, i) => (
                     <TouchableOpacity
                         key={i}
                         style={[styles.TouchableOpacityStyles]}
-                        onPress={() => {this.goToEvent(event._id)}}
+                        onPress={() => {
+                            this.goToEvent(event._id)
+                        }}
                     >
                         <View style={[styles.layoutRow]}>
-                            <Avatar height={60} source={{uri: event.backgroundPic}}/>
+                            <Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 60, width: 60, borderRadius: 50}} containerStyle={{height: 60, width: 60}}  source={{uri: event.backgroundPic}}/>
                             <View style={[styles.layoutColumn, styles.leftPaddingText]}>
                                 <View style={[styles.layoutRow]}>
-                                    <Text style={styles.blackColorText}>{event.title ? event.title : event.activity.name}</Text>
-                                    <Text style={styles.grayColorText}> on  {moment(event.eventDates.startDate).format('Do MMM')}</Text>
+                                    <Text
+                                        style={styles.blackColorText}>{event.title ? event.title : event.activity.name}</Text>
+                                    <Text style={styles.grayColorText}>
+                                        {' on ' + moment(event.eventDates.startDate).format('Do MMM')}</Text>
                                 </View>
                                 <View style={[styles.layoutColumn]}>
                                     <Text style={styles.grayColorText}>{event.activity.name}</Text>
@@ -66,18 +67,60 @@ export class Home extends Component {
                     </TouchableOpacity>
                 ))
             }
-        </View>;
+        </View>
+    };
+
+    renderNoEvents = (type) => {
+        if (type === 'recommended') return <View><Text>No one recommended events</Text></View>;
+        else if (type === 'userList') return <View><Text>No one events</Text></View>;
+    };
+
+    renderRecommendedEvents = () => {
+        const {recommendedEvents} = this.props;
+
+        if (recommendedEvents.length > 0) return <View style={[styles.backgroundColorContentWhite, styles.shadowContainer, {marginBottom: 20}]}>
+            <Text style={{margin: 10}}>{'Recommended events ' + recommendedEvents.length}</Text>
+            {this.renderEventList(recommendedEvents)}
+        </View>
+    };
+
+    renderUserEvents = () => {
+        const {joinedEvents} = this.props;
+
+        return <View style={[styles.backgroundColorContentWhite, styles.shadowContainer, {marginBottom: 20}]}>
+            <Text style={{margin: 10}}>{'Events ' + joinedEvents.length}</Text>
+            {
+                joinedEvents.length > 0 ? this.renderEventList(joinedEvents) : this.renderNoEvents('userList')
+            }
+        </View>
+    };
+
+    renderEventScreen = () => {
+        return <View>
+            {this.renderRecommendedEvents()}
+            {this.renderUserEvents()}
+        </View>
+    };
+
+    renderProcess = () => {
+        return <View style={styles.containerProcess}>
+            <View>
+                <ActivityIndicator size="large" color="#00bcd4"/>
+            </View>
+        </View>
     };
 
     render() {
+        const {loaded} = this.props;
+
         return (
-            <View>
+            <View style={{flex: 1}}>
                 <HeaderSection title='Events'/>
-                {this.renderEventList()}
+                {
+                    loaded ? this.renderEventScreen() : this.renderProcess()
+                }
             </View>
-            )
-
-
+        )
     }
 }
 
@@ -87,6 +130,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         loadData: () => {
             dispatch(userActions.dbGetProfile());
             dispatch(eventActions.dbGetEventsList());
+            dispatch(eventActions.dbGetRecommendedEvents());
             // dispatch(notificationActions.dbGetNotifies());
             // dispatch(activityActions.dbGetActivitiesList());
 
@@ -96,18 +140,26 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 };
 
 const mapStateToProps = ({events}) => {
-    const {info, loaded} = events;
+    const {userEvents, recommended} = events;
 
     let joinedEvents = [];
-    let managedEvents = [];
-    if (loaded && info) {
-        joinedEvents = info.joined;
-        managedEvents = info.managed;
+    let recommendedEvents = [];
+
+    if (userEvents.loaded) {
+        joinedEvents = userEvents.list.joined;
     }
+
+    if (recommended.loaded) {
+        recommendedEvents = recommended.list.recommended;
+    }
+
+    let loaded = false;
+    if (userEvents.loaded && recommended.loaded) loaded = true;
 
     return {
         joinedEvents: joinedEvents ? joinedEvents : [],
-        managedEvents: managedEvents ? managedEvents : [],
+        recommendedEvents: recommendedEvents ? recommendedEvents : [],
+        loaded
     }
 };
 

@@ -6,10 +6,10 @@ import styles from './styles'
 class AuthLoadingScreen extends Component {
     constructor() {
         super();
-        this._bootstrapAsync();
+        this.bootstrapAsync();
     }
 
-    _bootstrapAsync = async () => {
+    bootstrapAsync = async () => {
         const userId = await AsyncStorage.getItem('userId');
         this.props.navigation.navigate(userId ? 'App' : 'Auth');
     };
@@ -21,7 +21,6 @@ class AuthLoadingScreen extends Component {
                     style={styles.logo}
                     source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}
                 />
-                <StatusBar barStyle="default" />
             </View>
         );
     }

@@ -17,12 +17,10 @@ const styles = StyleSheet.create({
     blackColorText: {
         color: '#000',
         fontSize: 14,
-        // fontFamily: 'Roboto',
     },
     grayColorText: {
         color: '#78909c',
         fontSize: 14,
-        // fontFamily: 'Roboto',
     },
     leftPaddingText: {
         paddingLeft: 10
@@ -41,6 +39,13 @@ const styles = StyleSheet.create({
     },
     picker: {
         width: 100,
+    },
+    shadowContainer: {
+        shadowColor: '#000',
+        shadowOffset: { height: 0.5 },
+        shadowOpacity: 0.1,
+        shadowRadius: 0.5,
+        elevation: 4
     },
 });
 

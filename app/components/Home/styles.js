@@ -1,9 +1,8 @@
-import { StyleSheet } from 'react-native'
+import {StyleSheet} from 'react-native'
 
 const styles = StyleSheet.create({
     TouchableOpacityStyles: {
         margin: 10,
-        // height: 40,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -113,6 +112,22 @@ const styles = StyleSheet.create({
         fontSize: 12.5,
         textAlign: 'center',
     },
+    containerProcess: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    backgroundColorContentWhite: {
+        backgroundColor: '#fff'
+    },
+    shadowContainer: {
+        shadowColor: '#000',
+        shadowOffset: { height: 0.5 },
+        shadowOpacity: 0.1,
+        shadowRadius: 0.5,
+        elevation: 4
+    }
 });
 
 export default styles

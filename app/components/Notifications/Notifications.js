@@ -7,29 +7,13 @@ import moment from 'moment'
 import forEach from 'lodash/forEach'
 import config from 'app/config';
 import {refresh} from 'app/api/refreshTokenAPI';
-
 import styles from './styles'
-
-// import PushNotification from 'react-native-push-notification';
-// import PushController from './PushController';
 
 
 export class Notifications extends Component {
     constructor(props) {
         super(props);
 
-        // this.handleAppStateChange = this.handleAppStateChange.bind(this);
-        // this.state = {
-        //     seconds: 5,
-        // };
-    }
-
-    componentDidMount() {
-        // AppState.addEventListener('change', this.handleAppStateChange);
-    }
-
-    componentWillUnmount() {
-        // AppState.removeEventListener('change', this.handleAppStateChange);
     }
 
     redirectToWeb = (notification) => {
@@ -59,10 +43,8 @@ export class Notifications extends Component {
         });
     };
 
-    renderNotifications = (viewedNotifications, newNotifications) => {
-        const {notifications} = this.props;
-        return <ScrollView>
-            {/* NEW NOTIFICATIONS*/}
+    renderNewNotificationsList = (newNotifications) => {
+        return <View style={[styles.backgroundColorContentWhite, styles.shadowContainer, {marginBottom: 20}]}>
             {
                 newNotifications && newNotifications.length !== 0 ?
                     <View style={[styles.layoutRow, styles.leftPaddingText, {marginTop: 10, marginBottom: 10}]}>
@@ -80,7 +62,7 @@ export class Notifications extends Component {
                             }}
                         >
                             <View style={[styles.layoutRow]}>
-                                <Avatar height={40} source={{uri: notification.details.pic}}/>
+                                <Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 40, width: 40, borderRadius: 50}} containerStyle={{height: 40, width: 40}} source={{uri: notification.details.pic}}/>
                                 <View style={[styles.layoutColumn, styles.leftPaddingText]}>
                                     <View style={[styles.layoutRow, {flex: 1}]}>
                                         <Text
@@ -105,7 +87,7 @@ export class Notifications extends Component {
                             }}
                         >
                             <View style={[styles.layoutRow]}>
-                                <Avatar height={40} source={{uri: notification.details.pic}}/>
+                                <Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 40, width: 40, borderRadius: 50}} containerStyle={{height: 40, width: 40}} source={{uri: notification.details.pic}}/>
                                 <View style={[styles.layoutColumn, styles.leftPaddingText]}>
                                     <View style={[styles.layoutRow, {flex: 1}]}>
                                         <Text style={styles.blackColorText}>{notification.details.name}</Text>
@@ -127,16 +109,12 @@ export class Notifications extends Component {
                             }}
                         >
                             <View style={[styles.layoutRow]}>
-                                <Avatar height={40} source={{uri: notification.details.pic}}/>
+                                <Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 40, width: 40, borderRadius: 50}} containerStyle={{height: 40, width: 40}} source={{uri: notification.details.pic}}/>
                                 <View style={[styles.layoutColumn, styles.leftPaddingText]}>
                                     <View style={[styles.layoutRow, {flex: 1}]}>
                                         <Text style={styles.blackColorText}>{notification.details.name}</Text>
                                         <Text style={[styles.grayColorText]}> following you</Text>
                                     </View>
-                                    {/*<View style={[styles.layoutRow]}>*/}
-                                        {/*<Text style={styles.blackColorText}>{notification.creatorName}</Text>*/}
-                                        {/*<Text style={[styles.grayColorText]}> invites you to this community</Text>*/}
-                                    {/*</View>*/}
                                 </View>
                             </View>
                         </TouchableOpacity>
@@ -150,16 +128,12 @@ export class Notifications extends Component {
                             }}
                         >
                             <View style={[styles.layoutRow]}>
-                                <Avatar height={40} source={{uri: notification.details.pic}}/>
+                                <Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 40, width: 40, borderRadius: 50}} containerStyle={{height: 40, width: 40}} source={{uri: notification.details.pic}}/>
                                 <View style={[styles.layoutColumn, styles.leftPaddingText]}>
                                     <View style={[styles.layoutRow, {flex: 1}]}>
                                         <Text style={styles.blackColorText}>{notification.details.name}</Text>
                                         <Text style={[styles.grayColorText]}> following you</Text>
                                     </View>
-                                    {/*<View style={[styles.layoutRow]}>*/}
-                                    {/*<Text style={styles.blackColorText}>{notification.creatorName}</Text>*/}
-                                    {/*<Text style={[styles.grayColorText]}> invites you to this community</Text>*/}
-                                    {/*</View>*/}
                                 </View>
                             </View>
                         </TouchableOpacity>
@@ -173,16 +147,12 @@ export class Notifications extends Component {
                             }}
                         >
                             <View style={[styles.layoutRow]}>
-                                <Avatar height={40} source={{uri: notification.details.pic}}/>
+                                <Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 40, width: 40, borderRadius: 50}} containerStyle={{height: 40, width: 40}} source={{uri: notification.details.pic}}/>
                                 <View style={[styles.layoutColumn, styles.leftPaddingText]}>
                                     <View style={[styles.layoutRow, {flex: 1}]}>
                                         <Text style={styles.blackColorText}>{notification.details.name}</Text>
                                         <Text style={[styles.grayColorText]}> wrote comment</Text>
                                     </View>
-                                    {/*<View style={[styles.layoutRow]}>*/}
-                                    {/*<Text style={styles.blackColorText}>{notification.creatorName}</Text>*/}
-                                    {/*<Text style={[styles.grayColorText]}> invites you to this community</Text>*/}
-                                    {/*</View>*/}
                                 </View>
                             </View>
                         </TouchableOpacity>
@@ -196,7 +166,7 @@ export class Notifications extends Component {
                             }}
                         >
                             <View style={[styles.layoutRow]}>
-                                <Avatar height={40} source={{uri: notification.details.pic}}/>
+                                <Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 40, width: 40, borderRadius: 50}} containerStyle={{height: 40, width: 40}} source={{uri: notification.details.pic}}/>
                                 <View style={[styles.layoutColumn, styles.leftPaddingText]}>
                                     <View style={[styles.layoutRow, {flex: 1}]}>
                                         <Text
@@ -214,9 +184,11 @@ export class Notifications extends Component {
                     }
                 }) : null
             }
+        </View>
+    };
 
-
-            {/* VIEWED NOTIFICATIONS*/}
+    renderViewedNotificationsList = (viewedNotifications) => {
+        return <View style={[styles.backgroundColorContentWhite, styles.shadowContainer, {marginBottom: 20}]}>
             {
                 viewedNotifications && viewedNotifications.length !== 0 ?
                     <View style={[styles.layoutRow, styles.leftPaddingText, {marginTop: 10, marginBottom: 10}]}>
@@ -234,7 +206,7 @@ export class Notifications extends Component {
                             }}
                         >
                             <View style={[styles.layoutRow]}>
-                                <Avatar height={40} source={{uri: notification.details.pic}}/>
+                                <Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 40, width: 40, borderRadius: 50}} containerStyle={{height: 40, width: 40}} source={{uri: notification.details.pic}}/>
                                 <View style={[styles.layoutColumn, styles.leftPaddingText]}>
                                     <View style={[styles.layoutRow, {flex: 1}]}>
                                         <Text
@@ -259,7 +231,7 @@ export class Notifications extends Component {
                             }}
                         >
                             <View style={[styles.layoutRow]}>
-                                <Avatar height={40} source={{uri: notification.details.pic}}/>
+                                <Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 40, width: 40, borderRadius: 50}} containerStyle={{height: 40, width: 40}} source={{uri: notification.details.pic}}/>
                                 <View style={[styles.layoutColumn, styles.leftPaddingText]}>
                                     <View style={[styles.layoutRow, {flex: 1}]}>
                                         <Text style={styles.blackColorText}>{notification.details.name}</Text>
@@ -281,16 +253,12 @@ export class Notifications extends Component {
                             }}
                         >
                             <View style={[styles.layoutRow]}>
-                                <Avatar height={40} source={{uri: notification.details.pic}}/>
+                                <Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 40, width: 40, borderRadius: 50}} containerStyle={{height: 40, width: 40}} source={{uri: notification.details.pic}}/>
                                 <View style={[styles.layoutColumn, styles.leftPaddingText]}>
                                     <View style={[styles.layoutRow, {flex: 1}]}>
                                         <Text style={styles.blackColorText}>{notification.details.name}</Text>
                                         <Text style={[styles.grayColorText]}> following you</Text>
                                     </View>
-                                    {/*<View style={[styles.layoutRow]}>*/}
-                                    {/*<Text style={styles.blackColorText}>{notification.creatorName}</Text>*/}
-                                    {/*<Text style={[styles.grayColorText]}> invites you to this community</Text>*/}
-                                    {/*</View>*/}
                                 </View>
                             </View>
                         </TouchableOpacity>
@@ -304,16 +272,12 @@ export class Notifications extends Component {
                             }}
                         >
                             <View style={[styles.layoutRow]}>
-                                <Avatar height={40} source={{uri: notification.details.pic}}/>
+                                <Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 40, width: 40, borderRadius: 50}} containerStyle={{height: 40, width: 40}} source={{uri: notification.details.pic}}/>
                                 <View style={[styles.layoutColumn, styles.leftPaddingText]}>
                                     <View style={[styles.layoutRow, {flex: 1}]}>
                                         <Text style={styles.blackColorText}>{notification.details.name}</Text>
                                         <Text style={[styles.grayColorText]}> following you</Text>
                                     </View>
-                                    {/*<View style={[styles.layoutRow]}>*/}
-                                    {/*<Text style={styles.blackColorText}>{notification.creatorName}</Text>*/}
-                                    {/*<Text style={[styles.grayColorText]}> invites you to this community</Text>*/}
-                                    {/*</View>*/}
                                 </View>
                             </View>
                         </TouchableOpacity>
@@ -327,16 +291,12 @@ export class Notifications extends Component {
                             }}
                         >
                             <View style={[styles.layoutRow]}>
-                                <Avatar height={40} source={{uri: notification.details.pic}}/>
+                                <Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 40, width: 40, borderRadius: 50}} containerStyle={{height: 40, width: 40}} source={{uri: notification.details.pic}}/>
                                 <View style={[styles.layoutColumn, styles.leftPaddingText]}>
                                     <View style={[styles.layoutRow, {flex: 1}]}>
                                         <Text style={styles.blackColorText}>{notification.details.name}</Text>
                                         <Text style={[styles.grayColorText]}> wrote comment</Text>
                                     </View>
-                                    {/*<View style={[styles.layoutRow]}>*/}
-                                    {/*<Text style={styles.blackColorText}>{notification.creatorName}</Text>*/}
-                                    {/*<Text style={[styles.grayColorText]}> invites you to this community</Text>*/}
-                                    {/*</View>*/}
                                 </View>
                             </View>
                         </TouchableOpacity>
@@ -350,7 +310,7 @@ export class Notifications extends Component {
                             }}
                         >
                             <View style={[styles.layoutRow]}>
-                                <Avatar height={40} source={{uri: notification.details.pic}}/>
+                                <Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 40, width: 40, borderRadius: 50}} containerStyle={{height: 40, width: 40}} source={{uri: notification.details.pic}}/>
                                 <View style={[styles.layoutColumn, styles.leftPaddingText]}>
                                     <View style={[styles.layoutRow, {flex: 1}]}>
                                         <Text
@@ -368,27 +328,20 @@ export class Notifications extends Component {
                     }
                 }) : null
             }
+        </View>
+    };
+
+    renderNotifications = (viewedNotifications, newNotifications) => {
+        const {notifications} = this.props;
+        return <ScrollView>
+            {this.renderNewNotificationsList(newNotifications)}
+            {this.renderViewedNotificationsList(viewedNotifications)}
 
             <View style={[styles.layoutRow, styles.backgroundColorContentGray, {justifyContent: 'center'}]}>
                 <Text style={[styles.grayColorText, styles.marginFooter]}>{notifications.length} notifications</Text>
             </View>
         </ScrollView>
     };
-
-    // handleAppStateChange(appState) {
-    //     if (appState === 'background') {
-    //         let date = new Date(Date.now() + (this.state.seconds * 1000));
-    //
-    //         if (Platform.OS === 'ios') {
-    //             date = date.toISOString();
-    //         }
-    //
-    //         PushNotification.localNotificationSchedule({
-    //             message: "My Notification Message",
-    //             date,
-    //         });
-    //     }
-    // }
 
     render() {
         const {notifications} = this.props;
@@ -405,31 +358,16 @@ export class Notifications extends Component {
         });
 
         return (
-            <View style={[styles.backgroundColorContentWhite]}>
+            <View>
                 <HeaderSection title={'Notifications'}/>
-
                 {this.renderNotifications(viewedNotifications, newNotifications)}
-
-                {/*<Picker*/}
-                    {/*style={styles.picker}*/}
-                    {/*selectedValue={this.state.seconds}*/}
-                    {/*onValueChange={(seconds) => this.setState({ seconds })}*/}
-                {/*>*/}
-                    {/*<Picker.Item label="5" value={5} />*/}
-                    {/*<Picker.Item label="10" value={10} />*/}
-                    {/*<Picker.Item label="15" value={15} />*/}
-                {/*</Picker>*/}
-                {/*<PushController />*/}
-
             </View>
         );
     }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-
     return {}
-
 };
 
 const mapStateToProps = (state, ownProps) => {

@@ -3,19 +3,14 @@ import {connect} from 'react-redux'
 import {TabNavigator, StackNavigator, TabBarBottom, SwitchNavigator} from 'react-navigation'
 import {Text} from 'react-native'
 import IconBadge from 'react-native-icon-badge';
-
 import {addListener} from 'app/config/redux';
-
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-
 import Home from 'app/components/Home'
 import Profile from 'app/components/Profile'
 import Notifications from 'app/components/Notifications'
 import Settings from 'app/components/Settings'
-
 import Login from 'app/components/Login'
 import Wizard from 'app/components/Wizard'
-
 import AuthLoadingScreen from 'app/components/AuthLoadingScreen'
 
 export const Tabs = TabNavigator(

@@ -1,28 +1,28 @@
 import * as types from 'app/constants/actionTypes'
 
 let defaultState = {
-    info: {},
-    loaded: false
+    userEvents: {
+        list: {},
+        loaded: false
+    },
+    recommended: {
+        list: {},
+        loaded: false
+    },
 };
 
 export let eventReducer = (state = defaultState, action) => {
-    const { payload } = action;
+    const {payload} = action;
     switch (action.type) {
-        case types.EVENTS_LIST:
-            return {
-                ...state,
-                info: {
-                    ...state.info,
-                    [payload.uid]: {
-                        ...payload.info
-                    }
-                }
-            };
         case types.ADD_USER_EVENTS_LIST_INFO:
             return {
                 ...state,
-                info: payload.info,
-                loaded: true
+                userEvents: {list: payload.info, loaded: true},
+            };
+        case types.ADD_RECOMMENDED_EVENTS:
+            return {
+                ...state,
+                recommended: {list: payload.info, loaded: true},
             };
         default:
             return state;
