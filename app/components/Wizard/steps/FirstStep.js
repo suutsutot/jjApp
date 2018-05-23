@@ -54,7 +54,7 @@ export class FirstStep extends Component {
         }];
 
         return (
-            <ScrollView style={{margin: 20}}>
+            <ScrollView style={{marginHorizontal: 10}}>
                 <View>
                     <View style={styles.description}>
                         <Text>Registration requires a few more details. Please
@@ -130,7 +130,7 @@ export class FirstStep extends Component {
                         </View>
                     </View>
                 </View>
-                <View style={{marginTop: 20}}>
+                <View style={{marginVertical: 20}}>
                     {
                         this._isValid() ?
                             <Button onPress={this.nextStep.bind(this)}>

@@ -28,7 +28,7 @@ export class SecondStep extends Component {
         });
     }
 
-    componentDidMount = () => {
+    // componentDidMount = () => {
         // !!! get user activities and check list on 'selected'
 
         // const selected = this.props.selected;
@@ -39,7 +39,7 @@ export class SecondStep extends Component {
         // } else {
         //     this._onSelect(selected)
         // }
-    };
+    // };
 
     _onSelect = (item) => {
         let selected = this.state.selected;
@@ -142,39 +142,45 @@ export class SecondStep extends Component {
 
     render() {
         return (
-            <View onLayout={(evt) => {
-                this.getNewDimensions(evt)
-            }}>
-                <View style={{flexDirection: 'row', height: 55}}>
-                    <View style={{marginTop: 15, marginLeft: 15, backgroundColor: 'transparent'}}>
-                        <Icon name="ios-search-outline" color='#00bcd4' size={25}/>
+            //<ScrollView style={{marginHorizontal: 10}}>
+                <View
+                    onLayout={(evt) => {this.getNewDimensions(evt)}}
+                >
+                    <View style={{flexDirection: 'row', height: 55}}>
+                        <View style={{marginTop: 15, marginLeft: 15, backgroundColor: 'transparent'}}>
+                            <Icon name="ios-search-outline" color='#00bcd4' size={25}/>
+                        </View>
+                        <TextInput
+                            style={{
+                                width: this.state.pageWidth - 20,
+                                height: 35,
+                                margin: 0,
+                                marginTop: 10,
+                                marginLeft: -25,
+                                padding: 5,
+                                paddingLeft: 30,
+                                borderColor: '#00bcd4',
+                                borderWidth: 1,
+                                borderRadius: 5
+                            }}
+                            onChangeText={(text) => {
+                                this._onSearch(text)
+                            }}
+                            clearButtonMode={'always'}
+                            placeholder="Search"
+                            placeholderTextColor='#00bcd4'
+                            underlineColorAndroid={'transparent'}
+                        />
                     </View>
-                    <TextInput
-                        style={{
-                            width: this.state.pageWidth - 20,
-                            height: 35,
-                            margin: 0,
-                            marginTop: 10,
-                            marginLeft: -25,
-                            padding: 5,
-                            paddingLeft: 30,
-                            borderColor: '#00bcd4',
-                            borderWidth: 1,
-                            borderRadius: 5
-                        }}
-                        onChangeText={(text) => {
-                            this._onSearch(text)
-                        }}
-                        clearButtonMode={'always'}
-                        placeholder="Search"
-                        placeholderTextColor='#00bcd4'
-                        underlineColorAndroid={'transparent'}
-                    />
+
+                    {this.renderList()}
+
                 </View>
+            //</ScrollView>
 
-                {this.renderList()}
 
-            </View>
+
+
 
         )
     }

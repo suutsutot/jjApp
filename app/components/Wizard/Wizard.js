@@ -1,43 +1,35 @@
-import React, {Component} from 'react'
-import {connect} from 'react-redux'
-import {View} from 'react-native'
-import {HeaderSection} from 'app/pureComponents'
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {View} from 'react-native';
+import {HeaderSection} from 'app/pureComponents';
 import {IndicatorViewPager, PagerDotIndicator} from 'rn-viewpager';
-import styles from './styles'
-
-import FirstStep from './steps/FirstStep'
-import SecondStep from './steps/SecondStep'
-import ThirdStep from './steps/ThirdStep'
-
+import styles from './styles';
+import FirstStep from './steps/FirstStep';
+import SecondStep from './steps/SecondStep';
 const PAGES = ['FirstPage', 'SecondPage'];
+
 
 export class Wizard extends Component {
 
     constructor(props) {
         super(props);
 
-        this.state = {
-            currentPage: 0,
-        };
+        // this.state = {
+        //     currentPage: 0,
+        // };
     }
 
-    componentWillMount() {
-    }
+    // componentWillReceiveProps(nextProps, nextState) {
+    //     if (nextState.currentPage !== this.state.currentPage) {
+    //         if (this.viewPager) {
+    //             this.viewPager.setPage(nextState.currentPage)
+    //         }
+    //     }
+    // }
 
-    componentDidMount() {
-    }
-
-    componentWillReceiveProps(nextProps, nextState) {
-        if (nextState.currentPage !== this.state.currentPage) {
-            if (this.viewPager) {
-                this.viewPager.setPage(nextState.currentPage)
-            }
-        }
-    }
-
-    renderDotIndicator() {
-        return <PagerDotIndicator pageCount={2}/>;
-    }
+    // renderDotIndicator() {
+    //     return <PagerDotIndicator selectedDotStyle={{backgroundColor: '#00bcd4', width: 7, height: 7}} pageCount={2}/>;
+    // }
 
     renderViewPagerPage = (data, index) => {
         if (data === 'FirstPage') return (
@@ -50,11 +42,6 @@ export class Wizard extends Component {
                 <SecondStep />
             </View>
         );
-        // else if (data === 'ThirdPage') return (
-        //     <View>
-        //         <ThirdStep data={data}/>
-        //     </View>
-        // );
     };
 
     render() {
@@ -62,14 +49,12 @@ export class Wizard extends Component {
             <View style={styles.container}>
                 <HeaderSection title="Welcome to JustJoin!"/>
                 <IndicatorViewPager
-                    style={{height: 200, flexGrow: 1}}
+                    style={{ flexGrow: 1}}
                     ref={(viewPager) => {
                         this.viewPager = viewPager
                     }}
-                    onPageSelected={(page) => {
-                        this.setState({currentPage: page.position})
-                    }}
-                    indicator={this.renderDotIndicator()}
+                    //onPageSelected={(page) => {this.setState({currentPage: page.position})}}
+                    //indicator={this.renderDotIndicator()}
                 >
                     {PAGES.map((page, index) => this.renderViewPagerPage(page, index))}
                 </IndicatorViewPager>
