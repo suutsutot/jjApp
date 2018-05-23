@@ -68,7 +68,7 @@ const AppStack = StackNavigator({Tabs, Login}, {
     mode: 'modal',
     headerMode: 'none'
 });
-const AuthStack = StackNavigator({Login, Wizard, Tabs}, {
+const AuthStack = StackNavigator({Wizard, Login, Tabs}, {
     mode: 'modal',
     headerMode: 'none'
 });

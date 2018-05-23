@@ -9,7 +9,7 @@ import FirstStep from './steps/FirstStep'
 import SecondStep from './steps/SecondStep'
 import ThirdStep from './steps/ThirdStep'
 
-const PAGES = ['FirstPage', 'SecondPage', 'ThirdPage'];
+const PAGES = ['FirstPage', 'SecondPage'];
 
 export class Wizard extends Component {
 
@@ -36,7 +36,7 @@ export class Wizard extends Component {
     }
 
     renderDotIndicator() {
-        return <PagerDotIndicator pageCount={3}/>;
+        return <PagerDotIndicator pageCount={2}/>;
     }
 
     renderViewPagerPage = (data, index) => {
@@ -50,11 +50,11 @@ export class Wizard extends Component {
                 <SecondStep />
             </View>
         );
-        else if (data === 'ThirdPage') return (
-            <View>
-                <ThirdStep data={data}/>
-            </View>
-        );
+        // else if (data === 'ThirdPage') return (
+        //     <View>
+        //         <ThirdStep data={data}/>
+        //     </View>
+        // );
     };
 
     render() {

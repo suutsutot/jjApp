@@ -54,8 +54,8 @@ export class FirstStep extends Component {
         }];
 
         return (
-            <View style={{margin: 20}}>
-                <ScrollView>
+            <ScrollView style={{margin: 20}}>
+                <View>
                     <View style={styles.description}>
                         <Text>Registration requires a few more details. Please
                             introduce yourself to proceed. This will help us adjust service just for
@@ -129,17 +129,17 @@ export class FirstStep extends Component {
                             <Divider style={{backgroundColor: 'grey', marginTop: 0}}/>
                         </View>
                     </View>
-                </ScrollView>
+                </View>
                 <View style={{marginTop: 20}}>
                     {
                         this._isValid() ?
                             <Button onPress={this.nextStep.bind(this)}>
                                 Next
                             </Button>
-                            : <Button >Next</Button>
+                            : <Button buttonStyle={{backgroundColor: 'gray'}}>Next</Button>
                     }
                 </View>
-            </View>
+            </ScrollView>
         )
 
     }
