@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
         width: '50%'
     },
     TouchableOpacityStyles: {
-        margin: 10,
+        padding: 10,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -19,6 +19,43 @@ const styles = StyleSheet.create({
     },
     layoutRow: {
         flexDirection: 'row'
+    },
+    layoutColumn: {
+        flexDirection: 'column'
+    },
+    // leftPaddingText: {
+    //     paddingLeft: 10
+    // },
+    shadowContainer: {
+        shadowColor: '#000',
+        shadowOffset: { height: 0.5 },
+        shadowOpacity: 0.1,
+        shadowRadius: 0.5,
+        elevation: 4
+    },
+    blackColorText: {
+        color: '#000',
+        fontSize: 14,
+        fontFamily: 'Roboto',
+    },
+    grayColorText: {
+        color: '#78909c',
+        fontSize: 14,
+        fontFamily: 'Roboto',
+    },
+    spaceBetweenText: {
+        justifyContent: 'space-between',
+        // alignItems: 'start',
+    },
+    paddingClass: {
+        paddingLeft: 10,
+        paddingVertical: 7
+    },
+    containerProcess: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 });
 

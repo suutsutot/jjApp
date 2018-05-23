@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {ScrollView, View, Text, TouchableOpacity, AppState, Picker, Platform, AsyncStorage, Linking, Image} from 'react-native'
-import {Avatar} from 'react-native-elements';
+import {ScrollView, View, Text, TouchableOpacity, AppState, Picker, Platform, AsyncStorage, Linking, Image, ActivityIndicator} from 'react-native'
 import {HeaderSection} from 'app/pureComponents'
 import moment from 'moment'
 import forEach from 'lodash/forEach'
@@ -354,8 +353,16 @@ export class Notifications extends Component {
         </ScrollView>
     };
 
+    renderProcess = () => {
+        return <View style={styles.containerProcess}>
+            <View>
+                <ActivityIndicator size="large" color="#00bcd4"/>
+            </View>
+        </View>
+    };
+
     render() {
-        const {notifications} = this.props;
+        const {notifications, loaded} = this.props;
         let viewedNotifications = [];
         let newNotifications = [];
 
@@ -371,7 +378,7 @@ export class Notifications extends Component {
         return (
             <View style={{flex: 1}}>
                 <HeaderSection title={'Notifications'}/>
-                {this.renderNotifications(viewedNotifications, newNotifications)}
+                {loaded ? this.renderNotifications(viewedNotifications, newNotifications) : this.renderProcess()}
             </View>
         );
     }
@@ -382,12 +389,14 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 };
 
 const mapStateToProps = (state, ownProps) => {
+    let loaded = state.notifications.loaded;
 
     let notifications;
-    if (state.notifications.loaded && state.notifications.userNotifies) notifications = state.notifications.userNotifies;
+    if (loaded && state.notifications.userNotifies) notifications = state.notifications.userNotifies;
 
     return {
-        notifications
+        notifications,
+        loaded
     }
 };
 

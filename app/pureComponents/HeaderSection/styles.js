@@ -9,7 +9,11 @@ const styles = StyleSheet.create({
         shadowRadius: 2,
         elevation: 3,
         marginBottom: 20
-    }
+    },
+    logo: {
+        height: 30,
+        width: 30
+    },
 });
 
 export default styles

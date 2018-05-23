@@ -47,6 +47,12 @@ const styles = StyleSheet.create({
         shadowRadius: 0.5,
         elevation: 4
     },
+    containerProcess: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
 });
 
 export default styles

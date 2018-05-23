@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {View, Text, TouchableOpacity, Linking, ActivityIndicator, Image, ScrollView} from 'react-native';
-import {Avatar} from 'react-native-elements';
 import moment from 'moment';
 import {refresh} from 'app/api/refreshTokenAPI';
 import config from 'app/config';
@@ -50,8 +49,13 @@ export class Home extends Component {
                         }}
                     >
                         <View style={[styles.layoutRow]}>
-                            {/*<Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 60, width: 60, borderRadius: 50}} containerStyle={{height: 60, width: 60}}  source={{uri: event.backgroundPic}}/>*/}
-                            <Image style={{ alignSelf: 'center', height: 60, width: 60, borderRadius: 50}} source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}/>
+                            {/*<Image style={{ alignSelf: 'center', height: 60, width: 60, borderRadius: 50}} source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}/>*/}
+                            <Image style={{
+                                //flex: 1,
+                                width: 60,
+                                height: 60,
+                                borderRadius: 50,
+                                resizeMode: 'cover'}} source={{uri: event.backgroundPic}}/>
                             <View style={[styles.layoutColumn, styles.leftPaddingText]}>
                                 <View style={[styles.layoutRow]}>
                                     <Text
@@ -72,8 +76,8 @@ export class Home extends Component {
     };
 
     renderNoEvents = (type) => {
-        if (type === 'recommended') return <View><Text>No one recommended events</Text></View>;
-        else if (type === 'userList') return <View><Text>No one events</Text></View>;
+        if (type === 'userList') return <View style={[{marginVertical: 20, alignItems: 'center'}]}><Text>No one events</Text></View>;
+        // else if (type === 'recommended') return <View style={styles.TouchableOpacityStyles}><Text>No one recommended events</Text></View>;
     };
 
     renderRecommendedEvents = () => {
@@ -88,8 +92,11 @@ export class Home extends Component {
     renderUserEvents = () => {
         const {joinedEvents} = this.props;
 
-        return <View style={[styles.backgroundColorContentWhite, styles.shadowContainer, {marginBottom: 20}]}>
-            <Text style={{margin: 10}}>{'Events ' + joinedEvents.length}</Text>
+        return <View style={[styles.backgroundColorContentWhite, styles.shadowContainer, {marginBottom: 30}]}>
+            <View style={[styles.layoutRow, {margin: 10}]}>
+                <Text style={styles.blackColorText}>{'Events '}</Text>
+                <Text style={styles.grayColorText}>{joinedEvents.length}</Text>
+            </View>
             {
                 joinedEvents.length > 0 ? this.renderEventList(joinedEvents) : this.renderNoEvents('userList')
             }
@@ -98,7 +105,7 @@ export class Home extends Component {
 
     renderEventScreen = () => {
         return <ScrollView>
-            {this.renderRecommendedEvents()}
+            {/*{this.renderRecommendedEvents()}*/}
             {this.renderUserEvents()}
         </ScrollView>
     };
@@ -129,9 +136,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         loadData: () => {
             dispatch(userActions.dbGetProfile());
             dispatch(eventActions.dbGetEventsList());
-            dispatch(eventActions.dbGetRecommendedEvents());
-            // dispatch(notificationActions.dbGetNotifies());
-            // dispatch(activityActions.dbGetActivitiesList());
+            // dispatch(eventActions.dbGetRecommendedEvents());
 
         },
     }
@@ -153,7 +158,8 @@ const mapStateToProps = ({events}) => {
     }
 
     let loaded = false;
-    if (userEvents.loaded && recommended.loaded) loaded = true;
+    // if (userEvents.loaded && recommended.loaded) loaded = true;
+    if (userEvents.loaded) loaded = true;
 
     return {
         joinedEvents: joinedEvents ? joinedEvents : [],
