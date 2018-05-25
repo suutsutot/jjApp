@@ -28,13 +28,21 @@ export class FirstStep extends Component {
     _hideDateTimePicker = () => this.setState({isDateTimePickerVisible: false});
 
     _handleDatePicked = (date) => {
-        this.setState({birthDate: date});
+        const {userProfile} = this.props;
+        // this.setState({birthDate: date});
+        userProfile.birthday = date;
         this._hideDateTimePicker();
     };
 
+    handleLocation = (location) => {
+        const {userProfile} = this.props;
+        userProfile.location = location;
+    }
+
     _isValid = () => {
-        let {firstName, lastName, birthDate, gender} = this.state;
-        if (firstName && lastName && birthDate && gender) {
+        const {firstName, lastName, gender, birthday, location} = this.props.userProfile;
+        // let {firstName, lastName, birthDate, gender} = this.state;
+        if (firstName && lastName && gender && birthday && location) {
             return true
         }
         else return false
@@ -44,13 +52,20 @@ export class FirstStep extends Component {
 
     }
 
+    saveUser = () => {
+
+    }
+
     render() {
+        const {userProfile} = this.props;
+        userProfile.birthday = moment(userProfile.birthday).toDate();
+
         let {firstName, lastName, birthDate} = this.state;
 
         let gender = [{
-            value: 'Male',
+            value: 'male',
         }, {
-            value: 'Female',
+            value: 'female',
         }];
 
         return (
@@ -66,28 +81,29 @@ export class FirstStep extends Component {
                         <TextField
                             label='First name'
                             tintColor="#00bcd4"
-                            value={firstName}
-                            onChangeText={ (firstName) => this.setState({firstName}) }
+                            value={userProfile.firstName}
+                            onChangeText={ (firstName) => userProfile.firstName = firstName }
                         />
                         <TextField
                             label='Last name'
                             tintColor="#00bcd4"
-                            value={lastName}
-                            onChangeText={ (lastName) => this.setState({lastName}) }
+                            value={userProfile.lastName}
+                            onChangeText={ (lastName) => userProfile.lastName = lastName }
                         />
                         <Dropdown
                             label='Gender'
                             data={gender}
-                            onChangeText={ (gender) => this.setState({gender}) }
+                            value={userProfile.gender}
+                            onChangeText={ (gender) => userProfile.gender = gender }
                         />
                         <View style={{flex: 1, marginTop: 20}}>
                             <Text style={{fontSize: 12, marginBottom: 6}}>Birthday</Text>
                             <TouchableOpacity onPress={this._showDateTimePicker}>
-                                <Text>{birthDate ? moment(birthDate).format('DD MMMM YYYY') : 'null'}</Text>
+                                <Text>{userProfile.birthday ? moment(userProfile.birthday).format('DD MMMM YYYY') : 'null'}</Text>
                                 <Divider style={{backgroundColor: 'grey', marginTop: 8}}/>
                             </TouchableOpacity>
                             <DateTimePicker
-                                date={birthDate}
+                                date={userProfile.birthday ? userProfile.birthday : birthDate}
                                 isVisible={this.state.isDateTimePickerVisible}
                                 onConfirm={this._handleDatePicked}
                                 onCancel={this._hideDateTimePicker}
@@ -125,6 +141,22 @@ export class FirstStep extends Component {
                                     },
                                 }}
                                 currentLocation={false}
+                                getDefaultValue={() => userProfile.location.string}
+                                onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
+                                    let location = {
+                                        string: details.formatted_address,
+                                        details: {
+                                            placeId: data.place_id,
+                                            country: data.terms[2].value,
+                                            state: data.terms[1].value,
+                                            city: data.terms[0].value,
+                                            geo: [details.geometry.location.lat, details.geometry.location.lng],
+                                            lng: details.geometry.location.lng,
+                                            lat:details.geometry.location.lat
+                                        }
+                                    };
+                                    this.handleLocation(location)
+                                }}
                             />
                             <Divider style={{backgroundColor: 'grey', marginTop: 0}}/>
                         </View>

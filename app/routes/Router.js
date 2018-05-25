@@ -64,14 +64,24 @@ export const Tabs = TabNavigator(
     }
 );
 
-const AppStack = StackNavigator({Tabs, Login}, {
+const AppStack = StackNavigator({Wizard, Tabs, Login}, {
     mode: 'modal',
     headerMode: 'none'
 });
-const AuthStack = StackNavigator({Wizard, Login, Tabs}, {
+const AuthStack = StackNavigator({Login, Wizard, Tabs}, {
     mode: 'modal',
     headerMode: 'none'
 });
+
+
+// const AppStack = StackNavigator({Tabs, Wizard}, {
+//     mode: 'modal',
+//     headerMode: 'none'
+// });
+// const AuthStack = StackNavigator({Login}, {
+//     mode: 'modal',
+//     headerMode: 'none'
+// });
 
 export const MasterNavigator = SwitchNavigator(
     {

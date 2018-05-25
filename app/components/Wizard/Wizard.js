@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {View} from 'react-native';
+import {View, ActivityIndicator} from 'react-native';
 import {HeaderSection} from 'app/pureComponents';
+import {userActions} from 'app/data/user';
 import {IndicatorViewPager, PagerDotIndicator} from 'rn-viewpager';
 import styles from './styles';
 import FirstStep from './steps/FirstStep';
@@ -19,6 +20,11 @@ export class Wizard extends Component {
         // };
     }
 
+    componentWillMount() {
+        const {getProfile} = this.props;
+        getProfile();
+    }
+
     // componentWillReceiveProps(nextProps, nextState) {
     //     if (nextState.currentPage !== this.state.currentPage) {
     //         if (this.viewPager) {
@@ -32,9 +38,10 @@ export class Wizard extends Component {
     // }
 
     renderViewPagerPage = (data, index) => {
+        const {userProfile} = this.props;
         if (data === 'FirstPage') return (
             <View>
-                <FirstStep data={data}/>
+                <FirstStep userProfile={userProfile}/>
             </View>
         );
         else if (data === 'SecondPage') return (
@@ -44,31 +51,73 @@ export class Wizard extends Component {
         );
     };
 
+    renderWizard = () => {
+        return <IndicatorViewPager
+            style={{ flexGrow: 1}}
+            ref={(viewPager) => {
+                this.viewPager = viewPager
+            }}
+            horizontalScroll={false}
+            //onPageSelected={(page) => {this.setState({currentPage: page.position})}}
+            //indicator={this.renderDotIndicator()}
+        >
+            {PAGES.map((page, index) => this.renderViewPagerPage(page, index))}
+        </IndicatorViewPager>
+
+    };
+
+    renderProcess = () => {
+        return <View style={styles.containerProcess}>
+            <View>
+                <ActivityIndicator size="large" color="#00bcd4"/>
+            </View>
+        </View>
+    };
+
     render() {
+        const {loaded} = this.props;
+
         return (
             <View style={styles.container}>
                 <HeaderSection title="Welcome to JustJoin!"/>
-                <IndicatorViewPager
-                    style={{ flexGrow: 1}}
-                    ref={(viewPager) => {
-                        this.viewPager = viewPager
-                    }}
-                    //onPageSelected={(page) => {this.setState({currentPage: page.position})}}
-                    //indicator={this.renderDotIndicator()}
-                >
-                    {PAGES.map((page, index) => this.renderViewPagerPage(page, index))}
-                </IndicatorViewPager>
+                {loaded ? this.renderWizard() : this.renderProcess()}
+
             </View>
         )
     }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-    return {}
+    return {
+        getProfile: () => {dispatch(userActions.dbGetProfile())},
+    }
 };
 
 const mapStateToProps = ({user}) => {
-    return {}
+    const {profile, loaded} = user;
+
+    let userProfile = {
+        firstName: null,
+        lastName: null,
+        gender: null,
+        birthday: null,
+        location: null
+    };
+
+    if (loaded) userProfile = {
+        firstName: profile.firstName,
+        lastName: profile.lastName,
+        gender: profile.gender,
+        birthday: profile.birthday,
+        location: profile.location
+    };
+
+    console.log('qeddw', userProfile)
+
+    return {
+        userProfile,
+        loaded
+    }
 };
 
 

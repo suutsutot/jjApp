@@ -31,6 +31,12 @@ const styles = StyleSheet.create({
         color: '#333333',
         alignSelf: 'center',
     },
+    containerProcess: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
 });
 
 export default styles
