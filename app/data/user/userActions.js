@@ -1,11 +1,10 @@
 import {AsyncStorage} from 'react-native';
 const getToken = () => AsyncStorage.getItem("idToken");
 const getEmail = () => AsyncStorage.getItem("email");
-
-import {refresh} from 'app/api/refreshTokenAPI'
+import {NavigationActions} from 'react-navigation';
+import {refresh} from 'app/api/refreshTokenAPI';
 import config from 'app/config';
-
-import * as types from 'app/constants/actionTypes'
+import * as types from 'app/constants/actionTypes';
 
 export const dbGetProfile = () => {
     return (dispatch, getState) => {
@@ -94,6 +93,32 @@ export const dbGetUserInfo = (userId) => {
         else {
             console.error('Error: userId is required!!!')
         }
+    }
+};
+
+export const dbUpdateUser = (data, i) => {
+    return (dispatch, getState) => {
+        console.log('dbUpdateUser');
+
+        refresh().then((newToken) => {
+            let url = config.server + '/api/users/';
+
+            fetch(url, {
+                method: 'PUT',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': newToken.idToken
+                }
+            })
+                .then(r => r.json())
+                .catch(error => console.log('Error: ', error))
+                .then(response => {
+                    // console.log('response', response)
+                    // let userInfo = response.user || {};
+                    // dispatch(addProfile(userInfo._id, userInfo))
+                });
+        });
     }
 };
 

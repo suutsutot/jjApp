@@ -7,8 +7,9 @@ import {Dropdown} from 'react-native-material-dropdown';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import {Divider} from 'react-native-elements';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
-import {Button} from 'app/pureComponents'
+import {userActions} from 'app/data/user';
 import styles from './../styles'
+
 
 export class FirstStep extends Component {
 
@@ -16,9 +17,6 @@ export class FirstStep extends Component {
         super(props);
 
         this.state = {
-            firstName: '',
-            lastName: '',
-            gender: '',
             birthDate: new Date(),
         }
     }
@@ -29,38 +27,20 @@ export class FirstStep extends Component {
 
     _handleDatePicked = (date) => {
         const {userProfile} = this.props;
-        // this.setState({birthDate: date});
-        userProfile.birthday = date;
+        userProfile.birthday = moment(date).toISOString();
         this._hideDateTimePicker();
     };
 
     handleLocation = (location) => {
         const {userProfile} = this.props;
         userProfile.location = location;
-    }
-
-    _isValid = () => {
-        const {firstName, lastName, gender, birthday, location} = this.props.userProfile;
-        // let {firstName, lastName, birthDate, gender} = this.state;
-        if (firstName && lastName && gender && birthday && location) {
-            return true
-        }
-        else return false
     };
-
-    nextStep() {
-
-    }
-
-    saveUser = () => {
-
-    }
 
     render() {
         const {userProfile} = this.props;
         userProfile.birthday = moment(userProfile.birthday).toDate();
 
-        let {firstName, lastName, birthDate} = this.state;
+        let {birthDate} = this.state;
 
         let gender = [{
             value: 'male',
@@ -77,7 +57,6 @@ export class FirstStep extends Component {
                             you.</Text>
                     </View>
                     <View>
-                        {/*<Text>Change photo</Text>*/}
                         <TextField
                             label='First name'
                             tintColor="#00bcd4"
@@ -142,17 +121,18 @@ export class FirstStep extends Component {
                                 }}
                                 currentLocation={false}
                                 getDefaultValue={() => userProfile.location.string}
-                                onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
+                                onPress={(data, details = null) => {
+
                                     let location = {
                                         string: details.formatted_address,
                                         details: {
-                                            placeId: data.place_id,
-                                            country: data.terms[2].value,
-                                            state: data.terms[1].value,
-                                            city: data.terms[0].value,
+                                            placeId: data.place_id ? data.place_id : null,
+                                            city: data && data.structured_formatting && data.structured_formatting.main_text ? data.structured_formatting.main_text : null,
+                                            state: data && data.structured_formatting && data.structured_formatting.secondary_text ? data.structured_formatting.secondary_text : null,
+                                            country: data && data.structured_formatting && data.structured_formatting.secondary_text ? data.structured_formatting.secondary_text : null,
                                             geo: [details.geometry.location.lat, details.geometry.location.lng],
                                             lng: details.geometry.location.lng,
-                                            lat:details.geometry.location.lat
+                                            lat: details.geometry.location.lat,
                                         }
                                     };
                                     this.handleLocation(location)
@@ -162,15 +142,6 @@ export class FirstStep extends Component {
                         </View>
                     </View>
                 </View>
-                <View style={{marginVertical: 20}}>
-                    {
-                        this._isValid() ?
-                            <Button onPress={this.nextStep.bind(this)}>
-                                Next
-                            </Button>
-                            : <Button buttonStyle={{backgroundColor: 'gray'}}>Next</Button>
-                    }
-                </View>
             </ScrollView>
         )
 
@@ -178,11 +149,16 @@ export class FirstStep extends Component {
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-    return {}
+    return {
+        updateProfile: (data) => {
+            dispatch(userActions.dbUpdateUser(data))
+        },
+    }
 };
 
 const mapStateToProps = (state, ownProps) => {
     return {}
 };
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(FirstStep)

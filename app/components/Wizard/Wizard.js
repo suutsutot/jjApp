@@ -1,13 +1,11 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {View, ActivityIndicator} from 'react-native';
-import {HeaderSection} from 'app/pureComponents';
+import {View, ActivityIndicator, ScrollView} from 'react-native';
+import {HeaderSection, Button} from 'app/pureComponents';
 import {userActions} from 'app/data/user';
-import {IndicatorViewPager, PagerDotIndicator} from 'rn-viewpager';
 import styles from './styles';
 import FirstStep from './steps/FirstStep';
 import SecondStep from './steps/SecondStep';
-const PAGES = ['FirstPage', 'SecondPage'];
 
 
 export class Wizard extends Component {
@@ -15,9 +13,9 @@ export class Wizard extends Component {
     constructor(props) {
         super(props);
 
-        // this.state = {
-        //     currentPage: 0,
-        // };
+        this.state = {
+            pageIndex: 0,
+        };
     }
 
     componentWillMount() {
@@ -25,45 +23,43 @@ export class Wizard extends Component {
         getProfile();
     }
 
-    // componentWillReceiveProps(nextProps, nextState) {
-    //     if (nextState.currentPage !== this.state.currentPage) {
-    //         if (this.viewPager) {
-    //             this.viewPager.setPage(nextState.currentPage)
-    //         }
-    //     }
-    // }
+    goToHome = () => {
+        this.props.navigation.navigate('Tabs')
+    };
 
-    // renderDotIndicator() {
-    //     return <PagerDotIndicator selectedDotStyle={{backgroundColor: '#00bcd4', width: 7, height: 7}} pageCount={2}/>;
-    // }
-
-    renderViewPagerPage = (data, index) => {
-        const {userProfile} = this.props;
-        if (data === 'FirstPage') return (
-            <View>
-                <FirstStep userProfile={userProfile}/>
-            </View>
-        );
-        else if (data === 'SecondPage') return (
-            <View>
-                <SecondStep />
-            </View>
-        );
+    saveUser = (i) => {
+        const {updateProfile, userProfile} = this.props;
+        updateProfile(userProfile);
+        if (i === 1) {
+            this.setState({pageIndex: i});
+        }
+        else {
+            this.goToHome()
+        }
     };
 
     renderWizard = () => {
-        return <IndicatorViewPager
-            style={{ flexGrow: 1}}
-            ref={(viewPager) => {
-                this.viewPager = viewPager
-            }}
-            horizontalScroll={false}
-            //onPageSelected={(page) => {this.setState({currentPage: page.position})}}
-            //indicator={this.renderDotIndicator()}
-        >
-            {PAGES.map((page, index) => this.renderViewPagerPage(page, index))}
-        </IndicatorViewPager>
+        const {userProfile} = this.props;
+        const {pageIndex} = this.state;
 
+        if (pageIndex === 0) return <ScrollView><FirstStep userProfile={userProfile}/></ScrollView>;
+        else return <View style={{flex: 1}}><SecondStep userProfile={userProfile}/></View>
+    };
+
+    renderFirstButton = () => {
+        return <View style={{marginVertical: 20}}>
+            <Button onPress={this.saveUser.bind(this, 1)}>
+                Next
+            </Button>
+        </View>
+    };
+
+    renderSecondButton = () => {
+        return <View style={{marginVertical: 20}}>
+            <Button onPress={this.saveUser.bind(this)}>
+                Save
+            </Button>
+        </View>
     };
 
     renderProcess = () => {
@@ -76,12 +72,14 @@ export class Wizard extends Component {
 
     render() {
         const {loaded} = this.props;
+        const {pageIndex} = this.state;
 
         return (
             <View style={styles.container}>
                 <HeaderSection title="Welcome to JustJoin!"/>
                 {loaded ? this.renderWizard() : this.renderProcess()}
-
+                {loaded && pageIndex === 0 ? this.renderFirstButton() : null}
+                {pageIndex === 1 ? this.renderSecondButton() : null}
             </View>
         )
     }
@@ -89,33 +87,20 @@ export class Wizard extends Component {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        getProfile: () => {dispatch(userActions.dbGetProfile())},
+        getProfile: () => {
+            dispatch(userActions.dbGetProfile())
+        },
+        updateProfile: (data, i) => {
+            dispatch(userActions.dbUpdateUser(data, i))
+        },
     }
 };
 
 const mapStateToProps = ({user}) => {
     const {profile, loaded} = user;
 
-    let userProfile = {
-        firstName: null,
-        lastName: null,
-        gender: null,
-        birthday: null,
-        location: null
-    };
-
-    if (loaded) userProfile = {
-        firstName: profile.firstName,
-        lastName: profile.lastName,
-        gender: profile.gender,
-        birthday: profile.birthday,
-        location: profile.location
-    };
-
-    console.log('qeddw', userProfile)
-
     return {
-        userProfile,
+        userProfile: loaded ? profile : {},
         loaded
     }
 };

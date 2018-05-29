@@ -63,22 +63,22 @@ export let dbLogin = () => {
 
                                     let resetAction;
 
-                                    // if (!userInfo.wizardSteps.personal || !userInfo.wizardSteps.activities) {
+                                    if (!userInfo.wizardSteps.personal || !userInfo.wizardSteps.activities) {
                                         resetAction = NavigationActions.reset({
                                             index: 0,
                                             actions: [
                                                 NavigationActions.navigate({routeName: 'Wizard'})
                                             ]
                                         });
-                                    // }
-                                    // else {
-                                    //     resetAction = NavigationActions.reset({
-                                    //         index: 0,
-                                    //         actions: [
-                                    //             NavigationActions.navigate({routeName: 'Tabs'})
-                                    //         ]
-                                    //     });
-                                    // }
+                                    }
+                                    else {
+                                        resetAction = NavigationActions.reset({
+                                            index: 0,
+                                            actions: [
+                                                NavigationActions.navigate({routeName: 'Tabs'})
+                                            ]
+                                        });
+                                    }
                                     dispatch(resetAction);
                                     dispatch(globalActions.hideLoading());
 

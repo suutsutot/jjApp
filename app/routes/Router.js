@@ -64,7 +64,7 @@ export const Tabs = TabNavigator(
     }
 );
 
-const AppStack = StackNavigator({Wizard, Tabs, Login}, {
+const AppStack = StackNavigator({Tabs, Login}, {
     mode: 'modal',
     headerMode: 'none'
 });

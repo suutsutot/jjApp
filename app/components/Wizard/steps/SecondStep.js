@@ -2,10 +2,9 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {View, Text, ScrollView, TextInput, TouchableOpacity, Dimensions} from 'react-native'
 import  {Avatar} from 'react-native-elements'
-
 import Icon from 'react-native-vector-icons/Ionicons';
-
-import ActivitiesAPI from 'app/api/ActivitiesAPI'
+import ActivitiesAPI from 'app/api/ActivitiesAPI';
+import {forEach, map, uniqBy, find} from 'lodash';
 
 
 export class SecondStep extends Component {
@@ -23,25 +22,21 @@ export class SecondStep extends Component {
     }
 
     componentWillMount() {
+        const {activities} = this.props.userProfile;
         ActivitiesAPI.getActivities().then((act) => {
             this.setState({activitiesList: act});
+
+            let selectedActivities = map(uniqBy(activities, "type"), function (activity) {
+                let foundActivity = find(act, {id: activity.type});
+                return foundActivity;
+            });
+
+            this.setState({selected: selectedActivities});
         });
     }
 
-    // componentDidMount = () => {
-        // !!! get user activities and check list on 'selected'
-
-        // const selected = this.props.selected;
-        // if(typeof selected === "object"){
-        //     selected.map(select => {
-        //         this._onSelect(select)
-        //     })
-        // } else {
-        //     this._onSelect(selected)
-        // }
-    // };
-
     _onSelect = (item) => {
+        let {userProfile} = this.props;
         let selected = this.state.selected;
 
         if (selected.indexOf(item) === -1) {
@@ -55,6 +50,16 @@ export class SecondStep extends Component {
                 selected: selected
             })
         }
+
+        let selectedActivities = [];
+        forEach(this.state.selected, function (item) {
+            if (!find(userProfile.activities, {'type': item.id})) {
+                let activity = {type: item.id, name: item.name, level: "No experience"};
+                selectedActivities.push(activity);
+            }
+        });
+
+        userProfile.activities = userProfile.activities.concat(selectedActivities);
     };
 
     getNewDimensions(event) {
@@ -92,7 +97,7 @@ export class SecondStep extends Component {
             list = this.state.searchText ? this.filterObjectByValue(activitiesList, activity => activity.name.toLowerCase().includes(this.state.searchText)) : activitiesList;
             labels = Object.keys(list).map(i => list[i]);
 
-            return <ScrollView style={{padding: 5}}>
+            return <ScrollView style={{padding: 5, marginBottom: 40}}>
                 {labels.map((label, index) => {
                     const itemKey = label;
                     return (
@@ -142,46 +147,41 @@ export class SecondStep extends Component {
 
     render() {
         return (
-            //<ScrollView style={{marginHorizontal: 10}}>
-                <View
-                    onLayout={(evt) => {this.getNewDimensions(evt)}}
-                >
-                    <View style={{flexDirection: 'row', height: 55}}>
-                        <View style={{marginTop: 15, marginLeft: 15, backgroundColor: 'transparent'}}>
-                            <Icon name="ios-search-outline" color='#00bcd4' size={25}/>
-                        </View>
-                        <TextInput
-                            style={{
-                                width: this.state.pageWidth - 20,
-                                height: 35,
-                                margin: 0,
-                                marginTop: 10,
-                                marginLeft: -25,
-                                padding: 5,
-                                paddingLeft: 30,
-                                borderColor: '#00bcd4',
-                                borderWidth: 1,
-                                borderRadius: 5
-                            }}
-                            onChangeText={(text) => {
-                                this._onSearch(text)
-                            }}
-                            clearButtonMode={'always'}
-                            placeholder="Search"
-                            placeholderTextColor='#00bcd4'
-                            underlineColorAndroid={'transparent'}
-                        />
+            <View
+                onLayout={(evt) => {
+                    this.getNewDimensions(evt)
+                }}
+            >
+                <View style={{flexDirection: 'row', height: 55}}>
+                    <View style={{marginTop: 15, marginLeft: 15, backgroundColor: 'transparent'}}>
+                        <Icon name="ios-search-outline" color='#00bcd4' size={25}/>
                     </View>
-
-                    {this.renderList()}
-
+                    <TextInput
+                        style={{
+                            width: this.state.pageWidth - 20,
+                            height: 35,
+                            margin: 0,
+                            marginTop: 10,
+                            marginLeft: -25,
+                            padding: 5,
+                            paddingLeft: 30,
+                            borderColor: '#00bcd4',
+                            borderWidth: 1,
+                            borderRadius: 5
+                        }}
+                        onChangeText={(text) => {
+                            this._onSearch(text)
+                        }}
+                        clearButtonMode={'always'}
+                        placeholder="Search"
+                        placeholderTextColor='#00bcd4'
+                        underlineColorAndroid={'transparent'}
+                    />
                 </View>
-            //</ScrollView>
 
+                {this.renderList()}
 
-
-
-
+            </View>
         )
     }
 }
@@ -193,5 +193,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 const mapStateToProps = (state, ownProps) => {
     return {}
 };
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(SecondStep)
