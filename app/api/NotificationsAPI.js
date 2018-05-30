@@ -6,6 +6,7 @@ export const getNotifications = async() =>{
     const newToken = await refresh();
 
     return new Promise((resolve, reject) => {
+        if (!newToken) resolve(null);
         let url = config.server + '/api/notifications';
         fetch(url,
             {

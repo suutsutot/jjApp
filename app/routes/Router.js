@@ -6,7 +6,6 @@ import IconBadge from 'react-native-icon-badge';
 import {addListener} from 'app/config/redux';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Home from 'app/components/Home'
-// import Profile from 'app/components/Profile'
 import Notifications from 'app/components/Notifications'
 import Settings from 'app/components/Settings'
 import Login from 'app/components/Login'
@@ -16,7 +15,6 @@ import AuthLoadingScreen from 'app/components/AuthLoadingScreen'
 export const Tabs = TabNavigator(
     {
         Home: {screen: Home},
-        // Profile: {screen: Profile},
         Notifications: {screen: Notifications},
         Settings: {screen: Settings},
     },
@@ -29,9 +27,6 @@ export const Tabs = TabNavigator(
                 if (routeName === 'Home') {
                     iconName = `event-note`;
                 }
-                // else if (routeName === 'Profile') {
-                //     iconName = `account-circle`;
-                // }
                 else if (routeName === 'Notifications') {
                     iconName = `notifications`;
                 }
@@ -72,16 +67,6 @@ const AuthStack = StackNavigator({Login, Wizard, Tabs}, {
     mode: 'modal',
     headerMode: 'none'
 });
-
-
-// const AppStack = StackNavigator({Tabs, Wizard}, {
-//     mode: 'modal',
-//     headerMode: 'none'
-// });
-// const AuthStack = StackNavigator({Login}, {
-//     mode: 'modal',
-//     headerMode: 'none'
-// });
 
 export const MasterNavigator = SwitchNavigator(
     {

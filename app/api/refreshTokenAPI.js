@@ -7,6 +7,8 @@ const auth0 = new Auth0(credentials);
 export const refresh = () => {
     return new Promise((resolve, reject) => {
         refreshToken().then((refreshToken) => {
+            if (!refreshToken) resolve(null);
+            else
             auth0
                 .auth
                 .refreshToken({refreshToken: refreshToken})
