@@ -33,7 +33,7 @@ export class SocketListener extends Component {
 
         socket.on('connect', function () {
             refresh().then((newToken) => {
-                if (newToken) socket.emit('authenticate', {token: newToken.idToken});
+                if (newToken.idToken) socket.emit('authenticate', {token: newToken.idToken});
             });
         });
 

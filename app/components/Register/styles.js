@@ -5,18 +5,9 @@ const styles = StyleSheet.create({
         flex: 1,
         position: 'relative',
         backgroundColor: '#fff',
-        // margin: 20,
-        // borderRadius: 2,
-        // shadowColor: '#000',
-        // shadowOffset: { width: 0, height: 2 },
-        // shadowOpacity: 0.8,
-        // shadowRadius: 2
     },
     auth_content: {
         paddingHorizontal: 30
-    },
-    buttonText: {
-        color: '#fff'
     },
     logo: {
         alignSelf: 'center',

@@ -8,7 +8,7 @@ import {authorizationActions} from 'app/data/authorization';
 import styles from './styles';
 
 
-export class Login extends Component {
+export class Register extends Component {
 
     constructor(props) {
         super(props);
@@ -30,7 +30,7 @@ export class Login extends Component {
     renderSocialButtons() {
         return <View>
             <SocialIcon
-                title='Log In With Facebook'
+                title='Sign Up With Facebook'
                 button
                 type='facebook'
                 style={{height: 40}}
@@ -38,7 +38,7 @@ export class Login extends Component {
             />
 
             <SocialIcon
-                title='Log In With Google'
+                title='Sign Up With Google'
                 button
                 type='google-plus-official'
                 style={{height: 40}}
@@ -74,7 +74,7 @@ export class Login extends Component {
         </View>
     }
 
-    renderLoginButton() {
+    renderRegisterButton() {
         if (this.props.loading) {
             return (
                 <CardSection style={styles.buttons}>
@@ -88,32 +88,33 @@ export class Login extends Component {
         return (
             <CardSection style={styles.buttons}>
                 <Button onPress={this.onLoginButton.bind(this)}>
-                    Log in
+                    Sign up
                 </Button>
             </CardSection>
         )
     }
 
-    renderRegisterButton() {
+    renderLoginButton() {
         return <View>
-            <Text style={{textAlign: 'center',}}>You dont have an account?</Text>
+            <Text style={{textAlign: 'center',}}>You already have an account?</Text>
             <CardSection style={styles.buttons}>
-                <Button onPress={() => this.redirect('Register')}>
-                    Register
+                <Button onPress={() => this.redirect('Login')}>
+                    Login
                 </Button>
             </CardSection>
         </View>
+
     }
 
     onLoginWithFacebook() {
         const {loginViaFacebook} = this.props;
-        loginViaFacebook();
+        // login()
         console.log('facebook')
     }
 
     onLoginWithGoogle() {
         const {loginViaGoogle} = this.props;
-        loginViaGoogle();
+        // login()
         console.log('google')
     }
 
@@ -151,8 +152,8 @@ export class Login extends Component {
                     <Text style={{textAlign: 'center',}}>or</Text>
                     {this.renderInputs()}
                     <View style={{height: 20}}/>
-                    {this.renderLoginButton()}
                     {this.renderRegisterButton()}
+                    {this.renderLoginButton()}
                 </ScrollView>
             </View>
         )
@@ -161,9 +162,7 @@ export class Login extends Component {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        login: () => dispatch(authorizationActions.dbLogin()),
-        loginViaFacebook: () => dispatch(authorizationActions.dbLoginViaFacebook()),
-        loginViaGoogle: () => dispatch(authorizationActions.dbLoginViaGoogle()),
+        register: () => dispatch(authorizationActions.dbRegister()),
     }
 };
 
@@ -173,4 +172,4 @@ const mapStateToProps = ({global}) => {
 };
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login)
+export default connect(mapStateToProps, mapDispatchToProps)(Register)
