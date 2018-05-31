@@ -5,6 +5,7 @@ import {CardSection, Button} from 'app/pureComponents';
 import {SocialIcon} from 'react-native-elements'
 import {TextField} from 'react-native-material-textfield';
 import {authorizationActions} from 'app/data/authorization';
+import {trim} from 'lodash';
 import styles from './styles';
 
 
@@ -87,7 +88,7 @@ export class Login extends Component {
 
         return (
             <CardSection style={styles.buttons}>
-                <Button onPress={this.onLoginButton.bind(this)}>
+                <Button onPress={this.onLoginWithCredentials.bind(this)}>
                     Log in
                 </Button>
             </CardSection>
@@ -136,6 +137,28 @@ export class Login extends Component {
         login()
     }
 
+    onLoginWithCredentials() {
+        const {LoginWithCredentials} = this.props;
+        const { emailInput, passwordInput } = this.state;
+
+        if (trim(emailInput) === '') {
+            this.setState({
+                emailInputError: 'Field is required.'
+            });
+            return
+        }
+
+        if (trim(passwordInput) === '') {
+            this.setState({
+                passwordInputError: 'Field is required.'
+            });
+            return
+        }
+
+
+        LoginWithCredentials(emailInput, passwordInput)
+    }
+
     render() {
         return (
             <View style={[styles.container]}>
@@ -162,6 +185,7 @@ export class Login extends Component {
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         login: () => dispatch(authorizationActions.dbLogin()),
+        LoginWithCredentials: (email, password) => dispatch(authorizationActions.dbLoginWithCredentials(email, password)),
         loginViaFacebook: () => dispatch(authorizationActions.dbLoginViaFacebook()),
         loginViaGoogle: () => dispatch(authorizationActions.dbLoginViaGoogle()),
     }

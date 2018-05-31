@@ -71,14 +71,14 @@ export class Wizard extends Component {
     };
 
     render() {
-        const {loaded} = this.props;
+        const {loaded, userProfile} = this.props;
         const {pageIndex} = this.state;
 
         return (
             <View style={styles.container}>
                 <HeaderSection title="Welcome to JustJoin!"/>
                 {loaded ? this.renderWizard() : this.renderProcess()}
-                {loaded && pageIndex === 0 ? this.renderFirstButton() : null}
+                {loaded && userProfile.firstName && userProfile.lastName && userProfile.location && userProfile.location.string && userProfile.gender && userProfile.birthday && pageIndex === 0 ? this.renderFirstButton() : null}
                 {pageIndex === 1 ? this.renderSecondButton() : null}
             </View>
         )

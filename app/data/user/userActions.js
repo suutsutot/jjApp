@@ -114,9 +114,8 @@ export const dbUpdateUser = (data, i) => {
                 .then(r => r.json())
                 .catch(error => console.log('Error: ', error))
                 .then(response => {
-                    // console.log('response', response)
-                    // let userInfo = response.user || {};
-                    // dispatch(addProfile(userInfo._id, userInfo))
+                    console.log('ffff2222', data)
+                    dispatch(addProfile(data.email, data))
                 });
         });
     }

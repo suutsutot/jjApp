@@ -63,7 +63,7 @@ export let dbLogin = () => {
 
                                     let resetAction;
 
-                                    if (!userInfo.wizardSteps.personal || !userInfo.wizardSteps.activities) {
+                                    if (userInfo.wizardSteps.personal === false || userInfo.wizardSteps.activities === false) {
                                         resetAction = NavigationActions.reset({
                                             index: 0,
                                             actions: [
@@ -91,6 +91,93 @@ export let dbLogin = () => {
                 });
             })
             .catch(error => console.error('Error: ', error));
+    }
+};
+
+export let dbLoginWithCredentials = (email, password) => {
+    return (dispatch, getState) => {
+        dispatch(globalActions.showLoading());
+
+        auth0
+            .auth
+            .passwordRealm({
+                username: email,
+                password: password,
+                realm: "Username-Password-Authentication",
+                scope: 'openid offline_access',
+            })
+            .then(credentials => {
+                AsyncStorage.setItem('refreshToken', credentials.refreshToken);
+
+                refreshByCredentials(credentials).then((newToken) => {
+                    AsyncStorage.setItem('accessToken', newToken.accessToken);
+                    AsyncStorage.setItem('idToken', newToken.idToken);
+
+                    auth0.auth
+                        .userInfo({token: newToken.accessToken})
+                        .then(profile => {
+
+                            let url = config.server + '/api/users/duplicate-auth0';
+                            let email = profile.email;
+                            let data = {email};
+
+                            fetch(url, {
+                                method: 'POST',
+                                body: JSON.stringify(data),
+                                headers: {
+                                    'Accept': 'application/json',
+                                    'Content-Type': 'application/json',
+                                    'Authorization': newToken.idToken
+                                }
+                            })
+                                .then(r => r.json())
+                                .catch(error => {
+                                    console.log('AuthorizeActionError:', error);
+                                    dispatch(globalActions.hideLoading());
+                                    dispatch(globalActions.showErrorMessageWithTimeout(error.code));
+                                })
+                                .then(response => {
+                                    let userInfo = response.user || {};
+
+                                    AsyncStorage.setItem('userId', userInfo._id);
+                                    AsyncStorage.setItem('email', userInfo.email);
+
+                                    dispatch(globalActions.showNotificationSuccess());
+                                    dispatch(login(userInfo.email, userInfo));
+
+                                    getNotifications().then((data) => {
+                                        dispatch(updateNotifications(data));
+                                    });
+
+                                    let resetAction;
+
+                                    if (userInfo.wizardSteps.personal === false || userInfo.wizardSteps.activities === false) {
+                                        resetAction = NavigationActions.reset({
+                                            index: 0,
+                                            actions: [
+                                                NavigationActions.navigate({routeName: 'Wizard'})
+                                            ]
+                                        });
+                                    }
+                                    else {
+                                        resetAction = NavigationActions.reset({
+                                            index: 0,
+                                            actions: [
+                                                NavigationActions.navigate({routeName: 'Tabs'})
+                                            ]
+                                        });
+                                    }
+                                    dispatch(resetAction);
+                                    dispatch(globalActions.hideLoading());
+
+                                });
+                        })
+                        .catch(error => {
+                            dispatch(globalActions.hideLoading());
+                            dispatch(globalActions.showErrorMessageWithTimeout(error.code));
+                        });
+                });
+            })
     }
 };
 
@@ -263,6 +350,49 @@ export let dbLoginViaGoogle = () => {
                 });
             })
             .catch(error => console.error('Error: ', error));
+    }
+};
+
+export let dbSignUp = (email, password) => {
+    return (dispatch, getState) => {
+        dispatch(globalActions.showLoading());
+
+
+        let url = 'https://ynpl.auth0.com/dbconnections/signup';
+        let data = {
+            "client_id": "BBLp6dT9ug1mxY5UI3xwld6cA3Ukn8aH",
+            "email": "krdpoetns28+31051@gmail.com",
+            "password": "qwerty123",
+            "connection": "Username-Password-Authentication"
+        };
+
+        return fetch(url,
+            {
+                method: "POST",
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(r => r.json())
+            .then((responseData) => {
+                console.log('responseData', responseData);
+                let resetAction;
+
+                resetAction = NavigationActions.reset({
+                    index: 0,
+                    actions: [
+                        NavigationActions.navigate({routeName: 'Login'})
+                    ]
+                });
+
+                dispatch(resetAction);
+                alert("Successfully! Please log in");
+                dispatch(globalActions.hideLoading());
+            })
+            .catch((error) => {
+                console.warn(error)
+            })
     }
 };
 

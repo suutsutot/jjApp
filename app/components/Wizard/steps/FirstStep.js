@@ -28,12 +28,19 @@ export class FirstStep extends Component {
     _handleDatePicked = (date) => {
         const {userProfile} = this.props;
         userProfile.birthday = moment(date).toISOString();
+        this.updateUser(userProfile);
         this._hideDateTimePicker();
     };
 
     handleLocation = (location) => {
         const {userProfile} = this.props;
         userProfile.location = location;
+        this.updateUser(userProfile);
+    };
+
+    updateUser = (data) => {
+        const {updateProfile} = this.props;
+        updateProfile(data)
     };
 
     render() {
@@ -61,19 +68,28 @@ export class FirstStep extends Component {
                             label='First name'
                             tintColor="#00bcd4"
                             value={userProfile.firstName}
-                            onChangeText={ (firstName) => userProfile.firstName = firstName }
+                            onChangeText={ (firstName) => {
+                                userProfile.firstName = firstName;
+                                this.updateUser(userProfile)
+                            }}
                         />
                         <TextField
                             label='Last name'
                             tintColor="#00bcd4"
                             value={userProfile.lastName}
-                            onChangeText={ (lastName) => userProfile.lastName = lastName }
+                            onChangeText={ (lastName) => {
+                                userProfile.lastName = lastName;
+                                this.updateUser(userProfile)
+                            }}
                         />
                         <Dropdown
                             label='Gender'
                             data={gender}
                             value={userProfile.gender}
-                            onChangeText={ (gender) => userProfile.gender = gender }
+                            onChangeText={ (gender) => {
+                                userProfile.gender = gender;
+                                this.updateUser(userProfile)
+                            }}
                         />
                         <View style={{flex: 1, marginTop: 20}}>
                             <Text style={{fontSize: 12, marginBottom: 6}}>Birthday</Text>
@@ -120,7 +136,7 @@ export class FirstStep extends Component {
                                     },
                                 }}
                                 currentLocation={false}
-                                getDefaultValue={() => userProfile.location.string}
+                                getDefaultValue={() => userProfile.location && userProfile.location.string ? userProfile.location.string : ''}
                                 onPress={(data, details = null) => {
 
                                     let location = {

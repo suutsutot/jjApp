@@ -5,6 +5,7 @@ import {CardSection, Button} from 'app/pureComponents';
 import {SocialIcon} from 'react-native-elements'
 import {TextField} from 'react-native-material-textfield';
 import {authorizationActions} from 'app/data/authorization';
+import {trim} from 'lodash';
 import styles from './styles';
 
 
@@ -87,7 +88,7 @@ export class Register extends Component {
 
         return (
             <CardSection style={styles.buttons}>
-                <Button onPress={this.onLoginButton.bind(this)}>
+                <Button onPress={this.onSignUp.bind(this)}>
                     Sign up
                 </Button>
             </CardSection>
@@ -137,6 +138,28 @@ export class Register extends Component {
         login()
     }
 
+    onSignUp() {
+        const {register} = this.props;
+        const { emailInput, passwordInput } = this.state;
+
+        if (trim(emailInput) === '') {
+            this.setState({
+                emailInputError: 'Field is required.'
+            });
+            return
+        }
+
+        if (trim(passwordInput) === '') {
+            this.setState({
+                passwordInputError: 'Field is required.'
+            });
+            return
+        }
+
+
+        register(emailInput, passwordInput)
+    }
+
     render() {
         return (
             <View style={[styles.container]}>
@@ -162,7 +185,7 @@ export class Register extends Component {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        register: () => dispatch(authorizationActions.dbRegister()),
+        register: (email, password) => dispatch(authorizationActions.dbSignUp(email, password)),
     }
 };
 
