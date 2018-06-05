@@ -16,12 +16,12 @@ const styles = StyleSheet.create({
     blackColorText: {
         color: '#000',
         fontSize: 14,
-        fontFamily: 'Roboto',
+        // fontFamily: 'Roboto',
     },
     grayColorText: {
         color: '#78909c',
         fontSize: 14,
-        fontFamily: 'Roboto',
+        // fontFamily: 'Roboto',
     },
     leftPaddingText: {
         paddingLeft: 10

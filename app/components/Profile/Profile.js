@@ -164,14 +164,14 @@ export class Profile extends Component {
                 <View style={styles.container}>
                     <View style={styles.cardContainer}>
                         {this.renderContactHeader()}
-                        <TabViewAnimated
-                            style={styles.tabContainer}
-                            navigationState={this.state.tabs}
-                            renderScene={this._renderScene}
-                            renderPager={this._renderPager}
-                            renderHeader={this._renderHeader}
-                            onIndexChange={this._handleIndexChange}
-                        />
+                        {/*<TabViewAnimated*/}
+                            {/*style={styles.tabContainer}*/}
+                            {/*navigationState={this.state.tabs}*/}
+                            {/*renderScene={this._renderScene}*/}
+                            {/*renderPager={this._renderPager}*/}
+                            {/*renderHeader={this._renderHeader}*/}
+                            {/*onIndexChange={this._handleIndexChange}*/}
+                        {/*/>*/}
                     </View>
                 </View>
             </ScrollView>
