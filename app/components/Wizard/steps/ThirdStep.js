@@ -1,8 +1,7 @@
-import React, {Component} from 'react'
-import {connect} from 'react-redux'
-import {View, Text, ScrollView} from 'react-native'
-
-import styles from './../styles'
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {View, Text, ScrollView} from 'react-native';
+import styles from './../styles';
 
 export class ThirdStep extends Component {
 

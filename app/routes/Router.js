@@ -38,7 +38,7 @@ export const Tabs = TabNavigator(
                 if (routeName === 'Notifications') {
                     return <IconBadge
                         MainElement={<MaterialIcons name={iconName} size={35} color={tintColor}/>}
-                        BadgeElement={<Text style={{ color: 'white' }}>{screenProps.notifications.length}</Text>}
+                        BadgeElement={<Text style={{color: 'white'}}>{screenProps.notifications.length}</Text>}
                         Hidden={screenProps.notifications.length === 0}
                     />
                 }
@@ -81,7 +81,7 @@ export const MasterNavigator = SwitchNavigator(
 );
 
 const Router = ({dispatch, nav, notifications}) => (
-    <MasterNavigator screenProps={{ notifications }} navigation={{
+    <MasterNavigator screenProps={{notifications}} navigation={{
         dispatch,
         state: nav,
         addListener

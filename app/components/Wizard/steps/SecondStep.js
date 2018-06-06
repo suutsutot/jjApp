@@ -1,7 +1,7 @@
-import React, {Component} from 'react'
-import {connect} from 'react-redux'
-import {View, Text, ScrollView, TextInput, TouchableOpacity, Dimensions} from 'react-native'
-import  {Avatar} from 'react-native-elements'
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {View, Text, ScrollView, TextInput, TouchableOpacity, Dimensions} from 'react-native';
+import  {Avatar} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ActivitiesAPI from 'app/api/ActivitiesAPI';
 import {forEach, map, uniqBy, find} from 'lodash';

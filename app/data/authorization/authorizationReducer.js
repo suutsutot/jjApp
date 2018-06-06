@@ -1,10 +1,12 @@
-import * as types from 'app/constants/actionTypes'
+import * as types from 'app/constants/actionTypes';
 
 let defaultState = {
     email: '',
     userId: '',
     authed: false,
-    profile: {}
+    profile: {},
+    wrongCredentials: false,
+    errorUserGet: false
 };
 
 export let authorizeReducer = (state = defaultState, action) => {
@@ -29,6 +31,26 @@ export let authorizeReducer = (state = defaultState, action) => {
                 ...state,
                 email: '',
                 authed: false
+            };
+        case types.WRONG_CREDENTIALS:
+            return {
+                ...state,
+                wrongCredentials: true
+            };
+        case types.CURRENT_CREDENTIALS:
+            return {
+                ...state,
+                wrongCredentials: false
+            };
+        case types.NO_USER_GET:
+            return {
+                ...state,
+                errorUserGet: true
+            };
+        case types.SUCCESS_USER_GET:
+            return {
+                ...state,
+                errorUserGet: false
             };
         default:
             return state

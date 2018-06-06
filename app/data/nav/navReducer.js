@@ -1,4 +1,4 @@
-import {MasterNavigator} from 'app/routes/Router'
+import {MasterNavigator} from 'app/routes/Router';
 
 export let navReducer = (state, action) => {
     let nextState;

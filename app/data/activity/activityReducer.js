@@ -1,4 +1,4 @@
-import * as types from 'app/constants/actionTypes'
+import * as types from 'app/constants/actionTypes';
 
 let defaultState = {
     activitiesList: {},
@@ -6,7 +6,7 @@ let defaultState = {
 };
 
 export let activityReducer = (state = defaultState, action) => {
-    const { payload } = action;
+    const {payload} = action;
     switch (action.type) {
         case types.GET_ACTIVITIES_LIST_INFO:
             return {
@@ -14,7 +14,7 @@ export let activityReducer = (state = defaultState, action) => {
                 activitiesList: [
                     payload.info,
                 ],
-                loaded:true
+                loaded: true
             };
         default:
             return state;

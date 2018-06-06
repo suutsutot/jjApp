@@ -1,4 +1,4 @@
-import * as types from 'app/constants/actionTypes'
+import * as types from 'app/constants/actionTypes';
 
 let defaultState = {
     info: {},

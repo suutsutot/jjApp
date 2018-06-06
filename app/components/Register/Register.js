@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {ScrollView, View, Text, Image} from 'react-native';
 import {CardSection, Button} from 'app/pureComponents';
-import {SocialIcon} from 'react-native-elements'
+import {SocialIcon} from 'react-native-elements';
 import {TextField} from 'react-native-material-textfield';
 import {authorizationActions} from 'app/data/authorization';
 import {trim} from 'lodash';
@@ -109,14 +109,12 @@ export class Register extends Component {
 
     onLoginWithFacebook() {
         const {loginViaFacebook} = this.props;
-        // login()
-        console.log('facebook')
+        loginViaFacebook();
     }
 
     onLoginWithGoogle() {
         const {loginViaGoogle} = this.props;
-        // login()
-        console.log('google')
+        loginViaGoogle();
     }
 
     onEmailChange(text) {
@@ -133,14 +131,9 @@ export class Register extends Component {
         })
     }
 
-    onLoginButton() {
-        const {login} = this.props;
-        login()
-    }
-
     onSignUp() {
         const {register} = this.props;
-        const { emailInput, passwordInput } = this.state;
+        const {emailInput, passwordInput} = this.state;
 
         if (trim(emailInput) === '') {
             this.setState({
@@ -155,7 +148,6 @@ export class Register extends Component {
             });
             return
         }
-
 
         register(emailInput, passwordInput)
     }
@@ -174,7 +166,7 @@ export class Register extends Component {
                     {this.renderSocialButtons()}
                     <Text style={{textAlign: 'center',}}>or</Text>
                     {this.renderInputs()}
-                    <View style={{height: 20}}/>
+                    <View style={{height: 15}}/>
                     {this.renderRegisterButton()}
                     {this.renderLoginButton()}
                 </ScrollView>
@@ -186,6 +178,8 @@ export class Register extends Component {
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         register: (email, password) => dispatch(authorizationActions.dbSignUp(email, password)),
+        loginViaFacebook: () => dispatch(authorizationActions.dbLoginViaFacebook()),
+        loginViaGoogle: () => dispatch(authorizationActions.dbLoginViaGoogle()),
     }
 };
 

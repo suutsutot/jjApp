@@ -1,98 +1,13 @@
 import {AsyncStorage} from 'react-native';
-import {NavigationActions} from 'react-navigation'
+import {NavigationActions} from 'react-navigation';
 import Auth0 from 'react-native-auth0';
 let credentials = require('app/config/auth0-credentials');
 const auth0 = new Auth0(credentials);
 import {getNotifications} from 'app/api/NotificationsAPI';
-import {refreshByCredentials} from 'app/api/refreshTokenAPI'
+import {refreshByCredentials} from 'app/api/refreshTokenAPI';
 import config from 'app/config';
-import * as types from 'app/constants/actionTypes'
-import * as globalActions from 'app/data/global/globalActions'
-
-export let dbLogin = () => {
-    return (dispatch, getState) => {
-        dispatch(globalActions.showLoading());
-
-        auth0.webAuth
-            .authorize({
-                scope: 'openid email profile offline_access',
-                audience: 'https://' + credentials.domain + '/userinfo'
-            })
-            .then(credentials => {
-                AsyncStorage.setItem('refreshToken', credentials.refreshToken);
-
-                refreshByCredentials(credentials).then((newToken) => {
-                    AsyncStorage.setItem('accessToken', newToken.accessToken);
-                    AsyncStorage.setItem('idToken', newToken.idToken);
-
-                    auth0.auth
-                        .userInfo({token: newToken.accessToken})
-                        .then(profile => {
-
-                            let url = config.server + '/api/users/duplicate-auth0';
-                            let email = profile.email;
-                            let data = {email};
-
-                            fetch(url, {
-                                method: 'POST',
-                                body: JSON.stringify(data),
-                                headers: {
-                                    'Accept': 'application/json',
-                                    'Content-Type': 'application/json',
-                                    'Authorization': newToken.idToken
-                                }
-                            })
-                                .then(r => r.json())
-                                .catch(error => {
-                                    console.log('AuthorizeActionError:', error);
-                                    dispatch(globalActions.hideLoading());
-                                    dispatch(globalActions.showErrorMessageWithTimeout(error.code));
-                                })
-                                .then(response => {
-                                    let userInfo = response.user || {};
-
-                                    AsyncStorage.setItem('userId', userInfo._id);
-                                    AsyncStorage.setItem('email', userInfo.email);
-
-                                    dispatch(globalActions.showNotificationSuccess());
-                                    dispatch(login(userInfo.email, userInfo));
-
-                                    getNotifications().then((data) => {
-                                        dispatch(updateNotifications(data));
-                                    });
-
-                                    let resetAction;
-
-                                    if (userInfo.wizardSteps.personal === false || userInfo.wizardSteps.activities === false) {
-                                        resetAction = NavigationActions.reset({
-                                            index: 0,
-                                            actions: [
-                                                NavigationActions.navigate({routeName: 'Wizard'})
-                                            ]
-                                        });
-                                    }
-                                    else {
-                                        resetAction = NavigationActions.reset({
-                                            index: 0,
-                                            actions: [
-                                                NavigationActions.navigate({routeName: 'Tabs'})
-                                            ]
-                                        });
-                                    }
-                                    dispatch(resetAction);
-                                    dispatch(globalActions.hideLoading());
-
-                                });
-                        })
-                        .catch(error => {
-                            dispatch(globalActions.hideLoading());
-                            dispatch(globalActions.showErrorMessageWithTimeout(error.code));
-                        });
-                });
-            })
-            .catch(error => console.error('Error: ', error));
-    }
-};
+import * as types from 'app/constants/actionTypes';
+import * as globalActions from 'app/data/global/globalActions';
 
 export let dbLoginWithCredentials = (email, password) => {
     return (dispatch, getState) => {
@@ -107,6 +22,7 @@ export let dbLoginWithCredentials = (email, password) => {
                 scope: 'openid offline_access',
             })
             .then(credentials => {
+                dispatch(currentCredentials());
                 AsyncStorage.setItem('refreshToken', credentials.refreshToken);
 
                 refreshByCredentials(credentials).then((newToken) => {
@@ -133,50 +49,65 @@ export let dbLoginWithCredentials = (email, password) => {
                                 .then(r => r.json())
                                 .catch(error => {
                                     console.log('AuthorizeActionError:', error);
+                                    dispatch(noUserGet());
                                     dispatch(globalActions.hideLoading());
                                     dispatch(globalActions.showErrorMessageWithTimeout(error.code));
                                 })
                                 .then(response => {
-                                    let userInfo = response.user || {};
+                                    if (response && response.user) {
+                                        dispatch(successUserGet());
+                                        let userInfo = response.user || {};
 
-                                    AsyncStorage.setItem('userId', userInfo._id);
-                                    AsyncStorage.setItem('email', userInfo.email);
+                                        AsyncStorage.setItem('userId', userInfo._id);
+                                        AsyncStorage.setItem('email', userInfo.email);
 
-                                    dispatch(globalActions.showNotificationSuccess());
-                                    dispatch(login(userInfo.email, userInfo));
+                                        dispatch(globalActions.showNotificationSuccess());
+                                        dispatch(login(userInfo.email, userInfo));
 
-                                    getNotifications().then((data) => {
-                                        dispatch(updateNotifications(data));
-                                    });
-
-                                    let resetAction;
-
-                                    if (userInfo.wizardSteps.personal === false || userInfo.wizardSteps.activities === false) {
-                                        resetAction = NavigationActions.reset({
-                                            index: 0,
-                                            actions: [
-                                                NavigationActions.navigate({routeName: 'Wizard'})
-                                            ]
+                                        getNotifications().then((data) => {
+                                            dispatch(updateNotifications(data));
                                         });
+
+                                        let resetAction;
+
+                                        if (userInfo.wizardSteps.personal === false || userInfo.wizardSteps.activities === false) {
+                                            resetAction = NavigationActions.reset({
+                                                index: 0,
+                                                actions: [
+                                                    NavigationActions.navigate({routeName: 'Wizard'})
+                                                ]
+                                            });
+                                        }
+                                        else {
+                                            resetAction = NavigationActions.reset({
+                                                index: 0,
+                                                actions: [
+                                                    NavigationActions.navigate({routeName: 'Tabs'})
+                                                ]
+                                            });
+                                        }
+                                        dispatch(resetAction);
+                                        dispatch(globalActions.hideLoading());
                                     }
                                     else {
-                                        resetAction = NavigationActions.reset({
-                                            index: 0,
-                                            actions: [
-                                                NavigationActions.navigate({routeName: 'Tabs'})
-                                            ]
-                                        });
+                                        dispatch(noUserGet());
+                                        dispatch(globalActions.hideLoading());
                                     }
-                                    dispatch(resetAction);
-                                    dispatch(globalActions.hideLoading());
+
 
                                 });
                         })
                         .catch(error => {
+                            dispatch(noUserGet());
                             dispatch(globalActions.hideLoading());
                             dispatch(globalActions.showErrorMessageWithTimeout(error.code));
                         });
                 });
+            })
+            .catch(error => {
+                console.log('AuthorizeActionError:', error);
+                dispatch(wrongCredentials());
+                dispatch(globalActions.hideLoading());
             })
     }
 };
@@ -287,7 +218,6 @@ export let dbLoginViaGoogle = () => {
                     auth0.auth
                         .userInfo({token: newToken.accessToken})
                         .then(profile => {
-
                             let url = config.server + '/api/users/duplicate-auth0';
                             let email = profile.email;
                             let data = {email};
@@ -391,6 +321,7 @@ export let dbSignUp = (email, password) => {
                 dispatch(globalActions.hideLoading());
             })
             .catch((error) => {
+                dispatch(globalActions.hideLoading());
                 console.warn(error)
             })
     }
@@ -425,7 +356,23 @@ export const getUserId = (userId, email) => {
     }
 };
 
+export let wrongCredentials = () => {
+    return {type: types.WRONG_CREDENTIALS}
+};
+
+export let currentCredentials = () => {
+    return {type: types.CURRENT_CREDENTIALS}
+};
+
+export let noUserGet = () => {
+    return {type: types.NO_USER_GET}
+};
+
+export let successUserGet = () => {
+    return {type: types.SUCCESS_USER_GET}
+};
+
 const updateNotifications = payload => ({
-    type: 'UPDATE_NOTIFICATIONS',
+    type: types.UPDATE_NOTIFICATIONS,
     payload
 });

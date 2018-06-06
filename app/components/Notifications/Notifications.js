@@ -1,12 +1,24 @@
-import React, {Component} from 'react'
-import {connect} from 'react-redux'
-import {ScrollView, View, Text, TouchableOpacity, AppState, Picker, Platform, AsyncStorage, Linking, Image, ActivityIndicator} from 'react-native'
-import {HeaderSection} from 'app/pureComponents'
-import moment from 'moment'
-import forEach from 'lodash/forEach'
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {
+    ScrollView,
+    View,
+    Text,
+    TouchableOpacity,
+    AppState,
+    Picker,
+    Platform,
+    AsyncStorage,
+    Linking,
+    Image,
+    ActivityIndicator
+} from 'react-native';
+import {HeaderSection} from 'app/pureComponents';
+import moment from 'moment';
+import forEach from 'lodash/forEach';
 import config from 'app/config';
 import {refresh} from 'app/api/refreshTokenAPI';
-import styles from './styles'
+import styles from './styles';
 
 
 export class Notifications extends Component {
@@ -62,7 +74,8 @@ export class Notifications extends Component {
                         >
                             <View style={[styles.layoutRow]}>
                                 {/*<Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 40, width: 40, borderRadius: 50}} containerStyle={{height: 40, width: 40}} source={{uri: notification.details.pic}}/>*/}
-                                <Image style={{ alignSelf: 'center', height: 40, width: 40, borderRadius: 50}} source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}/>
+                                <Image style={{alignSelf: 'center', height: 40, width: 40, borderRadius: 50}}
+                                       source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}/>
                                 <View style={[styles.layoutColumn, styles.leftPaddingText]}>
                                     <View style={[styles.layoutRow, {flex: 1}]}>
                                         <Text
@@ -88,7 +101,8 @@ export class Notifications extends Component {
                         >
                             <View style={[styles.layoutRow]}>
                                 {/*<Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 40, width: 40, borderRadius: 50}} containerStyle={{height: 40, width: 40}} source={{uri: notification.details.pic}}/>*/}
-                                <Image style={{ alignSelf: 'center', height: 40, width: 40, borderRadius: 50}} source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}/>
+                                <Image style={{alignSelf: 'center', height: 40, width: 40, borderRadius: 50}}
+                                       source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}/>
                                 <View style={[styles.layoutColumn, styles.leftPaddingText]}>
                                     <View style={[styles.layoutRow, {flex: 1}]}>
                                         <Text style={styles.blackColorText}>{notification.details.name}</Text>
@@ -111,7 +125,8 @@ export class Notifications extends Component {
                         >
                             <View style={[styles.layoutRow]}>
                                 {/*<Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 40, width: 40, borderRadius: 50}} containerStyle={{height: 40, width: 40}} source={{uri: notification.details.pic}}/>*/}
-                                <Image style={{ alignSelf: 'center', height: 40, width: 40, borderRadius: 50}} source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}/>
+                                <Image style={{alignSelf: 'center', height: 40, width: 40, borderRadius: 50}}
+                                       source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}/>
                                 <View style={[styles.layoutColumn, styles.leftPaddingText]}>
                                     <View style={[styles.layoutRow, {flex: 1}]}>
                                         <Text style={styles.blackColorText}>{notification.details.name}</Text>
@@ -131,7 +146,8 @@ export class Notifications extends Component {
                         >
                             <View style={[styles.layoutRow]}>
                                 {/*<Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 40, width: 40, borderRadius: 50}} containerStyle={{height: 40, width: 40}} source={{uri: notification.details.pic}}/>*/}
-                                <Image style={{ alignSelf: 'center', height: 40, width: 40, borderRadius: 50}} source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}/>
+                                <Image style={{alignSelf: 'center', height: 40, width: 40, borderRadius: 50}}
+                                       source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}/>
                                 <View style={[styles.layoutColumn, styles.leftPaddingText]}>
                                     <View style={[styles.layoutRow, {flex: 1}]}>
                                         <Text style={styles.blackColorText}>{notification.details.name}</Text>
@@ -170,7 +186,8 @@ export class Notifications extends Component {
                         >
                             <View style={[styles.layoutRow]}>
                                 {/*<Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 40, width: 40, borderRadius: 50}} containerStyle={{height: 40, width: 40}} source={{uri: notification.details.pic}}/>*/}
-                                <Image style={{ alignSelf: 'center', height: 40, width: 40, borderRadius: 50}} source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}/>
+                                <Image style={{alignSelf: 'center', height: 40, width: 40, borderRadius: 50}}
+                                       source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}/>
                                 <View style={[styles.layoutColumn, styles.leftPaddingText]}>
                                     <View style={[styles.layoutRow, {flex: 1}]}>
                                         <Text
@@ -211,7 +228,8 @@ export class Notifications extends Component {
                         >
                             <View style={[styles.layoutRow]}>
                                 {/*<Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 40, width: 40, borderRadius: 50}} containerStyle={{height: 40, width: 40}} source={{uri: notification.details.pic}}/>*/}
-                                <Image style={{ alignSelf: 'center', height: 40, width: 40, borderRadius: 50}} source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}/>
+                                <Image style={{alignSelf: 'center', height: 40, width: 40, borderRadius: 50}}
+                                       source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}/>
                                 <View style={[styles.layoutColumn, styles.leftPaddingText]}>
                                     <View style={[styles.layoutRow, {flex: 1}]}>
                                         <Text
@@ -237,7 +255,8 @@ export class Notifications extends Component {
                         >
                             <View style={[styles.layoutRow]}>
                                 {/*<Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 40, width: 40, borderRadius: 50}} containerStyle={{height: 40, width: 40}} source={{uri: notification.details.pic}}/>*/}
-                                <Image style={{ alignSelf: 'center', height: 40, width: 40, borderRadius: 50}} source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}/>
+                                <Image style={{alignSelf: 'center', height: 40, width: 40, borderRadius: 50}}
+                                       source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}/>
                                 <View style={[styles.layoutColumn, styles.leftPaddingText]}>
                                     <View style={[styles.layoutRow, {flex: 1}]}>
                                         <Text style={styles.blackColorText}>{notification.details.name}</Text>
@@ -260,7 +279,8 @@ export class Notifications extends Component {
                         >
                             <View style={[styles.layoutRow]}>
                                 {/*<Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 40, width: 40, borderRadius: 50}} containerStyle={{height: 40, width: 40}} source={{uri: notification.details.pic}}/>*/}
-                                <Image style={{ alignSelf: 'center', height: 40, width: 40, borderRadius: 50}} source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}/>
+                                <Image style={{alignSelf: 'center', height: 40, width: 40, borderRadius: 50}}
+                                       source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}/>
                                 <View style={[styles.layoutColumn, styles.leftPaddingText]}>
                                     <View style={[styles.layoutRow, {flex: 1}]}>
                                         <Text style={styles.blackColorText}>{notification.details.name}</Text>
@@ -280,7 +300,8 @@ export class Notifications extends Component {
                         >
                             <View style={[styles.layoutRow]}>
                                 {/*<Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 40, width: 40, borderRadius: 50}} containerStyle={{height: 40, width: 40}} source={{uri: notification.details.pic}}/>*/}
-                                <Image style={{ alignSelf: 'center', height: 40, width: 40, borderRadius: 50}} source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}/>
+                                <Image style={{alignSelf: 'center', height: 40, width: 40, borderRadius: 50}}
+                                       source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}/>
                                 <View style={[styles.layoutColumn, styles.leftPaddingText]}>
                                     <View style={[styles.layoutRow, {flex: 1}]}>
                                         <Text style={styles.blackColorText}>{notification.details.name}</Text>
@@ -300,7 +321,8 @@ export class Notifications extends Component {
                         >
                             <View style={[styles.layoutRow]}>
                                 {/*<Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 40, width: 40, borderRadius: 50}} containerStyle={{height: 40, width: 40}} source={{uri: notification.details.pic}}/>*/}
-                                <Image style={{ alignSelf: 'center', height: 40, width: 40, borderRadius: 50}} source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}/>
+                                <Image style={{alignSelf: 'center', height: 40, width: 40, borderRadius: 50}}
+                                       source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}/>
                                 <View style={[styles.layoutColumn, styles.leftPaddingText]}>
                                     <View style={[styles.layoutRow, {flex: 1}]}>
                                         <Text style={styles.blackColorText}>{notification.details.name}</Text>
@@ -320,7 +342,8 @@ export class Notifications extends Component {
                         >
                             <View style={[styles.layoutRow]}>
                                 {/*<Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 40, width: 40, borderRadius: 50}} containerStyle={{height: 40, width: 40}} source={{uri: notification.details.pic}}/>*/}
-                                <Image style={{ alignSelf: 'center', height: 40, width: 40, borderRadius: 50}} source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}/>
+                                <Image style={{alignSelf: 'center', height: 40, width: 40, borderRadius: 50}}
+                                       source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}/>
                                 <View style={[styles.layoutColumn, styles.leftPaddingText]}>
                                     <View style={[styles.layoutRow, {flex: 1}]}>
                                         <Text

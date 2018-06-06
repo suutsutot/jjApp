@@ -1,7 +1,7 @@
 import config from 'app/config';
 import {refresh} from './refreshTokenAPI';
 
-export const dbSendLogs = async(data) =>{
+export const dbSendLogs = async(data) => {
     const newToken = await refresh();
 
     return new Promise((resolve, reject) => {

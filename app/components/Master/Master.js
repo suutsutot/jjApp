@@ -1,10 +1,10 @@
-import React, {Component} from 'react'
-import {connect} from 'react-redux'
-import {AppState, Dimensions, AsyncStorage} from 'react-native'
-import { globalActions } from 'app/data/global'
-import { authorizationActions } from 'app/data/authorization'
-import { notificationActions } from 'app/data/notification'
-import Router from 'app/routes/Router'
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {AppState, Dimensions, AsyncStorage} from 'react-native';
+import {globalActions} from 'app/data/global';
+import {authorizationActions} from 'app/data/authorization';
+import {notificationActions} from 'app/data/notification';
+import Router from 'app/routes/Router';
 
 export class Master extends Component {
 

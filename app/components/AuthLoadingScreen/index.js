@@ -1,2 +1,2 @@
-import AuthLoadingScreen from './AuthLoadingScreen'
-export default AuthLoadingScreen
+import AuthLoadingScreen from './AuthLoadingScreen';
+export default AuthLoadingScreen;

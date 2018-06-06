@@ -1,6 +1,6 @@
 import {refresh} from 'app/api/refreshTokenAPI';
 import config from 'app/config';
-import * as types from 'app/constants/actionTypes'
+import * as types from 'app/constants/actionTypes';
 
 
 export const dbGetNotifies = () => {

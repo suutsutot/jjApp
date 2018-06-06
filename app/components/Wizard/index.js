@@ -1,2 +1,2 @@
-import Wizard from './Wizard'
-export default Wizard
+import Wizard from './Wizard';
+export default Wizard;

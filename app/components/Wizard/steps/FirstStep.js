@@ -1,14 +1,14 @@
-import React, {Component} from 'react'
-import {connect} from 'react-redux'
-import moment from 'moment'
-import {View, Text, ScrollView, TouchableOpacity} from 'react-native'
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import moment from 'moment';
+import {View, Text, ScrollView, TouchableOpacity} from 'react-native';
 import {TextField} from 'react-native-material-textfield';
 import {Dropdown} from 'react-native-material-dropdown';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import {Divider} from 'react-native-elements';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import {userActions} from 'app/data/user';
-import styles from './../styles'
+import styles from './../styles';
 
 
 export class FirstStep extends Component {

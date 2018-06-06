@@ -1,12 +1,11 @@
-import React, {Component} from 'react'
-import {connect} from 'react-redux'
-import {Animated, ScrollView, View, Text, Image, ImageBackground, Platform} from 'react-native'
-import {TabViewAnimated, TabBar, TabViewPagerScroll, TabViewPagerPan} from 'react-native-tab-view'
-import {SocialIcon, ListItem} from 'react-native-elements'
-import {HeaderSection} from 'app/pureComponents'
-import styles from './styles'
-
-import {userActions } from 'app/data/user'
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {Animated, ScrollView, View, Text, Image, ImageBackground, Platform} from 'react-native';
+import {TabViewAnimated, TabBar, TabViewPagerScroll, TabViewPagerPan} from 'react-native-tab-view';
+import {SocialIcon, ListItem} from 'react-native-elements';
+import {HeaderSection} from 'app/pureComponents';
+import styles from './styles';
+import {userActions} from 'app/data/user';
 
 export class Profile extends Component {
 
@@ -165,12 +164,12 @@ export class Profile extends Component {
                     <View style={styles.cardContainer}>
                         {this.renderContactHeader()}
                         {/*<TabViewAnimated*/}
-                            {/*style={styles.tabContainer}*/}
-                            {/*navigationState={this.state.tabs}*/}
-                            {/*renderScene={this._renderScene}*/}
-                            {/*renderPager={this._renderPager}*/}
-                            {/*renderHeader={this._renderHeader}*/}
-                            {/*onIndexChange={this._handleIndexChange}*/}
+                        {/*style={styles.tabContainer}*/}
+                        {/*navigationState={this.state.tabs}*/}
+                        {/*renderScene={this._renderScene}*/}
+                        {/*renderPager={this._renderPager}*/}
+                        {/*renderHeader={this._renderHeader}*/}
+                        {/*onIndexChange={this._handleIndexChange}*/}
                         {/*/>*/}
                     </View>
                 </View>

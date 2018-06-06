@@ -8,7 +8,7 @@ import {HeaderSection} from 'app/pureComponents';
 import {eventActions} from 'app/data/event';
 import {userActions} from 'app/data/user';
 import {notificationActions} from 'app/data/notification';
-import {activityActions} from 'app/data/activity'
+import {activityActions} from 'app/data/activity';
 import styles from './styles';
 
 
@@ -55,7 +55,8 @@ export class Home extends Component {
                                 width: 60,
                                 height: 60,
                                 borderRadius: 50,
-                                resizeMode: 'cover'}} source={{uri: event.backgroundPic}}/>
+                                resizeMode: 'cover'
+                            }} source={{uri: event.backgroundPic}}/>
                             <View style={[styles.layoutColumn, styles.leftPaddingText]}>
                                 <View style={[styles.layoutRow]}>
                                     <Text
@@ -76,14 +77,16 @@ export class Home extends Component {
     };
 
     renderNoEvents = (type) => {
-        if (type === 'userList') return <View style={[{marginVertical: 20, alignItems: 'center'}]}><Text>No one events</Text></View>;
+        if (type === 'userList') return <View style={[{marginVertical: 20, alignItems: 'center'}]}><Text>No one
+            events</Text></View>;
         // else if (type === 'recommended') return <View style={styles.TouchableOpacityStyles}><Text>No one recommended events</Text></View>;
     };
 
     renderRecommendedEvents = () => {
         const {recommendedEvents} = this.props;
 
-        if (recommendedEvents.length > 0) return <View style={[styles.backgroundColorContentWhite, styles.shadowContainer, {marginBottom: 20}]}>
+        if (recommendedEvents.length > 0) return <View
+            style={[styles.backgroundColorContentWhite, styles.shadowContainer, {marginBottom: 20}]}>
             <Text style={{margin: 10}}>{'Recommended events ' + recommendedEvents.length}</Text>
             {this.renderEventList(recommendedEvents)}
         </View>

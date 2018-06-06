@@ -1,10 +1,10 @@
-import React, {Component} from 'react'
+import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {TouchableOpacity, View, ScrollView, Image, Text, ActivityIndicator, Linking} from 'react-native';
 import {CardSection, Button, HeaderSection} from 'app/pureComponents';
 import {Avatar} from 'react-native-elements';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { authorizationActions } from 'app/data/authorization';
+import {authorizationActions} from 'app/data/authorization';
 import {refresh} from 'app/api/refreshTokenAPI';
 import config from 'app/config';
 import styles from './styles';
@@ -34,11 +34,16 @@ export class Settings extends Component {
         const {name, avatar, userId} = this.props;
         return <TouchableOpacity
             style={[styles.TouchableOpacityStyles, styles.backgroundColorContentWhite, styles.shadowContainer, {marginBottom: 20}]}
-            onPress={() => {this.goToProfile(userId)}}>
+            onPress={() => {
+                this.goToProfile(userId)
+            }}>
             <View style={[styles.layoutRow, styles.spaceBetweenText, {flex: 1, alignItems: 'center'}]}>
                 <View style={[styles.layoutRow]}>
-                    <Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 60, width: 60, borderRadius: 50}} containerStyle={{height: 60, width: 60}}  source={{uri: avatar}}/>
-                    <View style={[styles.layoutColumn, styles.leftPaddingText, styles.spaceBetweenText, styles.paddingClass]}>
+                    <Avatar overlayContainerStyle={{borderRadius: 50}}
+                            avatarStyle={{height: 60, width: 60, borderRadius: 50}}
+                            containerStyle={{height: 60, width: 60}} source={{uri: avatar}}/>
+                    <View
+                        style={[styles.layoutColumn, styles.leftPaddingText, styles.spaceBetweenText, styles.paddingClass]}>
                         <Text style={[styles.blackColorText, {fontSize: 16}]}>{name}</Text>
                         <Text style={[styles.grayColorText, {fontSize: 12}]}>Go to Profile</Text>
                     </View>
@@ -49,7 +54,8 @@ export class Settings extends Component {
     };
 
     renderSchedule = () => {
-        return <View style={[styles.TouchableOpacityStyles, styles.backgroundColorContentWhite, styles.shadowContainer]}>
+        return <View
+            style={[styles.TouchableOpacityStyles, styles.backgroundColorContentWhite, styles.shadowContainer]}>
             <Text>Schedule</Text>
         </View>
     };

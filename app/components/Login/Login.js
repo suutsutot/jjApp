@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {ScrollView, View, Text, Image} from 'react-native';
 import {CardSection, Button} from 'app/pureComponents';
-import {SocialIcon} from 'react-native-elements'
+import {SocialIcon} from 'react-native-elements';
 import {TextField} from 'react-native-material-textfield';
 import {authorizationActions} from 'app/data/authorization';
 import {trim} from 'lodash';
@@ -50,6 +50,7 @@ export class Login extends Component {
 
     renderInputs() {
         const {emailInput, emailInputError, passwordInput, passwordInputError} = this.state;
+        const {wrongCredentials, errorUserGet} = this.props;
 
         return <View>
             <TextField
@@ -72,6 +73,10 @@ export class Login extends Component {
                 helperText={passwordInputError}
                 labelHeight={15}
             />
+            {wrongCredentials ?
+                <Text style={{color: 'red', textAlign: 'center'}}>Wrong email or password.</Text> : null}
+            {errorUserGet ?
+                <Text style={{color: 'red', textAlign: 'center'}}>Sorry, there was an authorization error</Text> : null}
         </View>
     }
 
@@ -132,14 +137,9 @@ export class Login extends Component {
         })
     }
 
-    onLoginButton() {
-        const {login} = this.props;
-        login()
-    }
-
     onLoginWithCredentials() {
         const {LoginWithCredentials} = this.props;
-        const { emailInput, passwordInput } = this.state;
+        const {emailInput, passwordInput} = this.state;
 
         if (trim(emailInput) === '') {
             this.setState({
@@ -173,7 +173,7 @@ export class Login extends Component {
                     {this.renderSocialButtons()}
                     <Text style={{textAlign: 'center',}}>or</Text>
                     {this.renderInputs()}
-                    <View style={{height: 20}}/>
+                    <View style={{height: 15}}/>
                     {this.renderLoginButton()}
                     {this.renderRegisterButton()}
                 </ScrollView>
@@ -184,16 +184,16 @@ export class Login extends Component {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        login: () => dispatch(authorizationActions.dbLogin()),
         LoginWithCredentials: (email, password) => dispatch(authorizationActions.dbLoginWithCredentials(email, password)),
         loginViaFacebook: () => dispatch(authorizationActions.dbLoginViaFacebook()),
         loginViaGoogle: () => dispatch(authorizationActions.dbLoginViaGoogle()),
     }
 };
 
-const mapStateToProps = ({global}) => {
+const mapStateToProps = ({global, authorize}) => {
+    const {wrongCredentials, errorUserGet} = authorize;
     const {error, loading} = global;
-    return {error, loading}
+    return {error, loading, wrongCredentials, errorUserGet}
 };
 
 

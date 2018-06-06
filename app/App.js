@@ -1,9 +1,9 @@
-import React, {Component} from 'react'
-import {Provider} from 'react-redux'
-import {AppState, Platform, View} from 'react-native'
-import store from 'app/config/store'
-import SocketListener from 'app/config/socket'
-import Master from 'app/components/Master'
+import React, {Component} from 'react';
+import {Provider} from 'react-redux';
+import {AppState, Platform, View} from 'react-native';
+import store from 'app/config/store';
+import SocketListener from 'app/config/socket';
+import Master from 'app/components/Master';
 
 class App extends Component {
 

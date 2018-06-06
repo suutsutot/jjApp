@@ -1,8 +1,8 @@
-import orderBy from 'lodash/filter'
-import {refresh} from './refreshTokenAPI'
+import orderBy from 'lodash/filter';
+import {refresh} from './refreshTokenAPI';
 import config from 'app/config';
 
-export const getNotifications = async() =>{
+export const getNotifications = async() => {
     const newToken = await refresh();
 
     return new Promise((resolve, reject) => {

@@ -1,2 +1,2 @@
-export * from './HeaderSection'
+export * from './HeaderSection';
 

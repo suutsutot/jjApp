@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native'
+import {StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
     TouchableOpacityStyles: {
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
         // elevation: 4,
         // marginBottom: 20
         shadowColor: '#000',
-        shadowOffset: { height: 0.5 },
+        shadowOffset: {height: 0.5},
         shadowOpacity: 0.1,
         shadowRadius: 0.5,
         elevation: 4

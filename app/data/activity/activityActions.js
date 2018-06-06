@@ -1,7 +1,7 @@
-import keyBy from 'lodash/keyBy'
-import filter from 'lodash/filter'
-import * as types from 'app/constants/actionTypes'
-import config from 'app/config'
+import keyBy from 'lodash/keyBy';
+import filter from 'lodash/filter';
+import * as types from 'app/constants/actionTypes';
+import config from 'app/config';
 
 export const dbGetActivitiesList = () => {
     return (dispatch, getState) => {

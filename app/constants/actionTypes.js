@@ -16,6 +16,10 @@ export const GET_USER_ID = 'GET_USER_ID';
 export const ADD_PROFILE = 'ADD_PROFILE';
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
+export const WRONG_CREDENTIALS = 'WRONG_CREDENTIALS';
+export const CURRENT_CREDENTIALS = 'CURRENT_CREDENTIALS';
+export const NO_USER_GET = 'NO_USER_GET';
+export const SUCCESS_USER_GET = 'SUCCESS_USER_GET';
 
 /* global actions */
 export const HIDE_MESSAGE_GLOBAL = 'HIDE_MESSAGE_GLOBAL';

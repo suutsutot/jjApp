@@ -9,16 +9,16 @@ export const refresh = () => {
         refreshToken().then((refreshToken) => {
             if (!refreshToken) resolve(null);
             else
-            auth0
-                .auth
-                .refreshToken({refreshToken: refreshToken})
-                .then(refreshUser => {
-                    resolve(refreshUser);
-                })
-                .catch(error => {
-                    console.error('Error: ', error);
-                    reject(error);
-                });
+                auth0
+                    .auth
+                    .refreshToken({refreshToken: refreshToken})
+                    .then(refreshUser => {
+                        resolve(refreshUser);
+                    })
+                    .catch(error => {
+                        console.error('Error: ', error);
+                        reject(error);
+                    });
         });
     });
 };

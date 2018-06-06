@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image} from 'react-native'
+import {Image} from 'react-native';
 import {Header} from 'react-native-elements';
 import styles from './styles';
 

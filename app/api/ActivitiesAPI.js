@@ -1,5 +1,5 @@
-import keyBy from 'lodash/keyBy'
-import filter from 'lodash/filter'
+import keyBy from 'lodash/keyBy';
+import filter from 'lodash/filter';
 import config from 'app/config';
 
 const service = {
