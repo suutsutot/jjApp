@@ -361,8 +361,8 @@ export let dbSignUp = (email, password) => {
         let url = 'https://ynpl.auth0.com/dbconnections/signup';
         let data = {
             "client_id": "BBLp6dT9ug1mxY5UI3xwld6cA3Ukn8aH",
-            "email": "krdpoetns28+31051@gmail.com",
-            "password": "qwerty123",
+            "email": email,
+            "password": password,
             "connection": "Username-Password-Authentication"
         };
 

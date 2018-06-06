@@ -4,7 +4,7 @@ import {createLogger} from 'redux-logger';
 import reducers from 'app/data';
 import {middleware} from 'app/config/redux';
 
-// const logger = createLogger({});
+const logger = createLogger({});
 
 // const logger = store => next => action => {
 //     console.log('dispatching', action);
@@ -26,7 +26,7 @@ import {middleware} from 'app/config/redux';
 let initialState = {};
 
 let store = redux.createStore(reducers, initialState, redux.compose(
-    redux.applyMiddleware(thunk, middleware)
+    redux.applyMiddleware(thunk, middleware, logger)
 ));
 
 export default store
