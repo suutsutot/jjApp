@@ -114,8 +114,6 @@ export let dbLoginWithCredentials = (email, password) => {
 
 export let dbLoginViaFacebook = () => {
     return (dispatch, getState) => {
-        // dispatch(globalActions.showLoading());
-
         auth0.webAuth
             .authorize({
                 scope: 'openid email profile offline_access',
@@ -123,6 +121,7 @@ export let dbLoginViaFacebook = () => {
                 connection: 'facebook'
             })
             .then(credentials => {
+                dispatch(successUserGet());
                 AsyncStorage.setItem('refreshToken', credentials.refreshToken);
 
                 refreshByCredentials(credentials).then((newToken) => {
@@ -132,7 +131,7 @@ export let dbLoginViaFacebook = () => {
                     auth0.auth
                         .userInfo({token: newToken.accessToken})
                         .then(profile => {
-
+                            dispatch(successUserGet());
                             let url = config.server + '/api/users/duplicate-auth0';
                             let email = profile.email;
                             let data = {email};
@@ -149,59 +148,64 @@ export let dbLoginViaFacebook = () => {
                                 .then(r => r.json())
                                 .catch(error => {
                                     console.log('AuthorizeActionError:', error);
-                                    // dispatch(globalActions.hideLoading());
-                                    dispatch(globalActions.showErrorMessageWithTimeout(error.code));
+                                    dispatch(noUserGet());
                                 })
                                 .then(response => {
-                                    let userInfo = response.user || {};
+                                    if (response && response.user) {
+                                        dispatch(successUserGet());
+                                        let userInfo = response.user || {};
 
-                                    AsyncStorage.setItem('userId', userInfo._id);
-                                    AsyncStorage.setItem('email', userInfo.email);
+                                        AsyncStorage.setItem('userId', userInfo._id);
+                                        AsyncStorage.setItem('email', userInfo.email);
 
-                                    dispatch(globalActions.showNotificationSuccess());
-                                    dispatch(login(userInfo.email, userInfo));
+                                        dispatch(globalActions.showNotificationSuccess());
+                                        dispatch(login(userInfo.email, userInfo));
 
-                                    getNotifications().then((data) => {
-                                        dispatch(updateNotifications(data));
-                                    });
-
-                                    let resetAction;
-
-                                    if (!userInfo.wizardSteps.personal || !userInfo.wizardSteps.activities) {
-                                        resetAction = NavigationActions.reset({
-                                            index: 0,
-                                            actions: [
-                                                NavigationActions.navigate({routeName: 'Wizard'})
-                                            ]
+                                        getNotifications().then((data) => {
+                                            dispatch(updateNotifications(data));
                                         });
+
+                                        let resetAction;
+
+                                        if (!userInfo.wizardSteps.personal || !userInfo.wizardSteps.activities) {
+                                            resetAction = NavigationActions.reset({
+                                                index: 0,
+                                                actions: [
+                                                    NavigationActions.navigate({routeName: 'Wizard'})
+                                                ]
+                                            });
+                                        }
+                                        else {
+                                            resetAction = NavigationActions.reset({
+                                                index: 0,
+                                                actions: [
+                                                    NavigationActions.navigate({routeName: 'Tabs'})
+                                                ]
+                                            });
+                                        }
+                                        dispatch(resetAction);
                                     }
                                     else {
-                                        resetAction = NavigationActions.reset({
-                                            index: 0,
-                                            actions: [
-                                                NavigationActions.navigate({routeName: 'Tabs'})
-                                            ]
-                                        });
+                                        dispatch(noUserGet());
                                     }
-                                    dispatch(resetAction);
-                                    // dispatch(globalActions.hideLoading());
 
                                 });
                         })
                         .catch(error => {
-                            // dispatch(globalActions.hideLoading());
-                            dispatch(globalActions.showErrorMessageWithTimeout(error.code));
+                            console.log('AuthorizeActionError:', error);
+                            dispatch(noUserGet());
                         });
                 });
             })
-            .catch(error => console.error('Error: ', error));
+            .catch(error => {
+                console.log('AuthorizeActionError:', error);
+                dispatch(noUserGet());
+            });
     }
 };
 
 export let dbLoginViaGoogle = () => {
     return (dispatch, getState) => {
-        // dispatch(globalActions.showLoading());
-
         auth0.webAuth
             .authorize({
                 scope: 'openid email profile offline_access',
@@ -209,6 +213,7 @@ export let dbLoginViaGoogle = () => {
                 connection: 'google-oauth2'
             })
             .then(credentials => {
+                dispatch(successUserGet());
                 AsyncStorage.setItem('refreshToken', credentials.refreshToken);
 
                 refreshByCredentials(credentials).then((newToken) => {
@@ -218,6 +223,7 @@ export let dbLoginViaGoogle = () => {
                     auth0.auth
                         .userInfo({token: newToken.accessToken})
                         .then(profile => {
+                            dispatch(successUserGet());
                             let url = config.server + '/api/users/duplicate-auth0';
                             let email = profile.email;
                             let data = {email};
@@ -234,52 +240,58 @@ export let dbLoginViaGoogle = () => {
                                 .then(r => r.json())
                                 .catch(error => {
                                     console.log('AuthorizeActionError:', error);
-                                    // dispatch(globalActions.hideLoading());
-                                    dispatch(globalActions.showErrorMessageWithTimeout(error.code));
+                                    dispatch(noUserGet());
                                 })
                                 .then(response => {
-                                    let userInfo = response.user || {};
+                                    if (response && response.user) {
+                                        dispatch(successUserGet());
+                                        let userInfo = response.user || {};
 
-                                    AsyncStorage.setItem('userId', userInfo._id);
-                                    AsyncStorage.setItem('email', userInfo.email);
+                                        AsyncStorage.setItem('userId', userInfo._id);
+                                        AsyncStorage.setItem('email', userInfo.email);
 
-                                    dispatch(globalActions.showNotificationSuccess());
-                                    dispatch(login(userInfo.email, userInfo));
+                                        dispatch(globalActions.showNotificationSuccess());
+                                        dispatch(login(userInfo.email, userInfo));
 
-                                    getNotifications().then((data) => {
-                                        dispatch(updateNotifications(data));
-                                    });
-
-                                    let resetAction;
-
-                                    if (!userInfo.wizardSteps.personal || !userInfo.wizardSteps.activities) {
-                                        resetAction = NavigationActions.reset({
-                                            index: 0,
-                                            actions: [
-                                                NavigationActions.navigate({routeName: 'Wizard'})
-                                            ]
+                                        getNotifications().then((data) => {
+                                            dispatch(updateNotifications(data));
                                         });
+
+                                        let resetAction;
+
+                                        if (!userInfo.wizardSteps.personal || !userInfo.wizardSteps.activities) {
+                                            resetAction = NavigationActions.reset({
+                                                index: 0,
+                                                actions: [
+                                                    NavigationActions.navigate({routeName: 'Wizard'})
+                                                ]
+                                            });
+                                        }
+                                        else {
+                                            resetAction = NavigationActions.reset({
+                                                index: 0,
+                                                actions: [
+                                                    NavigationActions.navigate({routeName: 'Tabs'})
+                                                ]
+                                            });
+                                        }
+                                        dispatch(resetAction);
                                     }
                                     else {
-                                        resetAction = NavigationActions.reset({
-                                            index: 0,
-                                            actions: [
-                                                NavigationActions.navigate({routeName: 'Tabs'})
-                                            ]
-                                        });
+                                        dispatch(noUserGet());
                                     }
-                                    dispatch(resetAction);
-                                    // dispatch(globalActions.hideLoading());
-
                                 });
                         })
                         .catch(error => {
-                            // dispatch(globalActions.hideLoading());
-                            dispatch(globalActions.showErrorMessageWithTimeout(error.code));
+                            console.log('AuthorizeActionError:', error);
+                            dispatch(noUserGet());
                         });
                 });
             })
-            .catch(error => console.error('Error: ', error));
+            .catch(error => {
+                console.log('AuthorizeActionError:', error);
+                dispatch(noUserGet());
+            });
     }
 };
 
@@ -306,23 +318,29 @@ export let dbSignUp = (email, password) => {
             })
             .then(r => r.json())
             .then((responseData) => {
-                console.log('responseData', responseData);
-                let resetAction;
+                if (responseData) {
+                    console.log('responseData', responseData);
+                    let resetAction;
 
-                resetAction = NavigationActions.reset({
-                    index: 0,
-                    actions: [
-                        NavigationActions.navigate({routeName: 'Login'})
-                    ]
-                });
+                    resetAction = NavigationActions.reset({
+                        index: 0,
+                        actions: [
+                            NavigationActions.navigate({routeName: 'Login'})
+                        ]
+                    });
 
-                dispatch(resetAction);
-                alert("Successfully! Please log in");
-                dispatch(globalActions.hideLoading());
+                    dispatch(resetAction);
+                    alert("Successfully! Please log in");
+                    dispatch(globalActions.hideLoading());
+                }
+                else {
+                    alert("Sorry, there was a sign up error");
+                    dispatch(globalActions.hideLoading());
+                }
             })
             .catch((error) => {
+                console.log('AuthorizeActionError:', error);
                 dispatch(globalActions.hideLoading());
-                console.warn(error)
             })
     }
 };

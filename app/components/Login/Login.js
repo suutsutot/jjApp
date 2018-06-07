@@ -59,18 +59,17 @@ export class Login extends Component {
                 tintColor="#00bcd4"
                 onChangeText={this.onEmailChange.bind(this)}
                 value={emailInput}
-                error={emailInputError !== ''}
-                helperText={emailInputError}
+                error={emailInputError}
                 labelHeight={15}
             />
+            {/*{emailInputError ? <Text>{emailInputError}</Text> : null}*/}
             <TextField
                 secureTextEntry
                 label="Password"
                 tintColor="#00bcd4"
                 onChangeText={this.onPasswordChange.bind(this)}
                 value={passwordInput}
-                error={passwordInputError !== ''}
-                helperText={passwordInputError}
+                error={passwordInputError}
                 labelHeight={15}
             />
             {wrongCredentials ?

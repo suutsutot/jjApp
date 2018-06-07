@@ -2,6 +2,7 @@
 export const EVENTS_LIST = 'EVENTS_LIST';
 export const ADD_USER_EVENTS_LIST_INFO = 'ADD_USER_EVENTS_LIST_INFO';
 export const ADD_RECOMMENDED_EVENTS = 'ADD_RECOMMENDED_EVENTS';
+export const ADD_NEW_EVENTS = 'ADD_NEW_EVENTS';
 
 /* notify actions */
 export const ADD_NOTIFY = 'ADD_NOTIFY';

@@ -58,8 +58,7 @@ export class Register extends Component {
                 tintColor="#00bcd4"
                 onChangeText={this.onEmailChange.bind(this)}
                 value={emailInput}
-                error={emailInputError !== ''}
-                helperText={emailInputError}
+                error={emailInputError}
                 labelHeight={15}
             />
             <TextField
@@ -68,8 +67,7 @@ export class Register extends Component {
                 tintColor="#00bcd4"
                 onChangeText={this.onPasswordChange.bind(this)}
                 value={passwordInput}
-                error={passwordInputError !== ''}
-                helperText={passwordInputError}
+                error={passwordInputError}
                 labelHeight={15}
             />
         </View>

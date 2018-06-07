@@ -1,4 +1,4 @@
-import keyBy from 'lodash/keyBy';
+import {keyBy, orderBy} from 'lodash';
 import filter from 'lodash/filter';
 import config from 'app/config';
 
@@ -19,6 +19,7 @@ const service = {
                 responseData = filter(responseData, function (val) {
                     if (val.id) return val;
                 });
+                responseData = orderBy(responseData, ['name'], ['asc']);
                 responseData = keyBy(responseData, 'id');
                 return responseData;
 

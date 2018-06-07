@@ -12,6 +12,7 @@ import Login from 'app/components/Login';
 import Register from 'app/components/Register';
 import Wizard from 'app/components/Wizard';
 import AuthLoadingScreen from 'app/components/AuthLoadingScreen';
+import {filter} from 'lodash';
 
 export const Tabs = TabNavigator(
     {
@@ -38,8 +39,8 @@ export const Tabs = TabNavigator(
                 if (routeName === 'Notifications') {
                     return <IconBadge
                         MainElement={<MaterialIcons name={iconName} size={35} color={tintColor}/>}
-                        BadgeElement={<Text style={{color: 'white'}}>{screenProps.notifications.length}</Text>}
-                        Hidden={screenProps.notifications.length === 0}
+                        BadgeElement={<Text style={{color: 'white'}}>{(filter(screenProps.notifications, {viewed: false})).length}</Text>}
+                        Hidden={(filter(screenProps.notifications, {viewed: false})).length === 0}
                     />
                 }
                 else {

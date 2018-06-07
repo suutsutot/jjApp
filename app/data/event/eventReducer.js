@@ -9,6 +9,10 @@ let defaultState = {
         list: {},
         loaded: false
     },
+    newEvents: {
+        list: {},
+        loaded: false
+    },
 };
 
 export let eventReducer = (state = defaultState, action) => {
@@ -18,6 +22,11 @@ export let eventReducer = (state = defaultState, action) => {
             return {
                 ...state,
                 userEvents: {list: payload.info, loaded: true},
+            };
+        case types.ADD_NEW_EVENTS:
+            return {
+                ...state,
+                newEvents: {list: payload.info, loaded: true},
             };
         case types.ADD_RECOMMENDED_EVENTS:
             return {

@@ -133,7 +133,11 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 0.5,
         elevation: 4
-    }
+    },
+    spaceBetweenText: {
+        justifyContent: 'space-between',
+        // alignItems: 'start',
+    },
 });
 
 export default styles

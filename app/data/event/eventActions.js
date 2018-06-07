@@ -22,8 +22,15 @@ export const dbGetEventsList = () => {
                     .then(r => r.json())
                     .catch(error => console.log('Error: ', error))
                     .then(response => {
-                        let eventsList = response.joined || {};
-                        dispatch(addUserEventsListInfo(userId, eventsList))
+                        if (response) {
+                            let eventsList = response.joined || {};
+                            let newEventsList = response.requested || {};
+                            dispatch(addUserEventsListInfo(userId, eventsList));
+                            dispatch(addNewEventsListInfo(userId, newEventsList));
+                        }
+                        else {
+                            console.log('Error: dbGetEventsList')
+                        }
                     });
             })
         })
@@ -60,6 +67,13 @@ export const dbGetRecommendedEvents = () => {
 export const addUserEventsListInfo = (uid, info) => {
     return {
         type: types.ADD_USER_EVENTS_LIST_INFO,
+        payload: {uid, info}
+    }
+};
+
+export const addNewEventsListInfo = (uid, info) => {
+    return {
+        type: types.ADD_NEW_EVENTS,
         payload: {uid, info}
     }
 };

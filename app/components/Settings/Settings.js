@@ -57,6 +57,9 @@ export class Settings extends Component {
         return <View
             style={[styles.TouchableOpacityStyles, styles.backgroundColorContentWhite, styles.shadowContainer]}>
             <Text>Schedule</Text>
+            <View>
+                <Text>Coming soon...</Text>
+            </View>
         </View>
     };
 

@@ -145,6 +145,11 @@ export class SecondStep extends Component {
         }
     };
 
+    devTest = () => {
+        let {searchText} = this.state;
+        searchText.clear()
+    }
+
     render() {
         return (
             <View
@@ -177,6 +182,7 @@ export class SecondStep extends Component {
                         placeholderTextColor='#00bcd4'
                         underlineColorAndroid={'transparent'}
                     />
+                    {/*<View style={{marginTop: 15, marginRight: 35, backgroundColor: 'transparent'}}><Text>def</Text></View>*/}
                 </View>
 
                 {this.renderList()}

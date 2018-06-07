@@ -10,6 +10,7 @@ import {userActions} from 'app/data/user';
 import {notificationActions} from 'app/data/notification';
 import {activityActions} from 'app/data/activity';
 import styles from './styles';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 
 export class Home extends Component {
@@ -48,27 +49,25 @@ export class Home extends Component {
                             this.goToEvent(event._id)
                         }}
                     >
-                        <View style={[styles.layoutRow]}>
-                            {/*<Image style={{ alignSelf: 'center', height: 60, width: 60, borderRadius: 50}} source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}/>*/}
-                            <Image style={{
-                                //flex: 1,
-                                width: 60,
-                                height: 60,
-                                borderRadius: 50,
-                                resizeMode: 'cover'
-                            }} source={{uri: event.backgroundPic}}/>
-                            <View style={[styles.layoutColumn, styles.leftPaddingText]}>
-                                <View style={[styles.layoutRow]}>
-                                    <Text
-                                        style={styles.blackColorText}>{event.title ? event.title : event.activity.name}</Text>
-                                    <Text style={styles.grayColorText}>
-                                        {' on ' + moment(event.eventDates.startDate).format('Do MMM')}</Text>
-                                </View>
-                                <View style={[styles.layoutColumn]}>
-                                    <Text style={styles.grayColorText}>{event.activity.name}</Text>
-                                    <Text style={[styles.grayColorText]}>{event.participants.length} participants</Text>
+                        <View style={[styles.layoutRow, styles.spaceBetweenText, {flex: 1, alignItems: 'center'}]}>
+                            <View style={[styles.layoutRow]}>
+                                <Image style={{width: 60, height: 60, borderRadius: 50, resizeMode: 'cover'}}
+                                       source={{uri: event.backgroundPic}}/>
+                                <View style={[styles.layoutColumn, styles.leftPaddingText]}>
+                                    <View style={[styles.layoutRow]}>
+                                        <Text
+                                            style={styles.blackColorText}>{event.title ? event.title : event.activity.name}</Text>
+                                        <Text style={styles.grayColorText}>
+                                            {' on ' + moment(event.eventDates.startDate).format('Do MMM')}</Text>
+                                    </View>
+                                    <View style={[styles.layoutColumn]}>
+                                        <Text style={styles.grayColorText}>{event.activity.name}</Text>
+                                        <Text
+                                            style={[styles.grayColorText]}>{event.participants.length + ' participants'}</Text>
+                                    </View>
                                 </View>
                             </View>
+                            <MaterialIcons name="chevron-right" size={24} color={styles.grayColorText}/>
                         </View>
                     </TouchableOpacity>
                 ))
@@ -82,13 +81,15 @@ export class Home extends Component {
         // else if (type === 'recommended') return <View style={styles.TouchableOpacityStyles}><Text>No one recommended events</Text></View>;
     };
 
-    renderRecommendedEvents = () => {
-        const {recommendedEvents} = this.props;
+    renderNewEvent = () => {
+        const {newEventsList} = this.props;
 
-        if (recommendedEvents.length > 0) return <View
-            style={[styles.backgroundColorContentWhite, styles.shadowContainer, {marginBottom: 20}]}>
-            <Text style={{margin: 10}}>{'Recommended events ' + recommendedEvents.length}</Text>
-            {this.renderEventList(recommendedEvents)}
+        return <View style={[styles.backgroundColorContentWhite, styles.shadowContainer, {marginBottom: 20}]}>
+            <View style={[styles.layoutRow, {margin: 10}]}>
+                <Text style={styles.blackColorText}>{'New events '}</Text>
+                <Text style={styles.grayColorText}>{newEventsList.length}</Text>
+            </View>
+            {this.renderEventList(newEventsList)}
         </View>
     };
 
@@ -107,8 +108,9 @@ export class Home extends Component {
     };
 
     renderEventScreen = () => {
+        const {newEventsList} = this.props;
         return <ScrollView>
-            {/*{this.renderRecommendedEvents()}*/}
+            {newEventsList.length > 0 ? this.renderNewEvent() : null}
             {this.renderUserEvents()}
         </ScrollView>
     };
@@ -139,34 +141,27 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         loadData: () => {
             dispatch(userActions.dbGetProfile());
             dispatch(eventActions.dbGetEventsList());
-            // dispatch(eventActions.dbGetRecommendedEvents());
-
         },
     }
 
 };
 
 const mapStateToProps = ({events}) => {
-    const {userEvents, recommended} = events;
+    const {userEvents, newEvents} = events;
 
     let joinedEvents = [];
-    let recommendedEvents = [];
+    let newEventsList = [];
 
-    if (userEvents.loaded) {
-        joinedEvents = userEvents.list;
-    }
+    if (userEvents.loaded) joinedEvents = userEvents.list;
 
-    if (recommended.loaded) {
-        recommendedEvents = recommended.list;
-    }
+    if (newEvents.loaded) newEventsList = newEvents.list;
 
     let loaded = false;
-    // if (userEvents.loaded && recommended.loaded) loaded = true;
-    if (userEvents.loaded) loaded = true;
+    if (userEvents.loaded && newEvents.loaded) loaded = true;
 
     return {
         joinedEvents: joinedEvents ? joinedEvents : [],
-        recommendedEvents: recommendedEvents ? recommendedEvents : [],
+        newEventsList: newEventsList ? newEventsList : [],
         loaded
     }
 };

@@ -367,8 +367,8 @@ export class Notifications extends Component {
     renderNotifications = (viewedNotifications, newNotifications) => {
         const {notifications} = this.props;
         return <ScrollView>
-            {newNotifications ? this.renderNewNotificationsList(newNotifications) : null}
-            {viewedNotifications ? this.renderViewedNotificationsList(viewedNotifications) : null}
+            {newNotifications.length > 0 ? this.renderNewNotificationsList(newNotifications) : null}
+            {viewedNotifications.length > 0 ? this.renderViewedNotificationsList(viewedNotifications) : null}
 
             <View style={[styles.layoutRow, styles.backgroundColorContentGray, {justifyContent: 'center'}]}>
                 <Text style={[styles.grayColorText, styles.marginFooter]}>{notifications.length} notifications</Text>
