@@ -32,7 +32,7 @@ export class SocketListener extends Component {
         const {handleSocketMessage} = this.props;
         socket.on('connect', function () {
             refresh().then((newToken) => {
-                if (newToken.idToken) socket.emit('authenticate', {token: newToken.idToken});
+                if (newToken && newToken.idToken) socket.emit('authenticate', {token: newToken.idToken});
             });
         });
 
