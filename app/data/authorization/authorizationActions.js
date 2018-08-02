@@ -68,24 +68,7 @@ export let dbLoginWithCredentials = (email, password) => {
                                             dispatch(updateNotifications(data));
                                         });
 
-                                        let resetAction;
-
-                                        if (userInfo.wizardSteps.personal === false || userInfo.wizardSteps.activities === false) {
-                                            resetAction = NavigationActions.reset({
-                                                index: 0,
-                                                actions: [
-                                                    NavigationActions.navigate({routeName: 'Wizard'})
-                                                ]
-                                            });
-                                        }
-                                        else {
-                                            resetAction = NavigationActions.reset({
-                                                index: 0,
-                                                actions: [
-                                                    NavigationActions.navigate({routeName: 'Tabs'})
-                                                ]
-                                            });
-                                        }
+                                        let resetAction = NavigationActions.navigate({routeName: 'Tabs'});
                                         dispatch(resetAction);
                                         dispatch(globalActions.hideLoading());
                                     }
@@ -165,24 +148,7 @@ export let dbLoginViaFacebook = () => {
                                             dispatch(updateNotifications(data));
                                         });
 
-                                        let resetAction;
-
-                                        if (!userInfo.wizardSteps.personal || !userInfo.wizardSteps.activities) {
-                                            resetAction = NavigationActions.reset({
-                                                index: 0,
-                                                actions: [
-                                                    NavigationActions.navigate({routeName: 'Wizard'})
-                                                ]
-                                            });
-                                        }
-                                        else {
-                                            resetAction = NavigationActions.reset({
-                                                index: 0,
-                                                actions: [
-                                                    NavigationActions.navigate({routeName: 'Tabs'})
-                                                ]
-                                            });
-                                        }
+                                        let resetAction = NavigationActions.navigate({routeName: 'Tabs'});
                                         dispatch(resetAction);
                                     }
                                     else {
@@ -257,25 +223,7 @@ export let dbLoginViaGoogle = () => {
                                             dispatch(updateNotifications(data));
                                         });
 
-                                        let resetAction;
-
-                                        // if (!userInfo.wizardSteps.personal || !userInfo.wizardSteps.activities) {
-                                        //     resetAction = NavigationActions.reset({
-                                        //         index: 0,
-                                        //         actions: [
-                                        //             NavigationActions.navigate({routeName: 'Wizard'})
-                                        //         ]
-                                        //     });
-                                        // }
-                                        // else {
-                                        //     resetAction = NavigationActions.reset({
-                                        //         index: 0,
-                                        //         actions: [
-                                        //             NavigationActions.navigate({routeName: 'Tabs'})
-                                        //         ]
-                                        //     });
-                                        // }
-                                        resetAction = NavigationActions.navigate({routeName: 'Tabs'});
+                                        let resetAction = NavigationActions.navigate({routeName: 'Tabs'});
                                         dispatch(resetAction);
                                     }
                                     else {
@@ -321,15 +269,7 @@ export let dbSignUp = (email, password) => {
             .then((responseData) => {
                 if (responseData) {
                     console.log('responseData', responseData);
-                    let resetAction;
-
-                    resetAction = NavigationActions.reset({
-                        index: 0,
-                        actions: [
-                            NavigationActions.navigate({routeName: 'Login'})
-                        ]
-                    });
-
+                    let resetAction = NavigationActions.navigate({routeName: 'Login'});
                     dispatch(resetAction);
                     alert("Successfully! Please log in");
                     dispatch(globalActions.hideLoading());
@@ -350,12 +290,6 @@ export let dbLogout = () => {
     return (dispatch, getState) => {
         dispatch(logout());
         AsyncStorage.clear();
-        // const resetAction = NavigationActions.reset({
-        //     index: 0,
-        //     actions: [
-        //         NavigationActions.navigate({routeName: 'Login'})
-        //     ]
-        // });
         const resetAction = NavigationActions.navigate({routeName: 'Login'});
         dispatch(resetAction)
     }

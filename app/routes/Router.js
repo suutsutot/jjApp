@@ -16,8 +16,8 @@ import {filter} from 'lodash';
 
 export const Tabs = TabNavigator(
     {
-        Home: {screen: Home},
         Notifications: {screen: Notifications},
+        Home: {screen: Home},
         Settings: {screen: Settings},
     },
     {
@@ -66,20 +66,9 @@ const newAppStack = StackNavigator({AuthLoadingScreen, Tabs, Login}, {
     headerMode: 'none'
 });
 
-// const AppStack = StackNavigator({Tabs, Login, Wizard, Register}, {
-//     mode: 'modal',
-//     headerMode: 'none'
-// });
-// const AuthStack = StackNavigator({Login, Wizard, Register, Tabs}, {
-//     mode: 'modal',
-//     headerMode: 'none'
-// });
-
 export const MasterNavigator = SwitchNavigator(
     {
-        AuthLoading: newAppStack,
-        // App: AppStack,
-        // Auth: AuthStack,
+        AuthLoading: newAppStack
     },
     {
         initialRouteName: 'AuthLoading',
