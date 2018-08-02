@@ -26,7 +26,7 @@ const logger = createLogger({});
 let initialState = {};
 
 let store = redux.createStore(reducers, initialState, redux.compose(
-    redux.applyMiddleware(thunk, middleware, logger)
+    redux.applyMiddleware(thunk, middleware)
 ));
 
 export default store

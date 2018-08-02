@@ -4,11 +4,11 @@ const config = {
         client: 'http://10.0.3.2:8080'  // set your device IP address
     },
     'dev': {
-        server: 'http://justjoin1.ru',
-        client: 'http://justjoin1.ru'
+        server: 'https://api.justjoin1.ru',
+        client: 'https://justjoin1.ru'
     },
     'prod': {
-        server: 'https://justjoin.com',
+        server: 'https://api.justjoin.com',
         client: 'https://justjoin.com'
     }
 };

@@ -19,7 +19,6 @@ export class Settings extends Component {
     goToProfile = (id) => {
         refresh().then((newToken) => {
             let url = config.client + '/redirect?type=user&id=' + id + '&idToken=' + newToken.idToken + '&accessToken=' + newToken.accessToken;
-
             Linking.canOpenURL(url).then(supported => {
                 if (supported) {
                     Linking.openURL(url);
