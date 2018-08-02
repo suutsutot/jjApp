@@ -11,7 +11,7 @@ class AuthLoadingScreen extends Component {
 
     bootstrapAsync = async() => {
         const userId = await AsyncStorage.getItem('userId');
-        this.props.navigation.navigate(userId ? 'App' : 'Auth');
+        this.props.navigation.navigate(userId ? 'Tabs' : 'Login');
     };
 
     render() {

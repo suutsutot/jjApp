@@ -259,22 +259,23 @@ export let dbLoginViaGoogle = () => {
 
                                         let resetAction;
 
-                                        if (!userInfo.wizardSteps.personal || !userInfo.wizardSteps.activities) {
-                                            resetAction = NavigationActions.reset({
-                                                index: 0,
-                                                actions: [
-                                                    NavigationActions.navigate({routeName: 'Wizard'})
-                                                ]
-                                            });
-                                        }
-                                        else {
-                                            resetAction = NavigationActions.reset({
-                                                index: 0,
-                                                actions: [
-                                                    NavigationActions.navigate({routeName: 'Tabs'})
-                                                ]
-                                            });
-                                        }
+                                        // if (!userInfo.wizardSteps.personal || !userInfo.wizardSteps.activities) {
+                                        //     resetAction = NavigationActions.reset({
+                                        //         index: 0,
+                                        //         actions: [
+                                        //             NavigationActions.navigate({routeName: 'Wizard'})
+                                        //         ]
+                                        //     });
+                                        // }
+                                        // else {
+                                        //     resetAction = NavigationActions.reset({
+                                        //         index: 0,
+                                        //         actions: [
+                                        //             NavigationActions.navigate({routeName: 'Tabs'})
+                                        //         ]
+                                        //     });
+                                        // }
+                                        resetAction = NavigationActions.navigate({routeName: 'Tabs'});
                                         dispatch(resetAction);
                                     }
                                     else {
@@ -349,12 +350,13 @@ export let dbLogout = () => {
     return (dispatch, getState) => {
         dispatch(logout());
         AsyncStorage.clear();
-        const resetAction = NavigationActions.reset({
-            index: 0,
-            actions: [
-                NavigationActions.navigate({routeName: 'Login'})
-            ]
-        });
+        // const resetAction = NavigationActions.reset({
+        //     index: 0,
+        //     actions: [
+        //         NavigationActions.navigate({routeName: 'Login'})
+        //     ]
+        // });
+        const resetAction = NavigationActions.navigate({routeName: 'Login'});
         dispatch(resetAction)
     }
 };

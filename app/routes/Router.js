@@ -9,8 +9,8 @@ import Home from 'app/components/Home';
 import Notifications from 'app/components/Notifications';
 import Settings from 'app/components/Settings';
 import Login from 'app/components/Login';
-import Register from 'app/components/Register';
-import Wizard from 'app/components/Wizard';
+// import Register from 'app/components/Register';
+// import Wizard from 'app/components/Wizard';
 import AuthLoadingScreen from 'app/components/AuthLoadingScreen';
 import {filter} from 'lodash';
 
@@ -61,20 +61,25 @@ export const Tabs = TabNavigator(
     }
 );
 
-const AppStack = StackNavigator({Tabs, Login, Wizard, Register}, {
-    mode: 'modal',
-    headerMode: 'none'
-});
-const AuthStack = StackNavigator({Login, Wizard, Register, Tabs}, {
+const newAppStack = StackNavigator({AuthLoadingScreen, Tabs, Login}, {
     mode: 'modal',
     headerMode: 'none'
 });
 
+// const AppStack = StackNavigator({Tabs, Login, Wizard, Register}, {
+//     mode: 'modal',
+//     headerMode: 'none'
+// });
+// const AuthStack = StackNavigator({Login, Wizard, Register, Tabs}, {
+//     mode: 'modal',
+//     headerMode: 'none'
+// });
+
 export const MasterNavigator = SwitchNavigator(
     {
-        AuthLoading: AuthLoadingScreen,
-        App: AppStack,
-        Auth: AuthStack,
+        AuthLoading: newAppStack,
+        // App: AppStack,
+        // Auth: AuthStack,
     },
     {
         initialRouteName: 'AuthLoading',
