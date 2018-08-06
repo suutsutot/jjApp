@@ -1,12 +1,17 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {ScrollView, View, Text, Image} from 'react-native';
-import {CardSection, Button} from 'app/pureComponents';
-import {SocialIcon} from 'react-native-elements';
+import {ScrollView, View, Text, Image, TouchableOpacity, Linking} from 'react-native';
+import {CardSection} from 'app/pureComponents';
+import {SocialIcon, Button, Icon} from 'react-native-elements';
 import {TextField} from 'react-native-material-textfield';
 import {authorizationActions} from 'app/data/authorization';
 import {trim} from 'lodash';
 import styles from './styles';
+import config from 'app/config';
+
+import LoginButton from 'react-native-animate-loading-button'
+
+import CustomIcon from '../../customIcons/components/customFonts.js'
 
 
 export class Login extends Component {
@@ -30,20 +35,32 @@ export class Login extends Component {
 
     renderSocialButtons() {
         return <View>
-            <SocialIcon
-                title='Log In With Facebook'
-                button
-                type='facebook'
-                style={{height: 40}}
-                onPress={this.onLoginWithFacebook.bind(this)}
+            <Button
+                icon={
+                    <View style={styles.icon_aria}>
+                        <Image style={{width: 24, height: 24}}
+                               source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/icons/google-icon.png'}}/>
+                    </View>
+                }
+                title='Log In With Google'
+                titleStyle={{flex: 1}}
+                buttonStyle={[styles.social_button, {backgroundColor: "#dc4e41", marginBottom: 24}]}
+                onPress={this.onLoginWithGoogle.bind(this)}
+
             />
 
-            <SocialIcon
-                title='Log In With Google'
-                button
-                type='google-plus-official'
-                style={{height: 40}}
-                onPress={this.onLoginWithGoogle.bind(this)}
+            <Button
+                icon={
+                    <View style={styles.icon_aria}>
+                        <Image style={{width: 25, height: 25}}
+                               source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/icons/facebook-icon.png'}}/>
+                    </View>
+                }
+                title='Log In With Facebook'
+                titleStyle={{flex: 1}}
+                buttonStyle={[styles.social_button, {backgroundColor: "#5e81a8"}]}
+                onPress={this.onLoginWithFacebook.bind(this)}
+
             />
         </View>
     }
@@ -80,7 +97,7 @@ export class Login extends Component {
     }
 
     renderLoginButton() {
-        if (this.props.loading) {
+        /*if (this.props.loading) {
             return (
                 <CardSection style={styles.buttons}>
                     <Button textStyle={styles.buttonText}>
@@ -88,18 +105,30 @@ export class Login extends Component {
                     </Button>
                 </CardSection>
             )
-        }
+        }*/
 
         return (
-            <CardSection style={styles.buttons}>
+            <View>
+                <LoginButton
+                    onPress={this.onLoginWithCredentials.bind(this)}
+                    ref={c => (this.loadingButton = c)}
+                    title='LOG IN'
+                    height={40}
+                    width={340}
+                    titleFontSize={16}
+                    backgroundColor="#00bcd4"
+                    borderRadius={20}
+                />
+            </View>
+            /*<CardSection style={styles.buttons}>
                 <Button onPress={this.onLoginWithCredentials.bind(this)}>
                     Log in
                 </Button>
-            </CardSection>
+            </CardSection>*/
         )
     }
 
-    renderRegisterButton() {
+    /*renderRegisterButton() {
         return <View>
             <Text style={{textAlign: 'center',}}>You dont have an account?</Text>
             <CardSection style={styles.buttons}>
@@ -108,7 +137,7 @@ export class Login extends Component {
                 </Button>
             </CardSection>
         </View>
-    }
+    }*/
 
     onLoginWithFacebook() {
         const {loginViaFacebook} = this.props;
@@ -137,7 +166,7 @@ export class Login extends Component {
     }
 
     onLoginWithCredentials() {
-        const {LoginWithCredentials} = this.props;
+        const {LoginWithCredentials, wrongCredentials, errorUserGet} = this.props;
         const {emailInput, passwordInput} = this.state;
 
         if (trim(emailInput) === '') {
@@ -154,8 +183,20 @@ export class Login extends Component {
             return
         }
 
+        this.loadingButton.showLoading(true);
+        LoginWithCredentials(emailInput, passwordInput);
+        if (!this.props.loading) this.loadingButton.showLoading(false);
+    }
 
-        LoginWithCredentials(emailInput, passwordInput)
+    goToSignIn() {
+        let url = config.client + '/login';
+        Linking.canOpenURL(url).then(supported => {
+            if (supported) {
+                Linking.openURL(url);
+            } else {
+                console.log("Don't know how to open URI: " + url);
+            }
+        });
     }
 
     render() {
@@ -164,17 +205,31 @@ export class Login extends Component {
                 <ScrollView style={styles.auth_content}>
                     <Image
                         style={styles.logo}
-                        source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}
+                        source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/Logo_colored.png'}}
                     />
                     <View style={{height: 10}}/>
-                    <Text style={styles.logo_title}>JustJoin</Text>
+                    <Text style={styles.logo_title}>Login</Text>
                     <View style={{height: 10}}/>
                     {this.renderSocialButtons()}
-                    <Text style={{textAlign: 'center',}}>or</Text>
+                    <Text style={{
+                        textAlign: 'center',
+                        marginBottom: 26,
+                        marginTop: 26,
+                        fontSize: 14,
+                        color: "#b0bec5"
+                    }}>or</Text>
                     {this.renderInputs()}
                     <View style={{height: 15}}/>
                     {this.renderLoginButton()}
-                    {this.renderRegisterButton()}
+                    <View style={{height: 25}}/>
+                    <Text style={{fontSize: 20, color: "#37474f", textAlign: 'center'}}>Are you not registered?</Text>
+                    <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center',}}>
+                        <TouchableOpacity onPress={() => {
+                            this.goToSignIn()
+                        }}>
+                            <Text style={{fontSize: 20, color: "#00bcd4", marginTop: 15}}>Sign up now</Text>
+                        </TouchableOpacity>
+                    </View>
                 </ScrollView>
             </View>
         )
