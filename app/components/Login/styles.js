@@ -14,19 +14,19 @@ const styles = StyleSheet.create({
     },
     logo: {
         alignSelf: 'center',
-        borderRadius: 100,
-        height: 80,
+        height: 50,
+        width: 190,
+        resizeMode: 'contain',
         paddingVertical: 20,
-        marginTop: 20,
-        width: 80
+        marginTop: 30,
+        marginBottom: 10
     },
     logo_title: {
-        color: '#00bcd4',
+        color: '#546e7a',
         textAlign: 'center',
-        marginTop: 5,
         marginBottom: 10,
         alignSelf: 'center',
-        fontSize: 30
+        fontSize: 20
     },
     buttons: {
         marginBottom: 20,
@@ -35,6 +35,30 @@ const styles = StyleSheet.create({
         alignItems: 'center',
 
     },
+    icon_aria: {
+        height: 38,
+        width: 38,
+        backgroundColor: "#fff",
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 2,
+    },
+    social_button: {
+        height: 48,
+        borderRadius: 2,
+        paddingLeft: 5,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        fontSize: 16,
+        fontWeight: "400"
+    },
+    login_button: {
+        height: 40,
+        borderRadius: 20,
+        backgroundColor: '#00bcd4'
+    }
+
 });
 
 export default styles

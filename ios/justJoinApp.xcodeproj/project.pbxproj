@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -57,6 +56,7 @@
 		F56E33379DFC40A6AA3EAB6E /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F4DB4984F9B94535B1C62AD7 /* Ionicons.ttf */; };
 		F81D42B5DF88483C9D0FB155 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E85258A5BE904BB2AD927B22 /* SimpleLineIcons.ttf */; };
 		F8F9AD3CBE8940A487CD2710 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 07F296D026E6455C824E98CB /* FontAwesome.ttf */; };
+		B0BC2779C10D4EADB27945C0 /* icomoon.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 96FA65A1FC494A169C484E8E /* icomoon.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -450,6 +450,7 @@
 		DC68C58BE0444DB7A0088F4E /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		E85258A5BE904BB2AD927B22 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
 		F4DB4984F9B94535B1C62AD7 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
+		96FA65A1FC494A169C484E8E /* icomoon.ttf */ = {isa = PBXFileReference; name = "icomoon.ttf"; path = "../app/customIcons/fonts/icomoon.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -725,6 +726,7 @@
 				94911FBD7BD1454C8941C0B2 /* Octicons.ttf */,
 				E85258A5BE904BB2AD927B22 /* SimpleLineIcons.ttf */,
 				5A5D87705FD34F19B59072EE /* Zocial.ttf */,
+				96FA65A1FC494A169C484E8E /* icomoon.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1369,6 +1371,7 @@
 				A0B16F1FA0D248C6904EEFAF /* Octicons.ttf in Resources */,
 				F81D42B5DF88483C9D0FB155 /* SimpleLineIcons.ttf in Resources */,
 				98C68552A7B841D28A2BBDC7 /* Zocial.ttf in Resources */,
+				B0BC2779C10D4EADB27945C0 /* icomoon.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
