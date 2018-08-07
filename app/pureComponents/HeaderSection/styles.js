@@ -8,12 +8,12 @@ const styles = StyleSheet.create({
         borderBottomWidth: 0,
         shadowRadius: 2,
         elevation: 3,
-        marginBottom: 20
+        // marginBottom: 20
     },
-    logo: {
-        height: 30,
-        width: 30
-    },
+    // logo: {
+    //     height: 30,
+    //     width: 30
+    // },
 });
 
 export default styles

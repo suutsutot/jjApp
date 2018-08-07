@@ -5,7 +5,9 @@ import {Text} from 'react-native';
 import IconBadge from 'react-native-icon-badge';
 import {addListener} from 'app/config/redux';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import Home from 'app/components/Home';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Events from 'app/components/Home';
+import Communities from 'app/components/Communities';
 import Notifications from 'app/components/Notifications';
 import Settings from 'app/components/Settings';
 import Login from 'app/components/Login';
@@ -13,67 +15,119 @@ import Login from 'app/components/Login';
 // import Wizard from 'app/components/Wizard';
 import AuthLoadingScreen from 'app/components/AuthLoadingScreen';
 import {filter} from 'lodash';
+import {createMaterialBottomTabNavigator} from 'react-navigation-material-bottom-tabs';
+import {HeaderSection} from 'app/pureComponents';
 
-export const Tabs = TabNavigator(
-    {
-        Notifications: {screen: Notifications},
-        Home: {screen: Home},
-        Settings: {screen: Settings},
-    },
-    {
+export const Tabs = createMaterialBottomTabNavigator({
+    Notifications: {
+        screen: Notifications,
         navigationOptions: ({navigation, screenProps}) => ({
-            tabBarIcon: ({focused, tintColor}) => {
-                const {routeName} = navigation.state;
+            tabBarLabel: 'Notifications',
+            tabBarIcon: ({tintColor}) => (
+                <IconBadge
+                    MainElement={<MaterialIcons name={`notifications`} size={24} color={tintColor}/>}
+                    BadgeElement={<Text style={{color: 'white'}}>{(filter(screenProps.notifications, {viewed: false})).length}</Text>}
+                    Hidden={(filter(screenProps.notifications, {viewed: false})).length === 0}
+                />
+            )
 
-                let iconName;
-                if (routeName === 'Home') {
-                    iconName = `event-note`;
-                }
-                else if (routeName === 'Notifications') {
-                    iconName = `notifications`;
-                }
-                else if (routeName === 'Settings') {
-                    iconName = `format-list-bulleted`;
-                }
+        })
+    },
+    Events: {
+        screen: Events,
+        navigationOptions: ({navigation, screenProps}) => ({
+            tabBarLabel: 'Events',
+            tabBarIcon: ({tintColor}) => (
+                <MaterialCommunityIcons name={`calendar-range`} size={24} color={tintColor}/>
+            )
 
-                if (routeName === 'Notifications') {
-                    return <IconBadge
-                        MainElement={<MaterialIcons name={iconName} size={35} color={tintColor}/>}
-                        BadgeElement={<Text style={{color: 'white'}}>{(filter(screenProps.notifications, {viewed: false})).length}</Text>}
-                        Hidden={(filter(screenProps.notifications, {viewed: false})).length === 0}
-                    />
-                }
-                else {
-                    return <MaterialIcons name={iconName} size={35} color={tintColor}/>;
-                }
+        })
+    },
+    Communities: {
+        screen: Communities,
+        navigationOptions: ({navigation, screenProps}) => ({
+            tabBarLabel: 'Communities',
+            tabBarIcon: ({tintColor}) => (
+                <MaterialCommunityIcons name={`account`} size={24} color={tintColor}/>
+            )
 
-            },
-        }),
-        tabBarOptions: {
-            showLabel: false,
-            activeTintColor: '#00bcd4',
-            inactiveTintColor: 'gray',
-        },
-        tabBarComponent: TabBarBottom,
-        tabBarPosition: 'bottom',
-        animationEnabled: false,
-        swipeEnabled: false,
+        })
+    },
+    Settings: {
+        screen: Settings,
+        navigationOptions: ({navigation, screenProps}) => ({
+            tabBarLabel: 'Settings',
+            tabBarIcon: ({tintColor}) => (
+                <MaterialIcons name={`format-list-bulleted`} size={24} color={tintColor}/>
+            )
+
+        })
+    },
+}, {
+    initialRouteName: 'Notifications',
+    order: ['Notifications', 'Events', 'Communities', 'Settings'],
+    activeTintColor: '#00bcd4',
+    inactiveTintColor: 'gray',
+    shifting: false,
+    barStyle: {
+        backgroundColor: '#fdfeff'
     }
-);
+});
 
-const newAppStack = StackNavigator({AuthLoadingScreen, Tabs, Login}, {
+// export const Tabs = TabNavigator(
+//     {
+//         Notifications: {screen: Notifications},
+//         Events: {screen: Home},
+//         Settings: {screen: Settings},
+//     },
+//     {
+//         navigationOptions: ({navigation, screenProps}) => ({
+//             tabBarIcon: ({focused, tintColor}) => {
+//                 const {routeName} = navigation.state;
+//
+//                 let iconName;
+//                 if (routeName === 'Events') {
+//                     iconName = `event-note`;
+//                 }
+//                 else if (routeName === 'Notifications') {
+//                     iconName = `notifications`;
+//                 }
+//                 else if (routeName === 'Settings') {
+//                     iconName = `format-list-bulleted`;
+//                 }
+//
+//                 if (routeName === 'Notifications') {
+//                     return <IconBadge
+//                         MainElement={<MaterialIcons name={iconName} size={24} color={tintColor}/>}
+//                         BadgeElement={<Text style={{color: 'white'}}>{(filter(screenProps.notifications, {viewed: false})).length}</Text>}
+//                         Hidden={(filter(screenProps.notifications, {viewed: false})).length === 0}
+//                     />
+//                 }
+//                 else {
+//                     return <MaterialIcons name={iconName} size={24} color={tintColor}/>;
+//                 }
+//
+//             },
+//             title: navigation.state,
+//             headerLeft: null,
+//             headerTitle: "Tab 1 Screen"
+//         }),
+//         tabBarOptions: {
+//             showLabel: true,
+//             activeTintColor: '#00bcd4',
+//             inactiveTintColor: 'gray',
+//         },
+//         tabBarComponent: TabBarBottom,
+//         tabBarPosition: 'bottom',
+//         animationEnabled: false,
+//         swipeEnabled: false,
+//     }
+// );
+
+export const MasterNavigator = StackNavigator({AuthLoadingScreen, Tabs, Login}, {
     mode: 'modal',
     headerMode: 'none'
 });
-
-export const MasterNavigator = SwitchNavigator(
-    {
-        AuthLoading: newAppStack
-    },
-    {
-        initialRouteName: 'AuthLoading',
-    }
-);
 
 const Router = ({dispatch, nav, notifications}) => (
     <MasterNavigator screenProps={{notifications}} navigation={{
