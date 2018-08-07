@@ -7,12 +7,8 @@ export const HeaderSection = (props) => {
     return (
         <Header
             backgroundColor='#00bcd4'
-            outerContainerStyles={styles.shadowContainer}
-            leftComponent={ <Image
-                style={styles.logo}
-                source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}
-            />}
-            centerComponent={{text: props.title, style: {color: '#fff', fontSize: 18}}}
+            outerContainerStyles={{borderBottomWidth: 0}}
+            centerComponent={{text: props.title ? props.title : 'JustJoin', style: {color: '#fff', fontSize: 18}}}
         />
     )
 };

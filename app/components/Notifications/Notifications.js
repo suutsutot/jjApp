@@ -19,6 +19,7 @@ import forEach from 'lodash/forEach';
 import config from 'app/config';
 import {refresh} from 'app/api/refreshTokenAPI';
 import styles from './styles';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 
 export class Notifications extends Component {
@@ -57,31 +58,20 @@ export class Notifications extends Component {
     renderNewNotificationsList = (newNotifications) => {
         return <View style={[styles.backgroundColorContentWhite, styles.shadowContainer, {marginBottom: 20}]}>
             {
-                newNotifications && newNotifications.length !== 0 ?
-                    <View style={[styles.layoutRow, styles.leftPaddingText, {marginTop: 10, marginBottom: 10}]}>
-                        <Text style={styles.grayColorText}>NEW</Text>
-                    </View> : null
-            }
-            {
                 newNotifications && newNotifications.length !== 0 ? newNotifications.map((notification, i) => {
                     if (notification.type === 'eventInvitation') {
                         return <TouchableOpacity
                             key={i}
-                            style={[styles.TouchableOpacityStyles, (i === newNotifications.length - 1) ? styles.marginBottom : null]}
-                            onPress={() => {
-                                this.redirectToWeb(notification)
-                            }}
-                        >
+                            style={[styles.TouchableOpacityStyles]}>
                             <View style={[styles.layoutRow]}>
-                                {/*<Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 40, width: 40, borderRadius: 50}} containerStyle={{height: 40, width: 40}} source={{uri: notification.details.pic}}/>*/}
                                 <Image style={{alignSelf: 'center', height: 40, width: 40, borderRadius: 50}}
-                                       source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}/>
+                                       source={{uri: notification.event.miniaturePic ? notification.event.miniaturePic : notification.event.backgroundPic}}/>
                                 <View style={[styles.layoutColumn, styles.leftPaddingText]}>
                                     <View style={[styles.layoutRow, {flex: 1}]}>
                                         <Text
-                                            style={styles.blackColorText}>{notification.details.name ? notification.details.name : notification.details.activity.name}</Text>
+                                            style={styles.blackColorText}>{notification.event.title ? notification.event.title : notification.event.activity.name}</Text>
                                         <Text style={styles.grayColorText}>
-                                            {' on ' + moment(notification.details.date).format('Do MMM')}</Text>
+                                            {' on ' + moment(notification.event.eventDates.startDate).format('Do MMM')}</Text>
                                     </View>
                                     <View style={[styles.layoutRow]}>
                                         <Text style={styles.blackColorText}>{notification.creatorName}</Text>
@@ -94,18 +84,13 @@ export class Notifications extends Component {
                     else if (notification.type === 'communityInvitation') {
                         return <TouchableOpacity
                             key={i}
-                            style={[styles.TouchableOpacityStyles, (i === newNotifications.length - 1) ? styles.marginBottom : null]}
-                            onPress={() => {
-                                this.redirectToWeb(notification)
-                            }}
-                        >
+                            style={[styles.TouchableOpacityStyles]}>
                             <View style={[styles.layoutRow]}>
-                                {/*<Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 40, width: 40, borderRadius: 50}} containerStyle={{height: 40, width: 40}} source={{uri: notification.details.pic}}/>*/}
                                 <Image style={{alignSelf: 'center', height: 40, width: 40, borderRadius: 50}}
-                                       source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}/>
+                                       source={{uri: notification.community.miniaturePic ? notification.community.miniaturePic : notification.community.backgroundPic}}/>
                                 <View style={[styles.layoutColumn, styles.leftPaddingText]}>
                                     <View style={[styles.layoutRow, {flex: 1}]}>
-                                        <Text style={styles.blackColorText}>{notification.details.name}</Text>
+                                        <Text style={styles.blackColorText}>{notification.community.title}</Text>
                                     </View>
                                     <View style={[styles.layoutRow]}>
                                         <Text style={styles.blackColorText}>{notification.creatorName}</Text>
@@ -118,18 +103,17 @@ export class Notifications extends Component {
                     else if (notification.type === 'friendRequest') {
                         return <TouchableOpacity
                             key={i}
-                            style={[styles.TouchableOpacityStyles, (i === newNotifications.length - 1) ? styles.marginBottom : null]}
+                            style={[styles.TouchableOpacityStyles]}
                             onPress={() => {
                                 this.redirectToWeb(notification)
                             }}
                         >
                             <View style={[styles.layoutRow]}>
-                                {/*<Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 40, width: 40, borderRadius: 50}} containerStyle={{height: 40, width: 40}} source={{uri: notification.details.pic}}/>*/}
                                 <Image style={{alignSelf: 'center', height: 40, width: 40, borderRadius: 50}}
-                                       source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}/>
+                                       source={{uri: notification.user.pic}}/>
                                 <View style={[styles.layoutColumn, styles.leftPaddingText]}>
                                     <View style={[styles.layoutRow, {flex: 1}]}>
-                                        <Text style={styles.blackColorText}>{notification.details.name}</Text>
+                                        <Text style={styles.blackColorText}>{notification.user.firstName + ' ' + notification.user.lastName}</Text>
                                         <Text style={[styles.grayColorText]}> following you</Text>
                                     </View>
                                 </View>
@@ -139,39 +123,82 @@ export class Notifications extends Component {
                     else if (notification.type === 'friendAccept') {
                         return <TouchableOpacity
                             key={i}
-                            style={[styles.TouchableOpacityStyles, (i === newNotifications.length - 1) ? styles.marginBottom : null]}
+                            style={[styles.TouchableOpacityStyles]}
                             onPress={() => {
                                 this.redirectToWeb(notification)
                             }}
                         >
                             <View style={[styles.layoutRow]}>
-                                {/*<Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 40, width: 40, borderRadius: 50}} containerStyle={{height: 40, width: 40}} source={{uri: notification.details.pic}}/>*/}
                                 <Image style={{alignSelf: 'center', height: 40, width: 40, borderRadius: 50}}
-                                       source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}/>
+                                       source={{uri: notification.user.pic}}/>
                                 <View style={[styles.layoutColumn, styles.leftPaddingText]}>
                                     <View style={[styles.layoutRow, {flex: 1}]}>
-                                        <Text style={styles.blackColorText}>{notification.details.name}</Text>
-                                        <Text style={[styles.grayColorText]}> following you</Text>
+                                        <Text style={styles.blackColorText}>{notification.user.firstName + ' ' + notification.user.lastName}</Text>
+                                        <Text style={[styles.grayColorText]}> is accepting your request</Text>
                                     </View>
                                 </View>
                             </View>
                         </TouchableOpacity>
                     }
-                    else if (notification.type === 'Comments') {
+                    else if (notification.type === 'communityComment') {
                         return <TouchableOpacity
                             key={i}
-                            style={[styles.TouchableOpacityStyles, (i === newNotifications.length - 1) ? styles.marginBottom : null]}
+                            style={[styles.TouchableOpacityStyles]}
                             onPress={() => {
                                 this.redirectToWeb(notification)
                             }}
                         >
                             <View style={[styles.layoutRow]}>
-                                {/*<Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 40, width: 40, borderRadius: 50}} containerStyle={{height: 40, width: 40}} source={{uri: notification.details.pic}}/>*/}
+                                <Image style={{alignSelf: 'center', height: 40, width: 40, borderRadius: 50}}
+                                       source={{uri: notification.community.miniaturePic ? notification.community.miniaturePic : notification.community.backgroundPic}}/>
                                 <View style={[styles.layoutColumn, styles.leftPaddingText]}>
                                     <View style={[styles.layoutRow, {flex: 1}]}>
-                                        <Text style={styles.blackColorText}>{notification.details.name}</Text>
+                                        <Text style={styles.blackColorText}>{notification.community.title}</Text>
                                         <Text style={[styles.grayColorText]}> wrote comment</Text>
                                     </View>
+                                    <Text>{notification.details.text}</Text>
+                                </View>
+                            </View>
+                        </TouchableOpacity>
+                    }
+                    else if (notification.type === 'eventComment') {
+                        return <TouchableOpacity
+                            key={i}
+                            style={[styles.TouchableOpacityStyles]}
+                            onPress={() => {
+                                this.redirectToWeb(notification)
+                            }}
+                        >
+                            <View style={[styles.layoutRow]}>
+                                <Image style={{alignSelf: 'center', height: 40, width: 40, borderRadius: 50}}
+                                       source={{uri: notification.event.miniaturePic ? notification.event.miniaturePic : notification.event.backgroundPic}}/>
+                                <View style={[styles.layoutColumn, styles.leftPaddingText]}>
+                                    <View style={[styles.layoutRow, {flex: 1}]}>
+                                        <Text style={styles.blackColorText}>{notification.event.title ? notification.event.title : notification.event.activity.name}</Text>
+                                        <Text style={[styles.grayColorText]}> wrote comment</Text>
+                                    </View>
+                                    <Text>{notification.details.text}</Text>
+                                </View>
+                            </View>
+                        </TouchableOpacity>
+                    }
+                    else if (notification.type === 'userComment') {
+                        return <TouchableOpacity
+                            key={i}
+                            style={[styles.TouchableOpacityStyles]}
+                            onPress={() => {
+                                this.redirectToWeb(notification)
+                            }}
+                        >
+                            <View style={[styles.layoutRow]}>
+                                <Image style={{alignSelf: 'center', height: 40, width: 40, borderRadius: 50}}
+                                       source={{uri: notification.user.pic}}/>
+                                <View style={[styles.layoutColumn, styles.leftPaddingText]}>
+                                    <View style={[styles.layoutRow, {flex: 1}]}>
+                                        <Text style={styles.blackColorText}>{notification.user.firstName + ' ' + notification.user.lastName}</Text>
+                                        <Text style={[styles.grayColorText]}> wrote comment</Text>
+                                    </View>
+                                    <Text>{notification.details.text}</Text>
                                 </View>
                             </View>
                         </TouchableOpacity>
@@ -179,24 +206,23 @@ export class Notifications extends Component {
                     else if (notification.type === 'oneTimeEventCreate' || notification.type === 'repeatedEventCreate') {
                         return <TouchableOpacity
                             key={i}
-                            style={[styles.TouchableOpacityStyles, (i === newNotifications.length - 1) ? styles.marginBottom : null]}
+                            style={[styles.TouchableOpacityStyles]}
                             onPress={() => {
                                 this.redirectToWeb(notification)
                             }}
                         >
                             <View style={[styles.layoutRow]}>
-                                {/*<Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 40, width: 40, borderRadius: 50}} containerStyle={{height: 40, width: 40}} source={{uri: notification.details.pic}}/>*/}
                                 <Image style={{alignSelf: 'center', height: 40, width: 40, borderRadius: 50}}
-                                       source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}/>
+                                       source={{uri: notification.community.miniaturePic ? notification.community.miniaturePic : notification.community.backgroundPic}}/>
                                 <View style={[styles.layoutColumn, styles.leftPaddingText]}>
                                     <View style={[styles.layoutRow, {flex: 1}]}>
                                         <Text
-                                            style={styles.blackColorText}>{notification.details.name ? notification.details.name : notification.details.activity.name}</Text>
+                                            style={styles.blackColorText}>{notification.details.eventName}</Text>
                                         <Text style={styles.grayColorText}>
                                             {' on ' + moment(notification.details.date).format('Do MMM')}</Text>
                                     </View>
                                     <View style={[styles.layoutRow]}>
-                                        <Text style={styles.blackColorText}>{notification.details.name}</Text>
+                                        <Text style={styles.blackColorText}>{notification.community.title}</Text>
                                         <Text style={[styles.grayColorText]}> invites you to this event</Text>
                                     </View>
                                 </View>
@@ -211,12 +237,6 @@ export class Notifications extends Component {
     renderViewedNotificationsList = (viewedNotifications) => {
         return <View style={[styles.backgroundColorContentWhite, styles.shadowContainer, {marginBottom: 20}]}>
             {
-                viewedNotifications && viewedNotifications.length !== 0 ?
-                    <View style={[styles.layoutRow, styles.leftPaddingText, {marginTop: 10, marginBottom: 10}]}>
-                        <Text style={styles.grayColorText}>VIEWED</Text>
-                    </View> : null
-            }
-            {
                 viewedNotifications && viewedNotifications.length !== 0 ? viewedNotifications.map((notification, i) => {
                     if (notification.type === 'eventInvitation') {
                         return <TouchableOpacity
@@ -227,15 +247,14 @@ export class Notifications extends Component {
                             }}
                         >
                             <View style={[styles.layoutRow]}>
-                                {/*<Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 40, width: 40, borderRadius: 50}} containerStyle={{height: 40, width: 40}} source={{uri: notification.details.pic}}/>*/}
                                 <Image style={{alignSelf: 'center', height: 40, width: 40, borderRadius: 50}}
-                                       source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}/>
+                                       source={{uri: notification.event.miniaturePic ? notification.event.miniaturePic : notification.event.backgroundPic}}/>
                                 <View style={[styles.layoutColumn, styles.leftPaddingText]}>
                                     <View style={[styles.layoutRow, {flex: 1}]}>
                                         <Text
-                                            style={styles.blackColorText}>{notification.details.name ? notification.details.name : notification.details.activity.name}</Text>
+                                            style={styles.blackColorText}>{notification.event.title ? notification.event.title : notification.event.activity.name}</Text>
                                         <Text style={styles.grayColorText}>
-                                            {' on ' + moment(notification.details.date).format('Do MMM')}</Text>
+                                            {' on ' + moment(notification.event.eventDates.startDate).format('Do MMM')}</Text>
                                     </View>
                                     <View style={[styles.layoutRow]}>
                                         <Text style={styles.blackColorText}>{notification.creatorName}</Text>
@@ -366,14 +385,19 @@ export class Notifications extends Component {
 
     renderNotifications = (viewedNotifications, newNotifications) => {
         const {notifications} = this.props;
-        return <ScrollView>
-            {newNotifications.length > 0 ? this.renderNewNotificationsList(newNotifications) : null}
-            {viewedNotifications.length > 0 ? this.renderViewedNotificationsList(viewedNotifications) : null}
 
-            <View style={[styles.layoutRow, styles.backgroundColorContentGray, {justifyContent: 'center'}]}>
-                <Text style={[styles.grayColorText, styles.marginFooter]}>{notifications.length} notifications</Text>
+        if (notifications.length === 0) {
+            return <View style={[styles.containerProcess]}>
+                <MaterialIcons name={'notifications-none'} size={48}/>
+                <Text>You do not have any notifications yet.</Text>
             </View>
-        </ScrollView>
+        }
+        else {
+            return <ScrollView>
+                {newNotifications.length > 0 ? this.renderNewNotificationsList(newNotifications) : null}
+                {viewedNotifications.length > 0 ? this.renderViewedNotificationsList(viewedNotifications) : null}
+            </ScrollView>
+        }
     };
 
     renderProcess = () => {
@@ -390,17 +414,13 @@ export class Notifications extends Component {
         let newNotifications = [];
 
         forEach(notifications, function (notification) {
-            if (notification.viewed === true) {
-                viewedNotifications.push(notification)
-            }
-            else {
-                newNotifications.push(notification)
-            }
+            if (notification.viewed === true) viewedNotifications.push(notification);
+            else newNotifications.push(notification);
         });
 
         return (
             <View style={{flex: 1}}>
-                <HeaderSection title={'Notifications'}/>
+                <HeaderSection/>
                 {loaded ? this.renderNotifications(viewedNotifications, newNotifications) : this.renderProcess()}
             </View>
         );
