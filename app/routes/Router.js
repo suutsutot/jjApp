@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {TabNavigator, StackNavigator, TabBarBottom, SwitchNavigator} from 'react-navigation';
+import {TabNavigator, StackNavigator, TabBarBottom } from 'react-navigation';
 import {Text} from 'react-native';
 import IconBadge from 'react-native-icon-badge';
 import {addListener} from 'app/config/redux';
@@ -77,7 +77,7 @@ export const Tabs = createMaterialBottomTabNavigator({
 // export const Tabs = TabNavigator(
 //     {
 //         Notifications: {screen: Notifications},
-//         Events: {screen: Home},
+//         Events: {screen: Events},
 //         Settings: {screen: Settings},
 //     },
 //     {
