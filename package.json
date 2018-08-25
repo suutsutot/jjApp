@@ -38,7 +38,7 @@
     "react-native-modal-datetime-picker": "^5.1.0",
     "react-native-parallax-scroll-view": "^0.21.0",
     "react-native-progress": "^3.3.0",
-    "react-native-push-notification": "3.0.2",
+    "react-native-push-notification": "git+https://github.com/zo0r/react-native-push-notification.git",
     "react-native-select-multiple": "^1.2.0",
     "react-native-smart-badge": "^1.1.1",
     "react-native-stager": "^1.0.0",

@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "490595239693",
+    "firebase_url": "https://dsvpushnotifications.firebaseio.com",
+    "project_id": "dsvpushnotifications",
+    "storage_bucket": "dsvpushnotifications.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:490595239693:android:b4a636890bc49ce4",
+        "android_client_info": {
+          "package_name": "com.justjoinapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "490595239693-fdo3rogvd08tvgaktggtn8gpdurmqsvr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDR0EcJPMQcimIXPv9FN6Fj2SybKWuRpHM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:490595239693:android:98e44f81cfc6e5da",
+        "android_client_info": {
+          "package_name": "com.tactise"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "490595239693-fdo3rogvd08tvgaktggtn8gpdurmqsvr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDR0EcJPMQcimIXPv9FN6Fj2SybKWuRpHM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
