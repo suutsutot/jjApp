@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {TabNavigator, StackNavigator, TabBarBottom } from 'react-navigation';
 import {Text} from 'react-native';
 import IconBadge from 'react-native-icon-badge';
-import {addListener} from 'app/config/redux';
+import { navigationListener } from 'app/config/navigationHelpers';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Events from 'app/components/Home';
@@ -133,7 +133,7 @@ const Router = ({dispatch, nav, notifications}) => (
     <MasterNavigator screenProps={{notifications}} navigation={{
         dispatch,
         state: nav,
-        addListener
+        addListener: navigationListener
     }}/>
 );
 

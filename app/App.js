@@ -1,22 +1,20 @@
-import React, {Component} from 'react';
+import React, { Fragment } from 'react';
 import {Provider} from 'react-redux';
-import {AppState, Platform, View} from 'react-native';
-import store from 'app/config/store';
-import SocketListener from 'app/config/socket';
+
+import store from 'app/store/index';
+import SocketController from 'app/components/SocketController';
+import PushNotificationsController from 'app/components/PushNotificationsController';
 import Master from 'app/components/Master';
 
-class App extends Component {
+const Application = () => (
+  <Provider store={store}>
+    <Fragment>
+      <Master />
+  
+      <SocketController />
+      <PushNotificationsController />
+    </Fragment>
+  </Provider>
+);
 
-    render() {
-        return (
-            <Provider store={store}>
-                <View style={{flex: 1}}>
-                    <Master />
-                    <SocketListener />
-                </View>
-            </Provider>
-        )
-    }
-}
-
-export default App;
+export default Application;

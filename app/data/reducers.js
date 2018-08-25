@@ -8,13 +8,12 @@ import {navReducer} from './nav/navReducer';
 import {eventReducer} from './event/eventReducer';
 import {notifyReducer} from './notification/notificationReducer';
 
-
 export default combineReducers({
-    nav: navReducer,
-    activity: activityReducer,
-    authorize: authorizeReducer,
-    global: globalReducer,
-    user: userReducer,
-    events: eventReducer,
-    notifications: notifyReducer,
+  nav: navReducer,
+  activity: activityReducer,
+  authorize: authorizeReducer,
+  global: globalReducer,
+  user: userReducer,
+  events: eventReducer,
+  notifications: notifyReducer,
 });
