@@ -3,6 +3,7 @@ import { NavigationActions } from 'react-navigation';
 
 import { getNotifications } from 'app/api/NotificationsAPI';
 import { refreshByCredentials } from 'app/api/refreshTokenAPI';
+import { updateNotifications } from 'app/data/notification/actions';
 import config from 'app/config';
 import * as types from 'app/constants/actionTypes';
 import * as globalActions from 'app/data/global/globalActions';
@@ -317,8 +318,3 @@ const noUserGet = () => {
 const successUserGet = () => {
   return {type: types.SUCCESS_USER_GET}
 };
-
-const updateNotifications = payload => ({
-  type: types.UPDATE_NOTIFICATIONS,
-  payload
-});

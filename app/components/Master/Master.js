@@ -4,6 +4,7 @@ import {AppState, Dimensions, AsyncStorage} from 'react-native';
 import {globalActions} from 'app/data/global';
 import {authorizationActions} from 'app/data/authorization';
 import {notificationActions} from 'app/data/notification';
+import actions from 'app/data/actions';
 import Router from 'app/routes/Router';
 
 export class Master extends Component {
@@ -44,7 +45,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         windowResize: (height, width) => dispatch(globalActions.changeWindowSize(height, width)),
         getUserId: (userId, email) => dispatch(authorizationActions.getUserId(userId, email)),
-        getNewNotifications: () => dispatch(notificationActions.dbGetNotifies())
+        getNewNotifications: () => dispatch(actions.notification.dbGetNotifies())
     }
 };
 

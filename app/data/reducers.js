@@ -6,7 +6,7 @@ import {globalReducer} from './global/globalReducer';
 import {userReducer} from './user/userReducer';
 import {navReducer} from './nav/navReducer';
 import {eventReducer} from './event/eventReducer';
-import {notifyReducer} from './notification/notificationReducer';
+import {notifyReducer} from './notification/reducers';
 
 export default combineReducers({
   nav: navReducer,

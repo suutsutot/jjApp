@@ -1,16 +1,10 @@
+import * as NOTIFICATIONS from './notifications';
+
 /* events action */
 export const EVENTS_LIST = 'EVENTS_LIST';
 export const ADD_USER_EVENTS_LIST_INFO = 'ADD_USER_EVENTS_LIST_INFO';
 export const ADD_RECOMMENDED_EVENTS = 'ADD_RECOMMENDED_EVENTS';
 export const ADD_NEW_EVENTS = 'ADD_NEW_EVENTS';
-
-/* notify actions */
-export const ADD_NOTIFY = 'ADD_NOTIFY';
-export const ADD_NOTIFY_LIST = 'ADD_NOTIFY_LIST';
-export const DELETE_NOTIFY = 'DELETE_NOTIFY';
-export const SEEN_NOTIFY = 'SEEN_NOTIFY';
-export const CLEAR_ALL_DATA_NOTIFY = 'CLEAR_ALL_DATA_NOTIFY';
-export const UPDATE_NOTIFICATIONS = 'UPDATE_NOTIFICATIONS';
 
 /* authorize actions */
 export const GET_USER_ID = 'GET_USER_ID';
@@ -32,3 +26,7 @@ export const CHANGE_WINDOW_SIZE = 'CHANGE_WINDOW_SIZE';
 
 /* activity actions */
 export const GET_ACTIVITIES_LIST_INFO = 'GET_ACTIVITIES_LIST_INFO';
+
+export default {
+  NOTIFICATIONS
+}

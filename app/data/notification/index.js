@@ -1,5 +1,5 @@
-import notificationReducer from './notificationReducer';
-import * as notificationActions from './notificationActions';
+import notificationReducer from './reducers';
+import * as notificationActions from './actions';
 export {
     notificationReducer,
     notificationActions
