@@ -1,40 +1,13 @@
-import {AsyncStorage} from 'react-native';
-const refreshToken = () => AsyncStorage.getItem("refreshToken");
-import Auth0 from 'react-native-auth0';
-let credentials = require('./../config/auth0-credentials');
-const auth0 = new Auth0(credentials);
+import { AsyncStorage } from 'react-native';
 
-export const refresh = () => {
-    return new Promise((resolve, reject) => {
-        refreshToken().then((refreshToken) => {
-            if (!refreshToken) resolve(null);
-            else
-                auth0
-                    .auth
-                    .refreshToken({refreshToken: refreshToken})
-                    .then(refreshUser => {
-                        resolve(refreshUser);
-                    })
-                    .catch(error => {
-                        console.error('Error: ', error);
-                        reject(error);
-                    });
-        });
-    });
+import auth0 from 'app/framework/auth0';
+
+export const refresh = async () => {
+  const refreshToken = await AsyncStorage.getItem('refreshToken');
+  return refreshByCredentials({ refreshToken });
 };
 
-export const refreshByCredentials = (user) => {
-    return new Promise((resolve, reject) => {
-        if (!user.refreshToken) resolve(null);
-
-        auth0
-            .auth
-            .refreshToken({refreshToken: user.refreshToken})
-            .then(refreshUser => {
-                resolve(refreshUser);
-            })
-            .catch(error => {
-                console.error('Error: ', error)
-            });
-    });
+export const refreshByCredentials = ({ refreshToken }) => {
+  if (!refreshToken) return Promise.resolve(null);
+  return auth0.auth.refreshToken({ refreshToken });
 };

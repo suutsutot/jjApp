@@ -46,7 +46,6 @@ export class Login extends Component {
                 titleStyle={{flex: 1}}
                 buttonStyle={[styles.social_button, {backgroundColor: "#dc4e41", marginBottom: 24}]}
                 onPress={this.onLoginWithGoogle.bind(this)}
-
             />
 
             <Button
