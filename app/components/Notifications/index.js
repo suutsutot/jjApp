@@ -1,16 +1,16 @@
-import React, { Component } from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'ramda';
 import { lifecycle } from 'recompose';
-import { forEach } from 'lodash';
 import {
-  ScrollView,
   View,
   Text,
-  TouchableOpacity,
   Linking,
+  FlatList,
   Image,
-  ActivityIndicator
+  ActivityIndicator,
+  TouchableOpacity,
+  StyleSheet
 } from 'react-native';
 import moment from 'moment';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -22,426 +22,235 @@ import actions from 'app/data/actions';
 
 import styles from './styles';
 
-export class Notifications extends Component {
-  constructor(props) {
-    super(props);
+const Touchable = ({children, onPress, style}) => (
+  <TouchableOpacity onPress={onPress}>
+    {children}
+  </TouchableOpacity>
+);
+
+const PrimaryText = ({children}) => (
+  <Text style={styles.blackColorText}>{children}</Text>
+);
+
+const SecondaryText = ({children}) => (
+  <Text style={styles.grayColorText}>{children}</Text>
+);
+
+const NotificationIcon = ({source}) => (
+  <Image style={styles.notificationIcon} source={source}/>
+);
+
+const Notification = ({ onPress, imageSource, firstRow, secondRow }) => (
+  <Touchable /*onPress={onPress}*/>
+    <View style={StyleSheet.flatten([styles.container, styles.layoutRow])}>
+      <NotificationIcon source={imageSource}/>
+      <View style={[styles.layoutColumn, styles.leftPaddingText]}>
+        <View style={[styles.layoutRow, {flex: 1}]}>
+          {firstRow}
+        </View>
+        <View style={[styles.layoutRow]}>
+          {secondRow}
+        </View>
+      </View>
+    </View>
+  </Touchable>
+);
+
+const getNotificationComponent = (name) => ({notification, onPress}) => {
+  switch (name) {
+    case 'eventInvitation':
+      return (
+        <Notification onPress={() => onPress(notification)}
+                      imageSource={{uri: notification.event.miniaturePic || notification.event.backgroundPic}}
+                      firstRow={(
+                        <Fragment>
+                          <PrimaryText>{notification.event.title || notification.event.activity.name}</PrimaryText>
+                          <SecondaryText>on {moment(notification.event.eventDates.startDate).format('Do MMM')}</SecondaryText>
+                        </Fragment>
+                      )}
+                      secondRow={(
+                        <Fragment>
+                          <PrimaryText>{notification.creatorName}</PrimaryText>
+                          <SecondaryText>invites you to this event</SecondaryText>
+                        </Fragment>
+                      )} />
+      );
+    case 'communityInvitation':
+      return (
+        <Notification onPress={() => onPress(notification)}
+                      imageSource={{uri: notification.community.miniaturePic || notification.community.backgroundPic}}
+                      firstRow={(
+                        <Fragment>
+                          <PrimaryText>{notification.community.title}</PrimaryText>
+                        </Fragment>
+                      )}
+                      secondRow={(
+                        <Fragment>
+                          <PrimaryText>{notification.creatorName}</PrimaryText>
+                          <SecondaryText>invites you to this community</SecondaryText>
+                        </Fragment>
+                      )} />
+      );
+    case 'friendRequest':
+      return (
+        <Notification onPress={() => onPress(notification)}
+                      imageSource={{uri: notification.user.pic}}
+                      firstRow={(
+                        <Fragment>
+                          <PrimaryText>{notification.user.firstName}{' '}{notification.user.lastName}</PrimaryText>
+                          <SecondaryText>following you</SecondaryText>
+                        </Fragment>
+                      )} />
+      );
+    case 'friendAccept':
+      return (
+        <Notification onPress={() => onPress(notification)}
+                      imageSource={{uri: notification.user.pic}}
+                      firstRow={(
+                        <Fragment>
+                          <PrimaryText>{notification.user.firstName}{' '}{notification.user.lastName}</PrimaryText>
+                          <SecondaryText>is accepting your request</SecondaryText>
+                        </Fragment>
+                      )} />
+      );
+    case 'communityComment':
+      return (
+        <Notification onPress={() => onPress(notification)}
+                      imageSource={{uri: notification.community.miniaturePic || notification.community.backgroundPic}}
+                      firstRow={(
+                        <Fragment>
+                          <PrimaryText>{notification.community.title}</PrimaryText>
+                          <SecondaryText>wrote comment</SecondaryText>
+                        </Fragment>
+                      )}
+                      secondRow={(
+                        <Fragment>
+                          <Text>{notification.details.text}</Text>
+                        </Fragment>
+                      )} />
+      );
+    case 'eventComment':
+      return (
+        <Notification onPress={() => onPress(notification)}
+                      imageSource={{uri: notification.event.miniaturePic || notification.event.backgroundPic}}
+                      firstRow={(
+                        <Fragment>
+                          <PrimaryText>{notification.event.title || notification.event.activity.name}</PrimaryText>
+                          <SecondaryText>wrote comment</SecondaryText>
+                        </Fragment>
+                      )}
+                      secondRow={(
+                        <Fragment>
+                          <Text>{notification.details.text}</Text>
+                        </Fragment>
+                      )} />
+      );
+    case 'userComment':
+      return (
+        <Notification onPress={() => onPress(notification)}
+                      imageSource={{uri: notification.user.pic}}
+                      firstRow={(
+                        <Fragment>
+                          <PrimaryText>{notification.user.firstName}{' '}{notification.user.lastName}</PrimaryText>
+                          <SecondaryText>wrote comment</SecondaryText>
+                        </Fragment>
+                      )}
+                      secondRow={(
+                        <Fragment>
+                          <Text>{notification.details.text}</Text>
+                        </Fragment>
+                      )} />
+      );
+    case 'oneTimeEventCreate':
+    case 'repeatedEventCreate':
+      return (
+        <Notification onPress={() => onPress(notification)}
+                      imageSource={{uri: notification.community.miniaturePic || notification.community.backgroundPic}}
+                      firstRow={(
+                        <Fragment>
+                          <PrimaryText>{notification.details.eventName}</PrimaryText>
+                          <SecondaryText>on {moment(notification.details.date).format('Do MMM')}</SecondaryText>
+                        </Fragment>
+                      )}
+                      secondRow={(
+                        <Fragment>
+                          <PrimaryText>{notification.community.title}</PrimaryText>
+                          <SecondaryText>invites you to this event</SecondaryText>
+                        </Fragment>
+                      )} />
+      )
   }
-  
-  redirectToWeb = (notification) => {
-    refresh().then((newToken) => {
-      let url;
-      
-      if (notification.type === 'eventInvitation' || notification.type === 'oneTimeEventCreate' || notification.type === 'repeatedEventCreate') {
-        url = config.server + '/redirect?type=event&id=' + notification.creatorId + '&idToken=' + newToken.idToken + '&accessToken=' + newToken.accessToken;
-      }
-      else if (notification.type === 'communityInvitation') {
-        url = config.server + '/redirect?type=community&id=' + notification.creatorId + '&idToken=' + newToken.idToken + '&accessToken=' + newToken.accessToken;
-      }
-      else if (notification.type === 'friendRequest' || notification.type === 'friendAccept') {
-        url = config.server + '/redirect?type=user&id=' + notification.creatorId + '&idToken=' + newToken.idToken + '&accessToken=' + newToken.accessToken;
-      }
-      else if (notification.type === 'Comments') {
-      
-      }
-      
-      Linking.canOpenURL(url).then(supported => {
-                    if (supported) {
-                    Linking.openURL(url);
-                  } else {
-                    console.log("Don't know how to open URI: " + url);
-                  }
-                  });
-                    });
-                    };
-  
-                    renderNewNotificationsList = (newNotifications) => {
-                      return <View style={[styles.backgroundColorContentWhite, styles.shadowContainer, {marginBottom: 20}]}>
-                      {
-                        newNotifications && newNotifications.length !== 0 ? newNotifications.map((notification, i) => {
-                          if (notification.type === 'eventInvitation') {
-                            return <TouchableOpacity
-                              key={i}
-                              style={[styles.TouchableOpacityStyles]}>
-                              <View style={[styles.layoutRow]}>
-                                <Image style={{alignSelf: 'center', height: 40, width: 40, borderRadius: 50}}
-                                       source={{uri: notification.event.miniaturePic ? notification.event.miniaturePic : notification.event.backgroundPic}}/>
-                                <View style={[styles.layoutColumn, styles.leftPaddingText]}>
-                                  <View style={[styles.layoutRow, {flex: 1}]}>
-                                    <Text
-                      style={styles.blackColorText}>{notification.event.title ? notification.event.title : notification.event.activity.name}</Text>
-                    <Text style={styles.grayColorText}>
-                      {' on ' + moment(notification.event.eventDates.startDate).format('Do MMM')}</Text>
-                  </View>
-                  <View style={[styles.layoutRow]}>
-                    <Text style={styles.blackColorText}>{notification.creatorName}</Text>
-                    <Text style={[styles.grayColorText]}> invites you to this event</Text>
-                  </View>
-                </View>
-              </View>
-            </TouchableOpacity>
-          }
-          else if (notification.type === 'communityInvitation') {
-            return <TouchableOpacity
-              key={i}
-              style={[styles.TouchableOpacityStyles]}>
-              <View style={[styles.layoutRow]}>
-                <Image style={{alignSelf: 'center', height: 40, width: 40, borderRadius: 50}}
-                       source={{uri: notification.community.miniaturePic ? notification.community.miniaturePic : notification.community.backgroundPic}}/>
-                <View style={[styles.layoutColumn, styles.leftPaddingText]}>
-                  <View style={[styles.layoutRow, {flex: 1}]}>
-                    <Text style={styles.blackColorText}>{notification.community.title}</Text>
-                  </View>
-                  <View style={[styles.layoutRow]}>
-                    <Text style={styles.blackColorText}>{notification.creatorName}</Text>
-                    <Text style={[styles.grayColorText]}> invites you to this community</Text>
-                  </View>
-                </View>
-              </View>
-            </TouchableOpacity>
-          }
-          else if (notification.type === 'friendRequest') {
-            return <TouchableOpacity
-              key={i}
-              style={[styles.TouchableOpacityStyles]}
-              onPress={() => {
-                this.redirectToWeb(notification)
-              }}
-            >
-              <View style={[styles.layoutRow]}>
-                <Image style={{alignSelf: 'center', height: 40, width: 40, borderRadius: 50}}
-                       source={{uri: notification.user.pic}}/>
-                <View style={[styles.layoutColumn, styles.leftPaddingText]}>
-                  <View style={[styles.layoutRow, {flex: 1}]}>
-                    <Text style={styles.blackColorText}>{notification.user.firstName + ' ' + notification.user.lastName}</Text>
-                    <Text style={[styles.grayColorText]}> following you</Text>
-                  </View>
-                </View>
-              </View>
-            </TouchableOpacity>
-          }
-          else if (notification.type === 'friendAccept') {
-            return <TouchableOpacity
-              key={i}
-              style={[styles.TouchableOpacityStyles]}
-              onPress={() => {
-                this.redirectToWeb(notification)
-              }}
-            >
-              <View style={[styles.layoutRow]}>
-                <Image style={{alignSelf: 'center', height: 40, width: 40, borderRadius: 50}}
-                       source={{uri: notification.user.pic}}/>
-                <View style={[styles.layoutColumn, styles.leftPaddingText]}>
-                  <View style={[styles.layoutRow, {flex: 1}]}>
-                    <Text style={styles.blackColorText}>{notification.user.firstName + ' ' + notification.user.lastName}</Text>
-                    <Text style={[styles.grayColorText]}> is accepting your request</Text>
-                  </View>
-                </View>
-              </View>
-            </TouchableOpacity>
-          }
-          else if (notification.type === 'communityComment') {
-            return <TouchableOpacity
-              key={i}
-              style={[styles.TouchableOpacityStyles]}
-              onPress={() => {
-                this.redirectToWeb(notification)
-              }}
-            >
-              <View style={[styles.layoutRow]}>
-                <Image style={{alignSelf: 'center', height: 40, width: 40, borderRadius: 50}}
-                       source={{uri: notification.community.miniaturePic ? notification.community.miniaturePic : notification.community.backgroundPic}}/>
-                <View style={[styles.layoutColumn, styles.leftPaddingText]}>
-                  <View style={[styles.layoutRow, {flex: 1}]}>
-                    <Text style={styles.blackColorText}>{notification.community.title}</Text>
-                    <Text style={[styles.grayColorText]}> wrote comment</Text>
-                  </View>
-                  <Text>{notification.details.text}</Text>
-                </View>
-              </View>
-            </TouchableOpacity>
-          }
-          else if (notification.type === 'eventComment') {
-            return <TouchableOpacity
-              key={i}
-              style={[styles.TouchableOpacityStyles]}
-              onPress={() => {
-                this.redirectToWeb(notification)
-              }}
-            >
-              <View style={[styles.layoutRow]}>
-                <Image style={{alignSelf: 'center', height: 40, width: 40, borderRadius: 50}}
-                       source={{uri: notification.event.miniaturePic ? notification.event.miniaturePic : notification.event.backgroundPic}}/>
-                <View style={[styles.layoutColumn, styles.leftPaddingText]}>
-                  <View style={[styles.layoutRow, {flex: 1}]}>
-                    <Text style={styles.blackColorText}>{notification.event.title ? notification.event.title : notification.event.activity.name}</Text>
-                    <Text style={[styles.grayColorText]}> wrote comment</Text>
-                  </View>
-                  <Text>{notification.details.text}</Text>
-                </View>
-              </View>
-            </TouchableOpacity>
-          }
-          else if (notification.type === 'userComment') {
-            return <TouchableOpacity
-              key={i}
-              style={[styles.TouchableOpacityStyles]}
-              onPress={() => {
-                this.redirectToWeb(notification)
-              }}
-            >
-              <View style={[styles.layoutRow]}>
-                <Image style={{alignSelf: 'center', height: 40, width: 40, borderRadius: 50}}
-                       source={{uri: notification.user.pic}}/>
-                <View style={[styles.layoutColumn, styles.leftPaddingText]}>
-                  <View style={[styles.layoutRow, {flex: 1}]}>
-                    <Text style={styles.blackColorText}>{notification.user.firstName + ' ' + notification.user.lastName}</Text>
-                    <Text style={[styles.grayColorText]}> wrote comment</Text>
-                  </View>
-                  <Text>{notification.details.text}</Text>
-                </View>
-              </View>
-            </TouchableOpacity>
-          }
-          else if (notification.type === 'oneTimeEventCreate' || notification.type === 'repeatedEventCreate') {
-            return <TouchableOpacity
-              key={i}
-              style={[styles.TouchableOpacityStyles]}
-              onPress={() => {
-                this.redirectToWeb(notification)
-              }}
-            >
-              <View style={[styles.layoutRow]}>
-                <Image style={{alignSelf: 'center', height: 40, width: 40, borderRadius: 50}}
-                       source={{uri: notification.community.miniaturePic ? notification.community.miniaturePic : notification.community.backgroundPic}}/>
-                <View style={[styles.layoutColumn, styles.leftPaddingText]}>
-                  <View style={[styles.layoutRow, {flex: 1}]}>
-                    <Text
-                      style={styles.blackColorText}>{notification.details.eventName}</Text>
-                    <Text style={styles.grayColorText}>
-                      {' on ' + moment(notification.details.date).format('Do MMM')}</Text>
-                  </View>
-                  <View style={[styles.layoutRow]}>
-                    <Text style={styles.blackColorText}>{notification.community.title}</Text>
-                    <Text style={[styles.grayColorText]}> invites you to this event</Text>
-                  </View>
-                </View>
-              </View>
-            </TouchableOpacity>
-          }
-        }) : null
-      }
+};
+
+const Progress = () => (
+  <View style={styles.containerProcess}>
+    <View>
+      <ActivityIndicator size="large" color="#00bcd4" />
     </View>
-  };
-  
-  renderViewedNotificationsList = (viewedNotifications) => {
-    return <View style={[styles.backgroundColorContentWhite, styles.shadowContainer, {marginBottom: 20}]}>
-      {
-        viewedNotifications && viewedNotifications.length !== 0 ? viewedNotifications.map((notification, i) => {
-          if (notification.type === 'eventInvitation') {
-            return <TouchableOpacity
-              key={i}
-              style={[styles.TouchableOpacityStyles, (i === viewedNotifications.length - 1) ? styles.marginBottom : null]}
-              onPress={() => {
-                this.redirectToWeb(notification)
-              }}
-            >
-              <View style={[styles.layoutRow]}>
-                <Image style={{alignSelf: 'center', height: 40, width: 40, borderRadius: 50}}
-                       source={{uri: notification.event.miniaturePic ? notification.event.miniaturePic : notification.event.backgroundPic}}/>
-                <View style={[styles.layoutColumn, styles.leftPaddingText]}>
-                  <View style={[styles.layoutRow, {flex: 1}]}>
-                    <Text
-                      style={styles.blackColorText}>{notification.event.title ? notification.event.title : notification.event.activity.name}</Text>
-                    <Text style={styles.grayColorText}>
-                      {' on ' + moment(notification.event.eventDates.startDate).format('Do MMM')}</Text>
-                  </View>
-                  <View style={[styles.layoutRow]}>
-                    <Text style={styles.blackColorText}>{notification.creatorName}</Text>
-                    <Text style={[styles.grayColorText]}> invites you to this event</Text>
-                  </View>
-                </View>
-              </View>
-            </TouchableOpacity>
-          }
-          else if (notification.type === 'communityInvitation') {
-            return <TouchableOpacity
-              key={i}
-              style={[styles.TouchableOpacityStyles, (i === viewedNotifications.length - 1) ? styles.marginBottom : null]}
-              onPress={() => {
-                this.redirectToWeb(notification)
-              }}
-            >
-              <View style={[styles.layoutRow]}>
-                {/*<Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 40, width: 40, borderRadius: 50}} containerStyle={{height: 40, width: 40}} source={{uri: notification.details.pic}}/>*/}
-                <Image style={{alignSelf: 'center', height: 40, width: 40, borderRadius: 50}}
-                       source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}/>
-                <View style={[styles.layoutColumn, styles.leftPaddingText]}>
-                  <View style={[styles.layoutRow, {flex: 1}]}>
-                    <Text style={styles.blackColorText}>{notification.details.name}</Text>
-                  </View>
-                  <View style={[styles.layoutRow]}>
-                    <Text style={styles.blackColorText}>{notification.creatorName}</Text>
-                    <Text style={[styles.grayColorText]}> invites you to this community</Text>
-                  </View>
-                </View>
-              </View>
-            </TouchableOpacity>
-          }
-          else if (notification.type === 'friendRequest') {
-            return <TouchableOpacity
-              key={i}
-              style={[styles.TouchableOpacityStyles, (i === viewedNotifications.length - 1) ? styles.marginBottom : null]}
-              onPress={() => {
-                this.redirectToWeb(notification)
-              }}
-            >
-              <View style={[styles.layoutRow]}>
-                {/*<Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 40, width: 40, borderRadius: 50}} containerStyle={{height: 40, width: 40}} source={{uri: notification.details.pic}}/>*/}
-                <Image style={{alignSelf: 'center', height: 40, width: 40, borderRadius: 50}}
-                       source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}/>
-                <View style={[styles.layoutColumn, styles.leftPaddingText]}>
-                  <View style={[styles.layoutRow, {flex: 1}]}>
-                    <Text style={styles.blackColorText}>{notification.details.name}</Text>
-                    <Text style={[styles.grayColorText]}> following you</Text>
-                  </View>
-                </View>
-              </View>
-            </TouchableOpacity>
-          }
-          else if (notification.type === 'friendAccept') {
-            return <TouchableOpacity
-              key={i}
-              style={[styles.TouchableOpacityStyles, (i === viewedNotifications.length - 1) ? styles.marginBottom : null]}
-              onPress={() => {
-                this.redirectToWeb(notification)
-              }}
-            >
-              <View style={[styles.layoutRow]}>
-                {/*<Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 40, width: 40, borderRadius: 50}} containerStyle={{height: 40, width: 40}} source={{uri: notification.details.pic}}/>*/}
-                <Image style={{alignSelf: 'center', height: 40, width: 40, borderRadius: 50}}
-                       source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}/>
-                <View style={[styles.layoutColumn, styles.leftPaddingText]}>
-                  <View style={[styles.layoutRow, {flex: 1}]}>
-                    <Text style={styles.blackColorText}>{notification.details.name}</Text>
-                    <Text style={[styles.grayColorText]}> following you</Text>
-                  </View>
-                </View>
-              </View>
-            </TouchableOpacity>
-          }
-          else if (notification.type === 'Comments') {
-            return <TouchableOpacity
-              key={i}
-              style={[styles.TouchableOpacityStyles, (i === viewedNotifications.length - 1) ? styles.marginBottom : null]}
-              onPress={() => {
-                this.redirectToWeb(notification)
-              }}
-            >
-              <View style={[styles.layoutRow]}>
-                {/*<Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 40, width: 40, borderRadius: 50}} containerStyle={{height: 40, width: 40}} source={{uri: notification.details.pic}}/>*/}
-                <Image style={{alignSelf: 'center', height: 40, width: 40, borderRadius: 50}}
-                       source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}/>
-                <View style={[styles.layoutColumn, styles.leftPaddingText]}>
-                  <View style={[styles.layoutRow, {flex: 1}]}>
-                    <Text style={styles.blackColorText}>{notification.details.name}</Text>
-                    <Text style={[styles.grayColorText]}> wrote comment</Text>
-                  </View>
-                </View>
-              </View>
-            </TouchableOpacity>
-          }
-          else if (notification.type === 'oneTimeEventCreate' || notification.type === 'repeatedEventCreate') {
-            return <TouchableOpacity
-              key={i}
-              style={[styles.TouchableOpacityStyles, (i === viewedNotifications.length - 1) ? styles.marginBottom : null]}
-              onPress={() => {
-                this.redirectToWeb(notification)
-              }}
-            >
-              <View style={[styles.layoutRow]}>
-                {/*<Avatar overlayContainerStyle={{borderRadius: 50}} avatarStyle={{height: 40, width: 40, borderRadius: 50}} containerStyle={{height: 40, width: 40}} source={{uri: notification.details.pic}}/>*/}
-                <Image style={{alignSelf: 'center', height: 40, width: 40, borderRadius: 50}}
-                       source={{uri: 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'}}/>
-                <View style={[styles.layoutColumn, styles.leftPaddingText]}>
-                  <View style={[styles.layoutRow, {flex: 1}]}>
-                    <Text
-                      style={styles.blackColorText}>{notification.details.name ? notification.details.name : notification.details.activity.name}</Text>
-                    <Text style={styles.grayColorText}>
-                      {' on ' + moment(notification.details.date).format('Do MMM')}</Text>
-                  </View>
-                  <View style={[styles.layoutRow]}>
-                    <Text style={styles.blackColorText}>{notification.details.name}</Text>
-                    <Text style={[styles.grayColorText]}> invites you to this event</Text>
-                  </View>
-                </View>
-              </View>
-            </TouchableOpacity>
-          }
-        }) : null
-      }
-    </View>
-  };
-  
-  renderNotifications = (viewedNotifications, newNotifications) => {
-    const {notifications} = this.props;
-    
-    if (notifications.length === 0) {
-      return <View style={[styles.containerProcess]}>
-        <MaterialIcons name={'notifications-none'} size={48}/>
-        <Text>You do not have any notifications yet.</Text>
-      </View>
-    }
-    else {
-      return <ScrollView>
-        {newNotifications.length > 0 ? this.renderNewNotificationsList(newNotifications) : null}
-        {viewedNotifications.length > 0 ? this.renderViewedNotificationsList(viewedNotifications) : null}
-      </ScrollView>
-    }
-  };
-  
-  renderProcess = () => {
-    return <View style={styles.containerProcess}>
-      <View>
-        <ActivityIndicator size="large" color="#00bcd4"/>
-      </View>
-    </View>
-  };
-  
-  render() {
-    const {notifications, loaded} = this.props;
-    let viewedNotifications = [];
-    let newNotifications = [];
-    
-    forEach(notifications, function (notification) {
-      if (notification.viewed === true) viewedNotifications.push(notification);
-      else newNotifications.push(notification);
-    });
-    
-    return (
-      <View style={{flex: 1}}>
-        <HeaderSection/>
-        {loaded ? this.renderNotifications(viewedNotifications, newNotifications) : this.renderProcess()}
-      </View>
-    );
+  </View>
+);
+
+const EmptyResults = () => (
+  <View style={[styles.containerProcess]}>
+    <MaterialIcons name={'notifications-none'} size={48}/>
+    <Text>You do not have any notifications yet.</Text>
+  </View>
+);
+
+const getRedirectType = (notification) => {
+  if (notification.type === 'eventInvitation' || notification.type === 'oneTimeEventCreate' || notification.type === 'repeatedEventCreate') {
+    return 'event';
+  } else if (notification.type === 'communityInvitation') {
+    return 'community';
+  } else if (notification.type === 'friendRequest' || notification.type === 'friendAccept') {
+    return 'user';
   }
-}
+
+  return '';
+};
+
+const redirectToWeb = async (notification) => {
+  const newToken = await refresh();
+
+  const redirectType = getRedirectType(notification);
+  const { accessToken, idToken } = newToken;
+  const { creatorId } = notification;
+
+  const url = `${config.server}/redirect?type=${redirectType}&idToken=${idToken}&accessToken=${accessToken}`;
+  const supported = await Linking.canOpenURL(url);
+  supported && Linking.openURL(url);
+};
+
+const Notifications = ({ notifications }) => (
+  <FlatList data={notifications}
+            renderItem={({ item: notification }) => {
+              const Component = getNotificationComponent(notification.type);
+              return <Component notification={notification}
+                                onPress={() => redirectToWeb(notification) } />
+            }}
+            keyExtractor={(notification) => notification._id} />
+);
+
+const NotificationsPage = ({ notifications, loaded }) => (
+  <View style={{flex: 1}}>
+    <HeaderSection />
+    {loaded
+      ? (
+        notifications.length
+          ? <Notifications notifications={notifications} />
+          : <EmptyResults />
+      )
+      : <Progress />}
+  </View>
+);
 
 export default compose(
   connect(
-    (state) => {
-      let loaded = state.notifications.loaded;
-      
-      let notifications;
-      if (loaded && state.notifications.list) notifications = state.notifications.list;
-      
-      return {
-        notifications,
-        loaded
-      }
-    },
-    {
-      fetchList: actions.notification.fetchList
-    }
+    (state) => ({
+      notifications: state.notifications.list,
+      loaded: state.notifications.loaded
+    }),
+    { fetchList: actions.notification.fetchList }
   ),
   lifecycle({
     componentDidMount() {
@@ -449,4 +258,4 @@ export default compose(
       fetchList();
     }
   })
-)(Notifications);
+)(NotificationsPage);
