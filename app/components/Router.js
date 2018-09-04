@@ -68,7 +68,7 @@ const config = {
 
 export const Tabs = createMaterialBottomTabNavigator(routes, config);
 
-export const MasterNavigator = StackNavigator(
+export const Navigator = StackNavigator(
   {
     AuthLoadingScreen,
     Tabs,
@@ -81,7 +81,7 @@ export const MasterNavigator = StackNavigator(
 );
 
 const Router = ({dispatch, nav, notifications}) => (
-  <MasterNavigator screenProps={{notifications}} navigation={{
+  <Navigator screenProps={{notifications}} navigation={{
     dispatch,
     state: nav,
     addListener: navigationListener

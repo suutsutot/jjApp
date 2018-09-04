@@ -5,7 +5,7 @@ import { lifecycle } from 'recompose';
 import io from 'socket.io-client';
 
 import config from 'app/config';
-import { setList } from 'app/data/actions';
+import { setList } from 'app/data/notifications/actions';
 import {getNotifications} from 'app/api/notificationsApi';
 import {refresh} from 'app/api/refreshTokenAPI';
 
@@ -13,7 +13,7 @@ const socket = io(config.server, {jsonp: false, transports: ['websocket']});
 
 const handleSocketMessage = payload => async dispatch => {
   const data = await getNotifications();
-  dispatch(updateNotifications(data))
+  dispatch(setList(data))
 };
 
 const title = 'You have new notification';

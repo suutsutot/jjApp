@@ -3,7 +3,7 @@ import { NavigationActions } from 'react-navigation';
 
 import { getNotifications } from 'app/api/notificationsApi';
 import { refreshByCredentials } from 'app/api/refreshTokenAPI';
-import { updateNotifications } from 'app/data/notification/actions';
+import { setList } from 'app/data/notifications/actions';
 import config from 'app/config';
 import * as types from 'app/constants/actionTypes';
 import * as globalActions from 'app/data/global/globalActions';
@@ -54,7 +54,7 @@ export const dbLoginWithCredentials = (username, password) => async (dispatch) =
 
         dispatch(globalActions.showNotificationSuccess());
         dispatch(login(userInfo.email, userInfo));
-        getNotifications().then((data) => dispatch(updateNotifications(data)));
+        getNotifications().then((data) => dispatch(setList(data)));
         dispatch(NavigationActions.navigate({ routeName: 'Tabs' }));
         dispatch(globalActions.hideLoading());
 
@@ -137,9 +137,7 @@ export const dbLoginViaFacebook = () => {
               dispatch(globalActions.showNotificationSuccess());
               dispatch(login(userInfo.email, userInfo));
 
-              getNotifications().then((data) => {
-                dispatch(updateNotifications(data));
-              });
+              getNotifications().then((data) => dispatch(setList(data)));
 
               const resetAction = NavigationActions.navigate({routeName: 'Tabs'});
               dispatch(resetAction);
@@ -212,9 +210,7 @@ export const dbLoginViaGoogle = () => {
               dispatch(globalActions.showNotificationSuccess());
               dispatch(login(userInfo.email, userInfo));
 
-              getNotifications().then((data) => {
-                dispatch(updateNotifications(data));
-              });
+              getNotifications().then((data) => dispatch(setList(data)));
 
               const resetAction = NavigationActions.navigate({routeName: 'Tabs'});
               dispatch(resetAction);

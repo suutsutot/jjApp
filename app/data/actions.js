@@ -1,5 +1,5 @@
-import * as notification from './notification/actions';
+import * as notifications from './notifications/actions';
 
 export default {
-  notification
+  notifications
 }

@@ -10,7 +10,8 @@ import {
   Image,
   ActivityIndicator,
   TouchableOpacity,
-  StyleSheet
+  StyleSheet,
+  RefreshControl,
 } from 'react-native';
 import moment from 'moment';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -221,26 +222,25 @@ const redirectToWeb = async (notification) => {
   supported && Linking.openURL(url);
 };
 
-const Notifications = ({ notifications }) => (
+const Notifications = ({ notifications, pending, fetchList }) => (
   <FlatList data={notifications}
             renderItem={({ item: notification }) => {
               const Component = getNotificationComponent(notification.type);
               return <Component notification={notification}
                                 onPress={() => redirectToWeb(notification) } />
             }}
+            refreshControl={<RefreshControl colors={['#00bcd4']}
+                                            refreshing={pending}
+                                            onRefresh={fetchList} />}
             keyExtractor={(notification) => notification._id} />
 );
 
-const NotificationsPage = ({ notifications, loaded }) => (
+const NotificationsPage = ({ notifications = [], loaded, pending, fetchList }) => (
   <View style={{flex: 1}}>
     <HeaderSection />
-    {loaded
-      ? (
-        notifications.length
-          ? <Notifications notifications={notifications} />
-          : <EmptyResults />
-      )
-      : <Progress />}
+    {!loaded || (loaded && notifications.length)
+      ? <Notifications notifications={notifications} pending={pending} fetchList={fetchList} />
+      : <EmptyResults />}
   </View>
 );
 
@@ -248,9 +248,10 @@ export default compose(
   connect(
     (state) => ({
       notifications: state.notifications.list,
-      loaded: state.notifications.loaded
+      loaded: state.notifications.loaded,
+      pending: state.notifications.pending
     }),
-    { fetchList: actions.notification.fetchList }
+    { fetchList: actions.notifications.fetchList }
   ),
   lifecycle({
     componentDidMount() {

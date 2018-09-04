@@ -6,7 +6,7 @@ import types from 'app/constants/actionTypes';
 
 export function* fetchList() {
   const data = yield call(getNotifications);
-  yield put(actions.notification.setList(data));
+  yield put(actions.notifications.setList(data));
 };
 
 export default function* () {
