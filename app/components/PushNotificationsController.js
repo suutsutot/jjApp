@@ -28,7 +28,7 @@ const PushNotificationsController = compose(
           console.log('NOTIFICATION:', notification);
           const { foreground } = notification;
           if (!foreground) {
-            navigate({ routeName: 'Events' });
+            navigate({ routeName: 'Notifications' });
           }
         },
         senderID: config.senderID,

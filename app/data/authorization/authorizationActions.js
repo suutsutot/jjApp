@@ -1,7 +1,7 @@
 import { AsyncStorage } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 
-import { getNotifications } from 'app/api/NotificationsAPI';
+import { getNotifications } from 'app/api/notificationsApi';
 import { refreshByCredentials } from 'app/api/refreshTokenAPI';
 import { updateNotifications } from 'app/data/notification/actions';
 import config from 'app/config';
