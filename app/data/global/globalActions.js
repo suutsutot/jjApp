@@ -40,10 +40,3 @@ export const hideLoading = () => {
         type: types.HIDE_LOADING
     }
 };
-
-export const changeWindowSize = (height, width) => {
-    return {
-        type: types.CHANGE_WINDOW_SIZE,
-        payload: {height, width}
-    }
-};

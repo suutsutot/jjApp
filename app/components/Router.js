@@ -9,12 +9,12 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 
 import { navigationListener } from 'app/config/navigationHelpers';
-import Events from 'app/components/Home';
-import Communities from 'app/components/Communities';
-import Notifications from 'app/components/Notifications';
-import Settings from 'app/components/Settings';
-import Login from 'app/components/Login';
-import AuthLoadingScreen from 'app/components/AuthLoadingScreen';
+import Events from 'app/components/Home/index';
+import Communities from 'app/components/Communities/index';
+import Notifications from 'app/components/Notifications/index';
+import Settings from 'app/components/Settings/index';
+import Login from 'app/components/Login/index';
+import AuthLoadingScreen from 'app/components/AuthLoadingScreen/index';
 
 const routes = {
   Notifications: {

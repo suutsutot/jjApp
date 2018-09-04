@@ -3,8 +3,7 @@ import * as types from 'app/constants/actionTypes';
 let defaultState = {
     loading: false,
     messageOpen: false,
-    error: '',
-    windowSize: {}
+    error: ''
 };
 
 export const globalReducer = (state = defaultState, action) => {
@@ -44,13 +43,6 @@ export const globalReducer = (state = defaultState, action) => {
             return {
                 ...state,
                 loading: false
-            };
-        case types.CHANGE_WINDOW_SIZE:
-            return {
-                ...state,
-                windowSize: {
-                    ...payload
-                }
             };
         default:
             return state
