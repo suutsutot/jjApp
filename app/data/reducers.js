@@ -1,4 +1,6 @@
 import {combineReducers} from 'redux';
+import { persistReducer } from 'redux-persist';
+import { AsyncStorage } from 'react-native';
 
 import {activityReducer} from './activity/activityReducer';
 import {authorizeReducer} from './authorization/authorizationReducer';
@@ -15,5 +17,9 @@ export default combineReducers({
   global: globalReducer,
   user: userReducer,
   events: eventReducer,
-  notifications: notifications,
+  notifications: persistReducer({
+    key: 'notifications',
+    storage: AsyncStorage,
+    whitelist: ['list']
+  }, notifications),
 });

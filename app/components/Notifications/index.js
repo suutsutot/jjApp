@@ -66,13 +66,13 @@ const getNotificationComponent = (name) => ({notification, onPress}) => {
                       firstRow={(
                         <Fragment>
                           <PrimaryText>{notification.event.title || notification.event.activity.name}</PrimaryText>
-                          <SecondaryText>on {moment(notification.event.eventDates.startDate).format('Do MMM')}</SecondaryText>
+                          <SecondaryText> on {moment(notification.event.eventDates.startDate).format('Do MMM')}</SecondaryText>
                         </Fragment>
                       )}
                       secondRow={(
                         <Fragment>
                           <PrimaryText>{notification.creatorName}</PrimaryText>
-                          <SecondaryText>invites you to this event</SecondaryText>
+                          <SecondaryText> invites you to this event</SecondaryText>
                         </Fragment>
                       )} />
       );
@@ -88,7 +88,7 @@ const getNotificationComponent = (name) => ({notification, onPress}) => {
                       secondRow={(
                         <Fragment>
                           <PrimaryText>{notification.creatorName}</PrimaryText>
-                          <SecondaryText>invites you to this community</SecondaryText>
+                          <SecondaryText> invites you to this community</SecondaryText>
                         </Fragment>
                       )} />
       );
@@ -99,7 +99,7 @@ const getNotificationComponent = (name) => ({notification, onPress}) => {
                       firstRow={(
                         <Fragment>
                           <PrimaryText>{notification.user.firstName}{' '}{notification.user.lastName}</PrimaryText>
-                          <SecondaryText>following you</SecondaryText>
+                          <SecondaryText> following you</SecondaryText>
                         </Fragment>
                       )} />
       );
@@ -110,7 +110,7 @@ const getNotificationComponent = (name) => ({notification, onPress}) => {
                       firstRow={(
                         <Fragment>
                           <PrimaryText>{notification.user.firstName}{' '}{notification.user.lastName}</PrimaryText>
-                          <SecondaryText>is accepting your request</SecondaryText>
+                          <SecondaryText> is accepting your request</SecondaryText>
                         </Fragment>
                       )} />
       );
@@ -121,7 +121,7 @@ const getNotificationComponent = (name) => ({notification, onPress}) => {
                       firstRow={(
                         <Fragment>
                           <PrimaryText>{notification.community.title}</PrimaryText>
-                          <SecondaryText>wrote comment</SecondaryText>
+                          <SecondaryText> wrote comment</SecondaryText>
                         </Fragment>
                       )}
                       secondRow={(
@@ -137,7 +137,7 @@ const getNotificationComponent = (name) => ({notification, onPress}) => {
                       firstRow={(
                         <Fragment>
                           <PrimaryText>{notification.event.title || notification.event.activity.name}</PrimaryText>
-                          <SecondaryText>wrote comment</SecondaryText>
+                          <SecondaryText> wrote comment</SecondaryText>
                         </Fragment>
                       )}
                       secondRow={(
@@ -153,7 +153,7 @@ const getNotificationComponent = (name) => ({notification, onPress}) => {
                       firstRow={(
                         <Fragment>
                           <PrimaryText>{notification.user.firstName}{' '}{notification.user.lastName}</PrimaryText>
-                          <SecondaryText>wrote comment</SecondaryText>
+                          <SecondaryText> wrote comment</SecondaryText>
                         </Fragment>
                       )}
                       secondRow={(
@@ -170,13 +170,13 @@ const getNotificationComponent = (name) => ({notification, onPress}) => {
                       firstRow={(
                         <Fragment>
                           <PrimaryText>{notification.details.eventName}</PrimaryText>
-                          <SecondaryText>on {moment(notification.details.date).format('Do MMM')}</SecondaryText>
+                          <SecondaryText> on {moment(notification.details.date).format('Do MMM')}</SecondaryText>
                         </Fragment>
                       )}
                       secondRow={(
                         <Fragment>
                           <PrimaryText>{notification.community.title}</PrimaryText>
-                          <SecondaryText>invites you to this event</SecondaryText>
+                          <SecondaryText> invites you to this event</SecondaryText>
                         </Fragment>
                       )} />
       )

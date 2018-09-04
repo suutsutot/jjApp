@@ -1,4 +1,5 @@
 import { createStore, compose, applyMiddleware } from 'redux';
+import { persistStore } from 'redux-persist';
 import thunk from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
 
@@ -13,4 +14,5 @@ const store = createStore(reducers, {}, compose(
 
 sagaMiddleware.run(sagas);
 
+export const persistor = persistStore(store);
 export default store;

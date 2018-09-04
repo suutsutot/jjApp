@@ -1,10 +1,11 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import {Provider} from 'react-redux';
 import { compose, lifecycle } from 'recompose';
 import { connect } from 'react-redux';
 import { AsyncStorage } from 'react-native';
+import { PersistGate } from 'redux-persist/integration/react'
 
-import store from 'app/store/index';
+import store, { persistor } from 'app/store/index';
 import withStore from 'app/hocs/withStore';
 import SocketController from 'app/components/SocketController';
 import PushNotificationsController from 'app/components/PushNotificationsController';
@@ -12,12 +13,12 @@ import Router from 'app/components/Router';
 import * as authorizationActions from 'app/data/authorization/authorizationActions';
 
 const Application = () => (
-  <Fragment>
+  <PersistGate loading={null} persistor={persistor}>
     <Router />
 
     <SocketController />
     <PushNotificationsController />
-  </Fragment>
+  </PersistGate>
 );
 
 export default compose(
