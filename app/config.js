@@ -1,3 +1,5 @@
+import googleServices from '../android/app/google-services';
+
 const config = {
   'local': {
     server: 'http://10.0.3.2:3000',
@@ -15,5 +17,5 @@ const config = {
 
 export default {
   ...config.dev,
-  senderID: '490595239693'
+  senderID: googleServices.project_info.project_number
 };

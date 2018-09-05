@@ -20,9 +20,9 @@ const PushNotificationsController = compose(
       const { navigate } = this.props;
       
       PushNotification.configure({
-        onRegister: (token) => {
+        onRegister: ({token}) => {
           console.log('TOKEN:', token);
-          AsyncStorage.setItem('pushNotificationsToken', token);
+          AsyncStorage.setItem('pushNotificationToken', token);
         },
         onNotification: (notification) => {
           console.log('NOTIFICATION:', notification);

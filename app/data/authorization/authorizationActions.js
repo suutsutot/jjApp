@@ -58,18 +58,22 @@ export const dbLoginWithCredentials = (username, password) => async (dispatch) =
         dispatch(NavigationActions.navigate({ routeName: 'Tabs' }));
         dispatch(globalActions.hideLoading());
 
-        // const pushNotificationsToken = await AsyncStorage.getItem('pushNotificationsToken');
-        // fetch(`${config.server}/api/users/set-push-token`, {
-        //   method: 'POST',
-        //   body: JSON.stringify({
-        //     token: pushNotificationsToken
-        //   }),
-        //   headers: {
-        //     'Accept': 'application/json',
-        //     'Content-Type': 'application/json',
-        //     'Authorization': idToken
-        //   }
-        // });
+        const pushNotificationToken = await AsyncStorage.getItem('pushNotificationToken');
+        try{
+          fetch(`${config.server}/api/users/set-push-token`, {
+            method: 'POST',
+            body: JSON.stringify({
+              id: userInfo._id,
+              pushNotificationToken
+            }),
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'Authorization': idToken
+            }
+          });
+        } catch (e) {
+        }
       }
       else {
         dispatch(noUserGet());
