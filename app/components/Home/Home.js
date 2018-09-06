@@ -4,13 +4,14 @@ import {View, Text, TouchableOpacity, Linking, ActivityIndicator, Image, ScrollV
 import moment from 'moment';
 import {refresh} from 'app/api/refreshTokenAPI';
 import config from 'app/config';
-import {HeaderSection} from 'app/pureComponents';
+import {HeaderSection, ItemCard} from 'app/pureComponents';
 import {eventActions} from 'app/data/event';
 import {userActions} from 'app/data/user';
 import {notificationActions} from 'app/data/notification';
 import {activityActions} from 'app/data/activity';
 import styles from './styles';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Menu, {MenuItem, MenuDivider} from 'react-native-material-menu';
 
 
 export class Home extends Component {
@@ -39,37 +40,22 @@ export class Home extends Component {
     };
 
     renderEventList = (events) => {
+        // const content = this.state.test && <Text>Content</Text>
         return <View>
             {
                 events.map((event, i) => (
-                    <TouchableOpacity
+                    <View
                         key={i}
                         style={[styles.TouchableOpacityStyles]}
-                        onPress={() => {
-                            this.goToEvent(event._id)
-                        }}
+                        // onPress={() => {
+                        //     this.goToEvent(event._id)
+                        // }}
                     >
-                        <View style={[styles.layoutRow, styles.spaceBetweenText, {flex: 1, alignItems: 'center'}]}>
-                            <View style={[styles.layoutRow]}>
-                                <Image style={{width: 60, height: 60, borderRadius: 50, resizeMode: 'cover'}}
-                                       source={{uri: event.backgroundPic}}/>
-                                <View style={[styles.layoutColumn, styles.leftPaddingText]}>
-                                    <View style={[styles.layoutRow]}>
-                                        <Text
-                                            style={styles.blackColorText}>{event.title ? event.title : event.activity.name}</Text>
-                                        <Text style={styles.grayColorText}>
-                                            {' on ' + moment(event.eventDates.startDate).format('Do MMM')}</Text>
-                                    </View>
-                                    <View style={[styles.layoutColumn]}>
-                                        <Text style={styles.grayColorText}>{event.activity.name}</Text>
-                                        <Text
-                                            style={[styles.grayColorText]}>{event.participants.length + ' participants'}</Text>
-                                    </View>
-                                </View>
-                            </View>
-                            <MaterialIcons name="chevron-right" size={24} color={styles.grayColorText}/>
-                        </View>
-                    </TouchableOpacity>
+                        <ItemCard data={event}/>
+                        {/*{content}*/}
+                    </View>
+
+
                 ))
             }
         </View>
@@ -96,11 +82,7 @@ export class Home extends Component {
     renderUserEvents = () => {
         const {joinedEvents} = this.props;
 
-        return <View style={[styles.backgroundColorContentWhite, styles.shadowContainer, {marginBottom: 30}]}>
-            <View style={[styles.layoutRow, {margin: 10}]}>
-                <Text style={styles.blackColorText}>{'Events '}</Text>
-                <Text style={styles.grayColorText}>{joinedEvents.length}</Text>
-            </View>
+        return <View>
             {
                 joinedEvents.length > 0 ? this.renderEventList(joinedEvents) : this.renderNoEvents('userList')
             }

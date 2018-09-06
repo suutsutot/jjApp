@@ -16,8 +16,8 @@ import {filter} from 'lodash';
 
 export const Tabs = TabNavigator(
     {
-        Notifications: {screen: Notifications},
         Home: {screen: Home},
+        Notifications: {screen: Notifications},
         Settings: {screen: Settings},
     },
     {

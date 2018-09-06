@@ -23,8 +23,8 @@ export const dbGetEventsList = () => {
                     .catch(error => console.log('Error: ', error))
                     .then(response => {
                         if (response) {
-                            let eventsList = response.joined || {};
-                            let newEventsList = response.requested || {};
+                            let eventsList = response.myEvents || {};
+                            let newEventsList = response.invited || {};
                             dispatch(addUserEventsListInfo(userId, eventsList));
                             dispatch(addNewEventsListInfo(userId, newEventsList));
                         }
