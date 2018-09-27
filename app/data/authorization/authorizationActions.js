@@ -55,7 +55,7 @@ export const dbLoginWithCredentials = (username, password) => async (dispatch) =
         dispatch(globalActions.showNotificationSuccess());
         dispatch(login(userInfo.email, userInfo));
         getNotifications().then((data) => dispatch(setList(data)));
-        dispatch(NavigationActions.navigate({ routeName: 'Tabs' }));
+        dispatch(NavigationActions.navigate({ routeName: 'Notifications' }));
         dispatch(globalActions.hideLoading());
 
         const pushNotificationToken = await AsyncStorage.getItem('pushNotificationToken');
@@ -143,7 +143,7 @@ export const dbLoginViaFacebook = () => {
 
               getNotifications().then((data) => dispatch(setList(data)));
 
-              const resetAction = NavigationActions.navigate({routeName: 'Tabs'});
+              const resetAction = NavigationActions.navigate({routeName: 'Notifications'});
               dispatch(resetAction);
             }
             else {
@@ -216,7 +216,7 @@ export const dbLoginViaGoogle = () => {
 
               getNotifications().then((data) => dispatch(setList(data)));
 
-              const resetAction = NavigationActions.navigate({routeName: 'Tabs'});
+              const resetAction = NavigationActions.navigate({routeName: 'Notifications'});
               dispatch(resetAction);
             }
             else {

@@ -24,7 +24,7 @@ export class Wizard extends Component {
     }
 
     goToHome = () => {
-        this.props.navigation.navigate('Tabs')
+        this.props.navigation.navigate('Notifications')
     };
 
     saveUser = (i) => {

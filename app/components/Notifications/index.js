@@ -346,12 +346,14 @@ export default compose(
       loaded: state.notifications.loaded,
       pending: state.notifications.pending
     }),
-    { fetchList: actions.notifications.fetchList }
+    {
+      fetchList: actions.notifications.fetchList
+    }
   ),
   lifecycle({
     componentDidMount() {
-      const { fetchList } = this.props;
+      const { fetchList, notifications } = this.props;
       fetchList();
-    }
+    },
   })
 )(NotificationsPage);

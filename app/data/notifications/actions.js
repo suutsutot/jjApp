@@ -6,5 +6,5 @@ export const setList = payload => ({
 });
 
 export const fetchList = () => ({
-  type: types.NOTIFICATIONS.FETCH_LIST,
+  type: types.NOTIFICATIONS.FETCH_LIST
 });
