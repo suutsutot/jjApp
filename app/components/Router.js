@@ -15,44 +15,63 @@ import Notifications from 'app/components/Notifications/index';
 import Settings from 'app/components/Settings/index';
 import Login from 'app/components/Login/index';
 import AuthLoadingScreen from 'app/components/AuthLoadingScreen/index';
+import { getNotificationsCounter } from 'app/data/notifications/selectors';
 
 const routes = {
   Notifications: {
     screen: Notifications,
-    navigationOptions: ({navigation, screenProps}) => ({
+    navigationOptions: ({ navigation, screenProps }) => ({
       tabBarLabel: 'Notifications',
-      tabBarIcon: ({tintColor}) => (
-        <IconBadge MainElement={<MaterialIcons name={`notifications`} size={24} color={tintColor} />}
-                   BadgeElement={
-                     <Text style={{color: 'white'}}>
-                       {(filter(screenProps.notifications, {viewed: false})).length}
-                     </Text>
-                   }
-                   Hidden={(filter(screenProps.notifications, {viewed: false})).length === 0} />
+      tabBarIcon: ({ tintColor }) => (
+        <IconBadge
+          MainElement={
+            <MaterialIcons name={`notifications`} size={24} color={tintColor} />
+          }
+          BadgeElement={
+            <Text style={{ color: 'white' }}>
+              {screenProps.notificationsCounter}
+            </Text>
+          }
+          Hidden={screenProps.notificationsCounter === 0}
+        />
       )
     })
   },
   Events: {
     screen: Events,
-    navigationOptions: ({navigation, screenProps}) => ({
+    navigationOptions: ({ navigation, screenProps }) => ({
       tabBarLabel: 'Events',
-      tabBarIcon: ({tintColor}) => <MaterialCommunityIcons name={`calendar-range`} size={24} color={tintColor} />
+      tabBarIcon: ({ tintColor }) => (
+        <MaterialCommunityIcons
+          name={`calendar-range`}
+          size={24}
+          color={tintColor}
+        />
+      )
     })
   },
   Communities: {
     screen: Communities,
-    navigationOptions: ({navigation, screenProps}) => ({
+    navigationOptions: ({ navigation, screenProps }) => ({
       tabBarLabel: 'Communities',
-      tabBarIcon: ({tintColor}) => <MaterialCommunityIcons name={`account`} size={24} color={tintColor} />
+      tabBarIcon: ({ tintColor }) => (
+        <MaterialCommunityIcons name={`account`} size={24} color={tintColor} />
+      )
     })
   },
   Settings: {
     screen: Settings,
-    navigationOptions: ({navigation, screenProps}) => ({
+    navigationOptions: ({ navigation, screenProps }) => ({
       tabBarLabel: 'Settings',
-      tabBarIcon: ({tintColor}) => <MaterialIcons name={`format-list-bulleted`} size={24} color={tintColor} />
+      tabBarIcon: ({ tintColor }) => (
+        <MaterialIcons
+          name={`format-list-bulleted`}
+          size={24}
+          color={tintColor}
+        />
+      )
     })
-  },
+  }
 };
 
 const config = {
@@ -80,17 +99,18 @@ export const Navigator = StackNavigator(
   }
 );
 
-const Router = ({dispatch, nav, notifications}) => (
-  <Navigator screenProps={{notifications}} navigation={{
-    dispatch,
-    state: nav,
-    addListener: navigationListener
-  }} />
+const Router = ({ dispatch, nav, notificationsCounter }) => (
+  <Navigator
+    screenProps={{ notificationsCounter }}
+    navigation={{
+      dispatch,
+      state: nav,
+      addListener: navigationListener
+    }}
+  />
 );
 
-export default connect(
-  (state) => ({
-    nav: state.nav,
-    notifications: state.notifications.list
-  })
-)(Router);
+export default connect(state => ({
+  nav: state.nav,
+  notificationsCounter: getNotificationsCounter(state)
+}))(Router);

@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     height: 40,
     width: 40,
     borderRadius: 50
-  },
+  }
 });
 
 export default styles

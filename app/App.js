@@ -9,6 +9,7 @@ import store, { persistor } from 'app/store/index';
 import withStore from 'app/hocs/withStore';
 import SocketController from 'app/components/SocketController';
 import PushNotificationsController from 'app/components/PushNotificationsController';
+import AppStateController from 'app/components/AppStateController';
 import Router from 'app/components/Router';
 import * as authorizationActions from 'app/data/authorization/authorizationActions';
 
@@ -18,6 +19,7 @@ const Application = () => (
 
     <SocketController />
     <PushNotificationsController />
+    <AppStateController />
   </PersistGate>
 );
 
