@@ -1,21 +1,19 @@
-import { filter } from 'lodash';
-import React from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { StackNavigator } from 'react-navigation';
-import { Text } from 'react-native';
-import IconBadge from 'react-native-icon-badge';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 
 import { navigationListener } from 'app/config/navigationHelpers';
-import Events from 'app/components/Home/index';
-import Communities from 'app/components/Communities/index';
-import Notifications from 'app/components/Notifications/index';
-import Settings from 'app/components/Settings/index';
-import Login from 'app/components/Login/index';
-import AuthLoadingScreen from 'app/components/AuthLoadingScreen/index';
+import Events from 'app/components/Home';
+import Communities from 'app/components/Communities';
+import Notifications from 'app/components/Notifications';
+import Settings from 'app/components/Settings';
+import Login from 'app/components/Login';
+import AuthLoadingScreen from 'app/components/AuthLoadingScreen';
 import { getNotificationsCounter } from 'app/data/notifications/selectors';
+import BottomTabsBadge from 'app/pureComponents/BottomTabsBadge';
 
 const routes = {
   Notifications: {
@@ -23,17 +21,16 @@ const routes = {
     navigationOptions: ({ navigation, screenProps }) => ({
       tabBarLabel: 'Notifications',
       tabBarIcon: ({ tintColor }) => (
-        <IconBadge
-          MainElement={
-            <MaterialIcons name={`notifications`} size={24} color={tintColor} />
-          }
-          BadgeElement={
-            <Text style={{ color: 'white' }}>
-              {screenProps.notificationsCounter}
-            </Text>
-          }
-          Hidden={screenProps.notificationsCounter === 0}
-        />
+        <Fragment>
+          <MaterialCommunityIcons
+            name={`calendar-range`}
+            size={24}
+            color={tintColor}
+          />
+          {screenProps.notificationsCounter !== 0 ? (
+            <BottomTabsBadge number={screenProps.notificationsCounter} />
+          ) : null}
+        </Fragment>
       )
     })
   },
