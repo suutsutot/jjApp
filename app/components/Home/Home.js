@@ -39,7 +39,7 @@ export class Home extends Component {
         });
     };
 
-    renderEventList = (events) => {
+    renderEventList = (events, type) => {
         // const content = this.state.test && <Text>Content</Text>
         return <View>
             {
@@ -51,7 +51,7 @@ export class Home extends Component {
                         //     this.goToEvent(event._id)
                         // }}
                     >
-                        <ItemCard data={event}/>
+                        <ItemCard data={event} type={type}/>
                         {/*{content}*/}
                     </View>
 
@@ -70,12 +70,16 @@ export class Home extends Component {
     renderNewEvent = () => {
         const {newEventsList} = this.props;
 
-        return <View style={[styles.backgroundColorContentWhite, styles.shadowContainer, {marginBottom: 20}]}>
-            <View style={[styles.layoutRow, {margin: 10}]}>
-                <Text style={styles.blackColorText}>{'New events '}</Text>
-                <Text style={styles.grayColorText}>{newEventsList.length}</Text>
-            </View>
-            {this.renderEventList(newEventsList)}
+        // return <View style={[styles.backgroundColorContentWhite, styles.shadowContainer, {marginBottom: 20}]}>
+        //     <View style={[styles.layoutRow, {margin: 10}]}>
+        //         <Text style={styles.blackColorText}>{'New events '}</Text>
+        //         <Text style={styles.grayColorText}>{newEventsList.length}</Text>
+        //     </View>
+        //     {this.renderEventList(newEventsList)}
+        // </View>
+
+        return <View>
+            {this.renderEventList(newEventsList, 'new')}
         </View>
     };
 
@@ -84,7 +88,7 @@ export class Home extends Component {
 
         return <View>
             {
-                joinedEvents.length > 0 ? this.renderEventList(joinedEvents) : this.renderNoEvents('userList')
+                joinedEvents.length > 0 ? this.renderEventList(joinedEvents, 'joined') : this.renderNoEvents('userList')
             }
         </View>
     };

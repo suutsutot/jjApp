@@ -38,6 +38,54 @@ export const ItemCard = (props) => {
         )
     };
 
+    this.renderCardActions = () => {
+        const {type} = props;
+
+        this.renderInviteStatus = () => {
+            return (
+                <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                    <View style={{flexDirection: 'row'}}>
+                        <Menu
+                            ref={this.setMenuRef}
+                            button={<Text onPress={this.showMenu}>{props.data.acceptedStatus}</Text>}
+                        >
+                            <MenuItem onPress={this.hideMenu.bind(this, 'Joined')}>Joined</MenuItem>
+                            <MenuItem onPress={this.hideMenu.bind(this, 'Attend')}>Attend</MenuItem>
+                            <MenuItem onPress={this.hideMenu.bind(this, 'No, thanks')}>No, thanks</MenuItem>
+                            <MenuDivider/>
+                        </Menu>
+                        <MaterialCommunityIcons name='menu-down' size={20} color={iconColor}/>
+                    </View>
+                    <Button
+                        title='INVITE FRIENDS'
+                        buttonStyle={styles.inviteButton}
+                        titleStyle={{color: '#00bcd4', fontSize: 14, fontWeight: '400'}}
+                    />
+                </View>
+            )
+        };
+
+        this.renderJoinStatus = () => {
+            return (
+                <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end'}}>
+                    <Text style={styles.rejectButton}>Reject</Text>
+
+                    <Button
+                        title='JOIN'
+                        buttonStyle={styles.joinButton}
+                        titleStyle={{color: '#ffffff', fontSize: 14, fontWeight: '400'}}
+                    />
+                </View>
+            )
+        };
+
+        return (
+            <View>
+                {type === 'new' ? this.renderJoinStatus() : this.renderInviteStatus()}
+            </View>
+        )
+    };
+
     return (
         <View style={styles.jjCard}>
             <View style={{flexDirection: 'row'}}>
@@ -67,25 +115,7 @@ export const ItemCard = (props) => {
                             </View>
                         </View>
                     </View>
-                    <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-                        <View style={{flexDirection: 'row'}}>
-                            <Menu
-                                ref={this.setMenuRef}
-                                button={<Text onPress={this.showMenu}>{props.data.acceptedStatus}</Text>}
-                            >
-                                <MenuItem onPress={this.hideMenu.bind(this, 'Joined')}>Joined</MenuItem>
-                                <MenuItem onPress={this.hideMenu.bind(this, 'Attend')}>Attend</MenuItem>
-                                <MenuItem onPress={this.hideMenu.bind(this, 'No, thanks')}>No, thanks</MenuItem>
-                                <MenuDivider/>
-                            </Menu>
-                            <MaterialCommunityIcons name='menu-down' size={20} color={iconColor}/>
-                        </View>
-                        <Button
-                            title='INVITE FRIENDS'
-                            buttonStyle={styles.inviteButton}
-                            titleStyle={{color: '#00bcd4', fontSize: 14, fontWeight: '400'}}
-                        />
-                    </View>
+                    {this.renderCardActions()}
                 </View>
             </View>
             {props.data.repeated && this.renderRepeatedDaysFooter()}

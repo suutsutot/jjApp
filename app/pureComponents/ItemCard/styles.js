@@ -53,6 +53,13 @@ const styles = StyleSheet.create({
         height: 32,
         borderRadius: 16,
         backgroundColor: '#00bcd4',
+
+    },
+    rejectButton:{
+        color: '#78909c',
+        fontSize: 14,
+        fontWeight: '400',
+        marginRight: 40
     },
     repeatedDaysFooter: {
         backgroundColor: '#e0f7fa',
