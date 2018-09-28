@@ -4,7 +4,7 @@ import {View, Text, TouchableOpacity, Linking, ActivityIndicator, Image, ScrollV
 import moment from 'moment';
 import {refresh} from 'app/api/refreshTokenAPI';
 import config from 'app/config';
-import {HeaderSection, ItemCard} from 'app/pureComponents';
+import {HeaderSection} from 'app/pureComponents';
 import {eventActions} from 'app/data/event';
 import {userActions} from 'app/data/user';
 import {notificationActions} from 'app/data/notification';
@@ -12,6 +12,7 @@ import {activityActions} from 'app/data/activity';
 import styles from './styles';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Menu, {MenuItem, MenuDivider} from 'react-native-material-menu';
+import ItemCard from 'app/pureComponents/ItemCard/ItemCard'
 
 
 export class Home extends Component {
@@ -51,7 +52,7 @@ export class Home extends Component {
                         //     this.goToEvent(event._id)
                         // }}
                     >
-                        <ItemCard data={event} type={type}/>
+                        <ItemCard data={event} type={type} index={i}/>
                         {/*{content}*/}
                     </View>
 

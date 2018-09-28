@@ -12,14 +12,6 @@ let defaultState = {
     newEvents: {
         list: {},
         loaded: false
-    },
-    joinEvent: {
-        event: {},
-        done: false
-    },
-    leaveEvent: {
-        event: {},
-        done: false
     }
 };
 
@@ -40,16 +32,6 @@ export let eventReducer = (state = defaultState, action) => {
             return {
                 ...state,
                 recommended: {list: payload.info, loaded: true},
-            };
-        case types.JOIN_EVENT:
-            return {
-                ...state,
-                joinStatus: {event: payload.info, done: true},
-            };
-        case types.REJECT_EVENT:
-            return {
-                ...state,
-                rejectStatus: {event: payload.info, done: true},
             };
         default:
             return state;

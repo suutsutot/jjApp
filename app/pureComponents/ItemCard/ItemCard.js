@@ -9,49 +9,44 @@ import Menu, {MenuItem, MenuDivider} from 'react-native-material-menu';
 import NestedEventsList from './nestedEventsList'
 
 const iconColor = '#cfd8dc';
-// const decisions = [{value: 'Joined',}, {value: 'Attend',}, {value: 'No, thanks'}];
 
-export const ItemCard = (props) => {
+class ItemCard extends Component {
 
-    props.data.menu = null;
-    props.data.acceptedStatus = 'Joined';
-
-    props.data.showRepeatedEventsContent = false;
-
-    this.setMenuRef = ref => {
-        props.data.menu = ref;
+    hideMenu = (id) => {
+        this['menu_' + id].hide();
     };
 
-    this.hideMenu = () => {
-        props.data.menu.hide();
+    showMenu = (id) => {
+        this['menu_' + id].show();
     };
 
-    this.showMenu = () => {
-        props.data.menu.show();
-    };
-
-    this.renderRepeatedDaysFooter = () => {
+    renderRepeatedDaysFooter = () => {
+        const {data} = this.props;
         return (
             <View>
-                <NestedEventsList eventDays={props.data.repeatedDays} events={props.data.repeatedEvents}/>
+                <NestedEventsList eventDays={data.repeatedDays} events={data.repeatedEvents}/>
             </View>
         )
     };
 
-    this.renderCardActions = () => {
-        const {type} = props;
+    renderCardActions = () => {
+        const {type} = this.props;
+        const {data} = this.props;
+        const {index} = this.props;
 
         this.renderInviteStatus = () => {
             return (
                 <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
                     <View style={{flexDirection: 'row'}}>
                         <Menu
-                            ref={this.setMenuRef}
-                            button={<Text onPress={this.showMenu}>{props.data.acceptedStatus}</Text>}
+                            ref={(eventMenu) => {
+                                this['menu_' + index] = eventMenu
+                            }}
+                            button={<Text onPress={this.showMenu.bind(this, index)}>Joined</Text>}
                         >
-                            <MenuItem onPress={this.hideMenu.bind(this, 'Joined')}>Joined</MenuItem>
-                            <MenuItem onPress={this.hideMenu.bind(this, 'Attend')}>Attend</MenuItem>
-                            <MenuItem onPress={this.hideMenu.bind(this, 'No, thanks')}>No, thanks</MenuItem>
+                            <MenuItem onPress={this.hideMenu.bind(this, index)}>Joined</MenuItem>
+                            <MenuItem onPress={this.hideMenu.bind(this, index)}>Attend</MenuItem>
+                            <MenuItem onPress={this.hideMenu.bind(this, index)}>No, thanks</MenuItem>
                             <MenuDivider/>
                         </Menu>
                         <MaterialCommunityIcons name='menu-down' size={20} color={iconColor}/>
@@ -86,39 +81,47 @@ export const ItemCard = (props) => {
         )
     };
 
-    return (
-        <View style={styles.jjCard}>
-            <View style={{flexDirection: 'row'}}>
-                <View>
-                    <Image style={styles.cardAvatar}
-                           source={{uri: props.data.backgroundPic}}/>
-                </View>
-                <View style={{flex: 1}}>
+
+    render() {
+
+        const {data} = this.props;
+
+        return (
+            <View style={styles.jjCard}>
+                <View style={{flexDirection: 'row'}}>
                     <View>
-                        <Text
-                            style={styles.cardHeader}>{props.data.title ? props.data.title : props.data.activity.name}</Text>
+                        <Image style={styles.cardAvatar}
+                               source={{uri: data.backgroundPic}}/>
+                    </View>
+                    <View style={{flex: 1}}>
+                        <View>
+                            <Text
+                                style={styles.cardHeader}>{data.title ? data.title : data.activity.name}</Text>
 
-                        <Text style={styles.cardSubHeader}>{props.data.activity.name}</Text>
-                        <Text style={styles.cardSubHeader}>{props.data.participants.length + ' participants'}</Text>
-                        {/*<Text></Text>*/}
+                            <Text style={styles.cardSubHeader}>{data.activity.name}</Text>
+                            <Text style={styles.cardSubHeader}>{data.participants.length + ' participants'}</Text>
+                            {/*<Text></Text>*/}
 
-                        <View style={styles.cardEventDay}>
-                            <View style={styles.dateString}>
-                                <MaterialCommunityIcons name="calendar-range" size={20} color={iconColor}/>
-                                <Text
-                                    style={[styles.cardHeader, styles.textMargin]}>{moment(props.data.eventDates.startDate).format('D MMMM')}</Text>
-                            </View>
-                            <View style={styles.dateString}>
-                                <MaterialIcons name="access-time" size={20} color={iconColor}/>
-                                <Text
-                                    style={[styles.cardHeader, styles.textMargin]}>{moment(props.data.eventDates.startDateTime).add(3, 'hour').format('H:mm') + ' at ' + moment(props.data.eventDates.startDateTime).format('dddd')}</Text>
+                            <View style={styles.cardEventDay}>
+                                <View style={styles.dateString}>
+                                    <MaterialCommunityIcons name="calendar-range" size={20} color={iconColor}/>
+                                    <Text
+                                        style={[styles.cardHeader, styles.textMargin]}>{moment(data.eventDates.startDate).format('D MMMM')}</Text>
+                                </View>
+                                <View style={styles.dateString}>
+                                    <MaterialIcons name="access-time" size={20} color={iconColor}/>
+                                    <Text
+                                        style={[styles.cardHeader, styles.textMargin]}>{moment(data.eventDates.startDateTime).add(3, 'hour').format('H:mm') + ' at ' + moment(data.eventDates.startDateTime).format('dddd')}</Text>
+                                </View>
                             </View>
                         </View>
+                        {this.renderCardActions()}
                     </View>
-                    {this.renderCardActions()}
                 </View>
+                {data.repeated && this.renderRepeatedDaysFooter()}
             </View>
-            {props.data.repeated && this.renderRepeatedDaysFooter()}
-        </View>
-    )
-};
+        )
+    }
+}
+
+export default ItemCard
