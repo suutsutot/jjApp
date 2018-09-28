@@ -2,7 +2,7 @@ import { merge } from 'ramda';
 
 import { refresh } from './refreshTokenAPI';
 
-export default async (url, options) => {
+export default (url, options) => async () => {
   const newToken = await refresh();
   if (!newToken) Promise.resolve(null);
 

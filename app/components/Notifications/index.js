@@ -352,8 +352,8 @@ export default compose(
   ),
   lifecycle({
     componentDidMount() {
-      const { fetchList, notifications } = this.props;
+      const { fetchList } = this.props;
       fetchList();
-    },
+    }
   })
 )(NotificationsPage);
