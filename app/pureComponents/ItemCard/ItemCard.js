@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image, Text, View, TouchableOpacity, TouchableHighlight} from 'react-native';
+import {Image, Text, View, TouchableOpacity, TouchableHighlight, Linking} from 'react-native';
 import moment from 'moment';
 import {Card, Icon, Button} from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -7,6 +7,8 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from './styles';
 import Menu, {MenuItem, MenuDivider} from 'react-native-material-menu';
 import NestedEventsList from './nestedEventsList'
+import {refresh} from "../../api/refreshTokenAPI";
+import config from "../../config";
 
 const iconColor = '#cfd8dc';
 
@@ -27,6 +29,20 @@ class ItemCard extends Component {
                 <NestedEventsList eventDays={data.repeatedDays} events={data.repeatedEvents}/>
             </View>
         )
+    };
+
+    goToEvent = (id) => {
+        refresh().then((newToken) => {
+            let url = config.client + '/redirect?type=event&id=' + id + '&idToken=' + newToken.idToken + '&accessToken=' + newToken.accessToken;
+
+            Linking.canOpenURL(url).then(supported => {
+                if (supported) {
+                    Linking.openURL(url);
+                } else {
+                    console.log("Don't know how to open URI: " + url);
+                }
+            });
+        });
     };
 
     renderCardActions = () => {
@@ -94,7 +110,9 @@ class ItemCard extends Component {
                                source={{uri: data.backgroundPic}}/>
                     </View>
                     <View style={{flex: 1}}>
-                        <View>
+                        <TouchableOpacity onPress={() =>{
+                            this.goToEvent(data._id)
+                        }}>
                             <Text
                                 style={styles.cardHeader}>{data.title ? data.title : data.activity.name}</Text>
 
@@ -114,7 +132,7 @@ class ItemCard extends Component {
                                         style={[styles.cardHeader, styles.textMargin]}>{moment(data.eventDates.startDateTime).add(3, 'hour').format('H:mm') + ' at ' + moment(data.eventDates.startDateTime).format('dddd')}</Text>
                                 </View>
                             </View>
-                        </View>
+                        </TouchableOpacity>
                         {this.renderCardActions()}
                     </View>
                 </View>

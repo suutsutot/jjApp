@@ -41,19 +41,11 @@ export class Home extends Component {
     };
 
     renderEventList = (events, type) => {
-        // const content = this.state.test && <Text>Content</Text>
         return <View>
             {
                 events.map((event, i) => (
-                    <View
-                        key={i}
-                        style={[styles.TouchableOpacityStyles]}
-                        // onPress={() => {
-                        //     this.goToEvent(event._id)
-                        // }}
-                    >
+                    <View key={i}>
                         <ItemCard data={event} type={type} index={i}/>
-                        {/*{content}*/}
                     </View>
 
 
