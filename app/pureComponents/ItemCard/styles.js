@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
         minHeight: 235,
         flex: 1,
         padding: 24,
-
+        margin: 10
     },
     cardAvatar: {
         width: 64,
