@@ -3,9 +3,9 @@ import { persistReducer } from 'redux-persist';
 import { AsyncStorage } from 'react-native';
 
 import {activityReducer} from './activity/activityReducer';
-import {authorizeReducer} from './authorization/authorizationReducer';
+import {authorize} from './authorization/reducer';
 import {globalReducer} from './global/globalReducer';
-import {userReducer} from './user/userReducer';
+import {user} from './user/reducer';
 import {navReducer} from './nav/navReducer';
 import {eventReducer} from './event/eventReducer';
 import {notifications} from './notifications/reducers';
@@ -13,9 +13,13 @@ import {notifications} from './notifications/reducers';
 export default combineReducers({
   nav: navReducer,
   activity: activityReducer,
-  authorize: authorizeReducer,
+  authorize: persistReducer({
+    key: 'authorize',
+    storage: AsyncStorage,
+    whitelist: ['profile']
+  }, authorize),
   global: globalReducer,
-  user: userReducer,
+  user,
   events: eventReducer,
   notifications: persistReducer({
     key: 'notifications',

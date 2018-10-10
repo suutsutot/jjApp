@@ -9,7 +9,10 @@ import * as types from 'app/constants/actionTypes';
 import * as globalActions from 'app/data/global/globalActions';
 import auth0 from 'app/framework/auth0';
 
-export const dbLoginWithCredentials = (username, password) => async (dispatch) => {
+export const dbLoginWithCredentials = (
+  username,
+  password
+) => async dispatch => {
   dispatch(globalActions.showLoading());
 
   try {
@@ -17,7 +20,7 @@ export const dbLoginWithCredentials = (username, password) => async (dispatch) =
       username,
       password,
       realm: 'Username-Password-Authentication',
-      scope: 'openid offline_access',
+      scope: 'openid offline_access'
     });
 
     dispatch(currentCredentials());
@@ -37,9 +40,9 @@ export const dbLoginWithCredentials = (username, password) => async (dispatch) =
           email: profile.email
         }),
         headers: {
-          'Accept': 'application/json',
+          Accept: 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': idToken
+          Authorization: idToken
         }
       });
 
@@ -54,12 +57,14 @@ export const dbLoginWithCredentials = (username, password) => async (dispatch) =
 
         dispatch(globalActions.showNotificationSuccess());
         dispatch(login(userInfo.email, userInfo));
-        getNotifications()().then((data) => dispatch(setList(data)));
+        getNotifications()().then(data => dispatch(setList(data)));
         dispatch(NavigationActions.navigate({ routeName: 'Notifications' }));
         dispatch(globalActions.hideLoading());
 
-        const pushNotificationToken = await AsyncStorage.getItem('pushNotificationToken');
-        try{
+        const pushNotificationToken = await AsyncStorage.getItem(
+          'pushNotificationToken'
+        );
+        try {
           fetch(`${config.server}/api/users/set-push-token`, {
             method: 'POST',
             body: JSON.stringify({
@@ -67,25 +72,23 @@ export const dbLoginWithCredentials = (username, password) => async (dispatch) =
               pushNotificationToken
             }),
             headers: {
-              'Accept': 'application/json',
+              Accept: 'application/json',
               'Content-Type': 'application/json',
-              'Authorization': idToken
+              Authorization: idToken
             }
           });
-        } catch (e) {
-        }
-      }
-      else {
+        } catch (e) {}
+      } else {
         dispatch(noUserGet());
         dispatch(globalActions.hideLoading());
       }
-    } catch(error) {
+    } catch (error) {
       console.log('AuthorizeActionError:', error);
       dispatch(noUserGet());
       dispatch(globalActions.hideLoading());
       dispatch(globalActions.showErrorMessageWithTimeout(error.code));
     }
-  } catch(error) {
+  } catch (error) {
     console.log('AuthorizeActionError:', error);
     dispatch(wrongCredentials());
     dispatch(globalActions.hideLoading());
@@ -95,226 +98,226 @@ export const dbLoginWithCredentials = (username, password) => async (dispatch) =
 export const dbLoginViaFacebook = () => {
   return (dispatch, getState) => {
     auth0.webAuth
-    .authorize({
-      scope: 'openid email profile offline_access',
-      audience: 'https://' + credentials.domain + '/userinfo',
-      connection: 'facebook'
-    })
-    .then(credentials => {
-      dispatch(successUserGet());
-      AsyncStorage.setItem('refreshToken', credentials.refreshToken);
+      .authorize({
+        scope: 'openid email profile offline_access',
+        audience: 'https://' + credentials.domain + '/userinfo',
+        connection: 'facebook'
+      })
+      .then(credentials => {
+        dispatch(successUserGet());
+        AsyncStorage.setItem('refreshToken', credentials.refreshToken);
 
-      refreshByCredentials(credentials).then((newToken) => {
-        AsyncStorage.setItem('accessToken', newToken.accessToken);
-        AsyncStorage.setItem('idToken', newToken.idToken);
+        refreshByCredentials(credentials).then(newToken => {
+          AsyncStorage.setItem('accessToken', newToken.accessToken);
+          AsyncStorage.setItem('idToken', newToken.idToken);
 
-        auth0.auth
-        .userInfo({token: newToken.accessToken})
-        .then(profile => {
-          dispatch(successUserGet());
-          const url = config.server + '/api/users/duplicate-auth0';
-          const email = profile.email;
-          const data = {email};
-
-          fetch(url, {
-            method: 'POST',
-            body: JSON.stringify(data),
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-              'Authorization': newToken.idToken
-            }
-          })
-          .then(r => r.json())
-          .catch(error => {
-            console.log('AuthorizeActionError:', error);
-            dispatch(noUserGet());
-          })
-          .then(response => {
-            if (response && response.user) {
+          auth0.auth
+            .userInfo({ token: newToken.accessToken })
+            .then(profile => {
               dispatch(successUserGet());
-              const userInfo = response.user || {};
+              const url = config.server + '/api/users/duplicate-auth0';
+              const email = profile.email;
+              const data = { email };
 
-              AsyncStorage.setItem('userId', userInfo._id);
-              AsyncStorage.setItem('email', userInfo.email);
+              fetch(url, {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                  Accept: 'application/json',
+                  'Content-Type': 'application/json',
+                  Authorization: newToken.idToken
+                }
+              })
+                .then(r => r.json())
+                .catch(error => {
+                  console.log('AuthorizeActionError:', error);
+                  dispatch(noUserGet());
+                })
+                .then(response => {
+                  if (response && response.user) {
+                    dispatch(successUserGet());
+                    const userInfo = response.user || {};
 
-              dispatch(globalActions.showNotificationSuccess());
-              dispatch(login(userInfo.email, userInfo));
+                    AsyncStorage.setItem('userId', userInfo._id);
+                    AsyncStorage.setItem('email', userInfo.email);
 
-              getNotifications()().then((data) => dispatch(setList(data)));
+                    dispatch(globalActions.showNotificationSuccess());
+                    dispatch(login(userInfo.email, userInfo));
 
-              const resetAction = NavigationActions.navigate({routeName: 'Notifications'});
-              dispatch(resetAction);
-            }
-            else {
+                    getNotifications()().then(data => dispatch(setList(data)));
+
+                    const resetAction = NavigationActions.navigate({
+                      routeName: 'Notifications'
+                    });
+                    dispatch(resetAction);
+                  } else {
+                    dispatch(noUserGet());
+                  }
+                });
+            })
+            .catch(error => {
+              console.log('AuthorizeActionError:', error);
               dispatch(noUserGet());
-            }
-
-          });
-        })
-        .catch(error => {
-          console.log('AuthorizeActionError:', error);
-          dispatch(noUserGet());
+            });
         });
+      })
+      .catch(error => {
+        console.log('AuthorizeActionError:', error);
+        dispatch(noUserGet());
       });
-    })
-    .catch(error => {
-      console.log('AuthorizeActionError:', error);
-      dispatch(noUserGet());
-    });
-  }
+  };
 };
 
 export const dbLoginViaGoogle = () => {
   return (dispatch, getState) => {
     auth0.webAuth
-    .authorize({
-      scope: 'openid email profile offline_access',
-      audience: 'https://' + credentials.domain + '/userinfo',
-      connection: 'google-oauth2'
-    })
-    .then(credentials => {
-      dispatch(successUserGet());
-      AsyncStorage.setItem('refreshToken', credentials.refreshToken);
+      .authorize({
+        scope: 'openid email profile offline_access',
+        audience: 'https://' + credentials.domain + '/userinfo',
+        connection: 'google-oauth2'
+      })
+      .then(credentials => {
+        dispatch(successUserGet());
+        AsyncStorage.setItem('refreshToken', credentials.refreshToken);
 
-      refreshByCredentials(credentials).then((newToken) => {
-        AsyncStorage.setItem('accessToken', newToken.accessToken);
-        AsyncStorage.setItem('idToken', newToken.idToken);
+        refreshByCredentials(credentials).then(newToken => {
+          AsyncStorage.setItem('accessToken', newToken.accessToken);
+          AsyncStorage.setItem('idToken', newToken.idToken);
 
-        auth0.auth
-        .userInfo({token: newToken.accessToken})
-        .then(profile => {
-          dispatch(successUserGet());
-          const url = config.server + '/api/users/duplicate-auth0';
-          const email = profile.email;
-          const data = {email};
-
-          fetch(url, {
-            method: 'POST',
-            body: JSON.stringify(data),
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-              'Authorization': newToken.idToken
-            }
-          })
-          .then(r => r.json())
-          .catch(error => {
-            console.log('AuthorizeActionError:', error);
-            dispatch(noUserGet());
-          })
-          .then(response => {
-            if (response && response.user) {
+          auth0.auth
+            .userInfo({ token: newToken.accessToken })
+            .then(profile => {
               dispatch(successUserGet());
-              const userInfo = response.user || {};
+              const url = config.server + '/api/users/duplicate-auth0';
+              const email = profile.email;
+              const data = { email };
 
-              AsyncStorage.setItem('userId', userInfo._id);
-              AsyncStorage.setItem('email', userInfo.email);
+              fetch(url, {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                  Accept: 'application/json',
+                  'Content-Type': 'application/json',
+                  Authorization: newToken.idToken
+                }
+              })
+                .then(r => r.json())
+                .catch(error => {
+                  console.log('AuthorizeActionError:', error);
+                  dispatch(noUserGet());
+                })
+                .then(response => {
+                  if (response && response.user) {
+                    dispatch(successUserGet());
+                    const userInfo = response.user || {};
 
-              dispatch(globalActions.showNotificationSuccess());
-              dispatch(login(userInfo.email, userInfo));
+                    AsyncStorage.setItem('userId', userInfo._id);
+                    AsyncStorage.setItem('email', userInfo.email);
 
-              getNotifications()().then((data) => dispatch(setList(data)));
+                    dispatch(globalActions.showNotificationSuccess());
+                    dispatch(login(userInfo.email, userInfo));
 
-              const resetAction = NavigationActions.navigate({routeName: 'Notifications'});
-              dispatch(resetAction);
-            }
-            else {
+                    getNotifications()().then(data => dispatch(setList(data)));
+
+                    const resetAction = NavigationActions.navigate({
+                      routeName: 'Notifications'
+                    });
+                    dispatch(resetAction);
+                  } else {
+                    dispatch(noUserGet());
+                  }
+                });
+            })
+            .catch(error => {
+              console.log('AuthorizeActionError:', error);
               dispatch(noUserGet());
-            }
-          });
-        })
-        .catch(error => {
-          console.log('AuthorizeActionError:', error);
-          dispatch(noUserGet());
+            });
         });
+      })
+      .catch(error => {
+        console.log('AuthorizeActionError:', error);
+        dispatch(noUserGet());
       });
-    })
-    .catch(error => {
-      console.log('AuthorizeActionError:', error);
-      dispatch(noUserGet());
-    });
-  }
+  };
 };
 
 export const dbSignUp = (email, password) => {
   return (dispatch, getState) => {
     dispatch(globalActions.showLoading());
 
-
     const url = 'https://ynpl.auth0.com/dbconnections/signup';
     const data = {
-      'client_id': 'BBLp6dT9ug1mxY5UI3xwld6cA3Ukn8aH',
-      'email': email,
-      'password': password,
-      'connection': 'Username-Password-Authentication'
+      client_id: 'BBLp6dT9ug1mxY5UI3xwld6cA3Ukn8aH',
+      email: email,
+      password: password,
+      connection: 'Username-Password-Authentication'
     };
 
-    return fetch(url,
-      {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: {
-          'Content-Type': 'application/json',
+    return fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(r => r.json())
+      .then(responseData => {
+        if (responseData) {
+          console.log('responseData', responseData);
+          const resetAction = NavigationActions.navigate({
+            routeName: 'Login'
+          });
+          dispatch(resetAction);
+          alert('Successfully! Please log in');
+          dispatch(globalActions.hideLoading());
+        } else {
+          alert('Sorry, there was a sign up error');
+          dispatch(globalActions.hideLoading());
         }
       })
-    .then(r => r.json())
-    .then((responseData) => {
-      if (responseData) {
-        console.log('responseData', responseData);
-        const resetAction = NavigationActions.navigate({routeName: 'Login'});
-        dispatch(resetAction);
-        alert('Successfully! Please log in');
+      .catch(error => {
+        console.log('AuthorizeActionError:', error);
         dispatch(globalActions.hideLoading());
-      }
-      else {
-        alert('Sorry, there was a sign up error');
-        dispatch(globalActions.hideLoading());
-      }
-    })
-    .catch((error) => {
-      console.log('AuthorizeActionError:', error);
-      dispatch(globalActions.hideLoading());
-    })
-  }
+      });
+  };
 };
 
 export const dbLogout = () => {
   return (dispatch, getState) => {
     dispatch(logout());
     AsyncStorage.clear();
-    const resetAction = NavigationActions.navigate({routeName: 'Login'});
-    dispatch(resetAction)
-  }
+    const resetAction = NavigationActions.navigate({ routeName: 'Login' });
+    dispatch(resetAction);
+  };
 };
 
-const login = (email, user) => {
-  return {type: types.LOGIN, email, profile: user}
+const login = (email, profile) => {
+  return { type: types.LOGIN, payload: { email, profile } };
 };
 
 const logout = () => {
-  return {type: types.LOGOUT}
+  return { type: types.LOGOUT };
 };
 
 export const getUserId = (userId, email) => {
   return {
     type: types.GET_USER_ID,
-    payload: {userId, email}
-  }
+    payload: { userId, email }
+  };
 };
 
 const wrongCredentials = () => {
-  return {type: types.WRONG_CREDENTIALS}
+  return { type: types.WRONG_CREDENTIALS };
 };
 
 const currentCredentials = () => {
-  return {type: types.CURRENT_CREDENTIALS}
+  return { type: types.CURRENT_CREDENTIALS };
 };
 
 const noUserGet = () => {
-  return {type: types.NO_USER_GET}
+  return { type: types.NO_USER_GET };
 };
 
 const successUserGet = () => {
-  return {type: types.SUCCESS_USER_GET}
+  return { type: types.SUCCESS_USER_GET };
 };

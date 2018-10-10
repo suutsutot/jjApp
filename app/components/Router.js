@@ -4,6 +4,7 @@ import { StackNavigator } from 'react-navigation';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
+import { Text } from 'react-native';
 
 import { navigationListener } from 'app/config/navigationHelpers';
 import Events from 'app/components/Home';
@@ -14,12 +15,13 @@ import Login from 'app/components/Login';
 import AuthLoadingScreen from 'app/components/AuthLoadingScreen';
 import { getNotificationsCounter } from 'app/data/notifications/selectors';
 import BottomTabsBadge from 'app/pureComponents/BottomTabsBadge';
+import i18n from 'app/framework/i18n';
 
 const routes = {
   Notifications: {
     screen: Notifications,
     navigationOptions: ({ navigation, screenProps }) => ({
-      tabBarLabel: 'Notifications',
+      tabBarLabel: <Text>{i18n('notifications')}</Text>,
       tabBarIcon: ({ tintColor }) => (
         <Fragment>
           <MaterialCommunityIcons
@@ -37,7 +39,7 @@ const routes = {
   Events: {
     screen: Events,
     navigationOptions: ({ navigation, screenProps }) => ({
-      tabBarLabel: 'Events',
+      tabBarLabel: <Text>{i18n('my_events')}</Text>,
       tabBarIcon: ({ tintColor }) => (
         <MaterialCommunityIcons
           name={`calendar-range`}
@@ -50,7 +52,7 @@ const routes = {
   Communities: {
     screen: Communities,
     navigationOptions: ({ navigation, screenProps }) => ({
-      tabBarLabel: 'Communities',
+      tabBarLabel: <Text>{i18n('communities_tab')}</Text>,
       tabBarIcon: ({ tintColor }) => (
         <MaterialCommunityIcons name={`account`} size={24} color={tintColor} />
       )
@@ -59,7 +61,7 @@ const routes = {
   Settings: {
     screen: Settings,
     navigationOptions: ({ navigation, screenProps }) => ({
-      tabBarLabel: 'Settings',
+      tabBarLabel: <Text>{i18n('settings')}</Text>,
       tabBarIcon: ({ tintColor }) => (
         <MaterialIcons
           name={`format-list-bulleted`}

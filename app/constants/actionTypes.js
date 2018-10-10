@@ -1,5 +1,3 @@
-import * as NOTIFICATIONS from './notifications';
-
 /* events action */
 export const EVENTS_LIST = 'EVENTS_LIST';
 export const ADD_USER_EVENTS_LIST_INFO = 'ADD_USER_EVENTS_LIST_INFO';
@@ -27,5 +25,8 @@ export const HIDE_LOADING = 'HIDE_LOADING';
 export const GET_ACTIVITIES_LIST_INFO = 'GET_ACTIVITIES_LIST_INFO';
 
 export default {
-  NOTIFICATIONS
+  NOTIFICATIONS: {
+    FETCH_LIST: '@NOTIFICATIONS/FETCH_LIST',
+    SET_LIST: '@NOTIFICATIONS/SET_LIST'
+  }
 }

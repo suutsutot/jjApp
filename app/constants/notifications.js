@@ -1,2 +1,0 @@
-export const FETCH_LIST = '@NOTIFICATIONS/FETCH_LIST';
-export const SET_LIST = '@NOTIFICATIONS/SET_LIST';

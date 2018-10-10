@@ -1,4 +1,4 @@
-import userReducer from './userReducer';
+import userReducer from './reducer';
 import * as userActions from './userActions';
 export {
     userReducer,

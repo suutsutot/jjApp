@@ -16,6 +16,7 @@ import {
 import moment from 'moment';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
+import i18n from 'app/framework/i18n';
 import { HeaderSection } from 'app/pureComponents';
 import config from 'app/config';
 import { refresh } from 'app/api/refreshTokenAPI';
@@ -74,7 +75,8 @@ const getNotificationComponent = name => ({ notification, onPress }) => {
           firstRow={
             <Fragment>
               <PrimaryText>
-                {notification.event.title || notification.event.activity.name}
+                {notification.event.title ||
+                  i18n(notification.event.activity.id, 'activities')}
               </PrimaryText>
               <SecondaryText>
                 {' '}
