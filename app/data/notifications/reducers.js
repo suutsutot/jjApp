@@ -1,7 +1,7 @@
 import types from 'app/constants/actionTypes';
 
 let defaultState = {
-  list: undefined,
+  list: [],
   loaded: false,
   pending: false,
 };

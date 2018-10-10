@@ -3,7 +3,7 @@ import {Provider} from 'react-redux';
 import { compose, lifecycle } from 'recompose';
 import { connect } from 'react-redux';
 import { AsyncStorage } from 'react-native';
-import { PersistGate } from 'redux-persist/integration/react'
+import { PersistGate } from 'redux-persist/integration/react';
 
 import store, { persistor } from 'app/store/index';
 import withStore from 'app/hocs/withStore';
@@ -12,6 +12,8 @@ import PushNotificationsController from 'app/components/PushNotificationsControl
 import AppStateController from 'app/components/AppStateController';
 import Router from 'app/components/Router';
 import * as authorizationActions from 'app/data/authorization/authorizationActions';
+
+console.ignoredYellowBox = ['Setting a timer'];
 
 const Application = () => (
   <PersistGate loading={null} persistor={persistor}>
