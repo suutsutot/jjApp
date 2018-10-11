@@ -18,7 +18,6 @@ const translations = {
 const defaultLanguage = 'en';
 
 export default function i18n(key, namespace = 'general') {
-  console.log(store.getState().authorize);
   const language = path(['authorize', 'profile', 'language'], store.getState());
 
   if (!key) return '';
