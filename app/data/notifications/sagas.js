@@ -1,5 +1,5 @@
-import { compose, filter, map, isEmpty } from 'ramda';
-import { takeEvery, call, put, all, select } from 'redux-saga/effects';
+import { filter, isEmpty, indexBy, prop, map } from 'ramda';
+import { takeEvery, call, put, select } from 'redux-saga/effects';
 import { NavigationActions } from 'react-navigation';
 
 import {
@@ -10,8 +10,12 @@ import actions from 'app/data/actions';
 import types from 'app/constants/actionTypes';
 
 export function* fetchList() {
-  const data = yield call(getNotifications());
-  yield put(actions.notifications.setList(data));
+  const notifications = yield call(getNotifications());
+
+  const list = map(x => x._id, notifications);
+  const data = indexBy(prop('_id'), notifications);
+  console.log('list', list, data);
+  yield put(actions.notifications.setList(list, data));
 
   const navState = yield select(state => state.nav);
   const {

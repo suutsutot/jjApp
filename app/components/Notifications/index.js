@@ -8,7 +8,6 @@ import {
   Linking,
   FlatList,
   Image,
-  ActivityIndicator,
   TouchableOpacity,
   StyleSheet,
   RefreshControl
@@ -21,6 +20,10 @@ import { HeaderSection } from 'app/pureComponents';
 import config from 'app/config';
 import { refresh } from 'app/api/refreshTokenAPI';
 import actions from 'app/data/actions';
+import {
+  getNotification,
+  getListNotificationsIds
+} from 'app/data/notifications/selectors';
 
 import styles from './styles';
 
@@ -250,14 +253,6 @@ const getNotificationComponent = name => ({ notification, onPress }) => {
   }
 };
 
-const Progress = () => (
-  <View style={styles.containerProcess}>
-    <View>
-      <ActivityIndicator size="large" color="#00bcd4" />
-    </View>
-  </View>
-);
-
 const EmptyResults = () => (
   <View style={[styles.containerProcess]}>
     <MaterialIcons name={'notifications-none'} size={48} />
@@ -298,18 +293,26 @@ const redirectToWeb = async notification => {
   supported && Linking.openURL(url);
 };
 
+const NotificationsListItem = ({ notification }) => {
+  const Component = getNotificationComponent(notification.type);
+  return (
+    <Component
+      notification={notification}
+      onPress={() => redirectToWeb(notification)}
+    />
+  );
+};
+
+const NotificationsListItemContainer = connect((state, { id }) => {
+  return {
+    notification: getNotification(id)(state)
+  };
+})(NotificationsListItem);
+
 const Notifications = ({ notifications, pending, fetchList }) => (
   <FlatList
     data={notifications}
-    renderItem={({ item: notification }) => {
-      const Component = getNotificationComponent(notification.type);
-      return (
-        <Component
-          notification={notification}
-          onPress={() => redirectToWeb(notification)}
-        />
-      );
-    }}
+    renderItem={({ item: id }) => <NotificationsListItemContainer id={id} />}
     refreshControl={
       <RefreshControl
         colors={['#00bcd4']}
@@ -317,7 +320,7 @@ const Notifications = ({ notifications, pending, fetchList }) => (
         onRefresh={fetchList}
       />
     }
-    keyExtractor={notification => notification._id}
+    keyExtractor={notification => notification}
   />
 );
 
@@ -344,7 +347,7 @@ const NotificationsPage = ({
 export default compose(
   connect(
     state => ({
-      notifications: state.notifications.list,
+      notifications: getListNotificationsIds(state),
       loaded: state.notifications.loaded,
       pending: state.notifications.pending
     }),

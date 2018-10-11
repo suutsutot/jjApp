@@ -1,8 +1,11 @@
 import types from 'app/constants/actionTypes';
 
-export const setList = payload => ({
+export const setList = (list, data) => ({
   type: types.NOTIFICATIONS.SET_LIST,
-  payload
+  payload: {
+    list,
+    data
+  }
 });
 
 export const fetchList = () => ({
