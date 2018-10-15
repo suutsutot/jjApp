@@ -9,12 +9,12 @@ import {
 import actions from 'app/data/actions';
 import types from 'app/constants/actionTypes';
 
-export function* fetchList() {
-  const notifications = yield call(getNotifications());
+function* fetchList() {
+  const notifications = yield call(getNotifications);
 
   const list = map(x => x._id, notifications);
   const data = indexBy(prop('_id'), notifications);
-  console.log('list', list, data);
+
   yield put(actions.notifications.setList(list, data));
 
   const navState = yield select(state => state.nav);
@@ -27,7 +27,7 @@ export function* fetchList() {
   }
 }
 
-export function* navigate(action) {
+function* navigate(action) {
   const { routeName } = action;
 
   if (routeName === 'Notifications') {
@@ -36,14 +36,14 @@ export function* navigate(action) {
 }
 
 export function* postViewed() {
-  const notifications = yield select(state => state.notifications.list);
-  const newNotifications = filter(x => !x.viewed, notifications);
+  const notificationsIds = yield select(state => state.notifications.list);
+  const newNotificationsIds = filter(x => !x.viewed, notificationsIds);
 
-  if (newNotifications && !isEmpty(newNotifications)) {
-    for (let notification of newNotifications) {
-      yield call(postViewedNotification(notification._id));
+  if (newNotificationsIds && !isEmpty(newNotificationsIds)) {
+    for (let notificationId of newNotificationsIds) {
+      // yield call(postViewedNotification, notificationId);
     }
-    yield call(fetchList);
+    // yield call(fetchList);
   }
 }
 

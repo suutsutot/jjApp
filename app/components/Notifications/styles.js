@@ -55,6 +55,15 @@ const styles = StyleSheet.create({
     height: 40,
     width: 40,
     borderRadius: 50
+  },
+  actionsView: {
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    flexDirection: 'row',
+    justifyContent: 'flex-end'
+  },
+  actionPrimaryButton: {
+    width: 130,
   }
 });
 

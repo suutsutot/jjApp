@@ -7,7 +7,7 @@ import {authorize} from './authorization/reducer';
 import {globalReducer} from './global/globalReducer';
 import {user} from './user/reducer';
 import {navReducer} from './nav/navReducer';
-import {eventReducer} from './event/eventReducer';
+import {events} from './event/reducer';
 import {notifications} from './notifications/reducers';
 
 export default combineReducers({
@@ -16,14 +16,14 @@ export default combineReducers({
   authorize: persistReducer({
     key: 'authorize',
     storage: AsyncStorage,
-    whitelist: ['profile']
+    whitelist: ['profile', 'auth0Id']
   }, authorize),
   global: globalReducer,
   user,
-  events: eventReducer,
+  events,
   notifications: persistReducer({
     key: 'notifications',
     storage: AsyncStorage,
-    whitelist: ['list']
+    whitelist: ['list', 'data']
   }, notifications),
 });

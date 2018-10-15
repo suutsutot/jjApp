@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
-import { compose } from 'ramda';
+import { compose, toUpper } from 'ramda';
 import { lifecycle } from 'recompose';
 import {
   View,
@@ -16,7 +16,7 @@ import moment from 'moment';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import i18n from 'app/framework/i18n';
-import { HeaderSection } from 'app/pureComponents';
+import { Button, HeaderSection } from 'app/pureComponents';
 import config from 'app/config';
 import { refresh } from 'app/api/refreshTokenAPI';
 import actions from 'app/data/actions';
@@ -43,14 +43,20 @@ const NotificationIcon = ({ source }) => (
   <Image style={styles.notificationIcon} source={source} />
 );
 
+const Actions = ({ children }) => (
+  <View style={styles.actionsView}>{children}</View>
+);
+
 const Notification = ({
   notification,
   onPress,
   imageSource,
   firstRow,
-  secondRow
+  secondRow,
+  hasActions,
+  actions
 }) => (
-  <Touchable /*onPress={onPress}*/>
+  <View>
     <View style={StyleSheet.flatten([styles.container, styles.layoutRow])}>
       <NotificationIcon
         source={{ uri: `https://placeimg.com/120/120/any${notification._id}` }}
@@ -60,11 +66,16 @@ const Notification = ({
         <View style={[styles.layoutRow]}>{secondRow}</View>
       </View>
     </View>
-  </Touchable>
+    {Boolean(hasActions) && <View>{actions}</View>}
+  </View>
 );
 
-const getNotificationComponent = name => ({ notification, onPress }) => {
-  switch (name) {
+const getNotificationComponent = type => ({
+  notification,
+  onPress,
+  joinEventRequested
+}) => {
+  switch (type) {
     case 'eventInvitation':
       return (
         <Notification
@@ -95,6 +106,17 @@ const getNotificationComponent = name => ({ notification, onPress }) => {
               <PrimaryText>{notification.creatorName}</PrimaryText>
               <SecondaryText> invites you to this event</SecondaryText>
             </Fragment>
+          }
+          hasActions={!notification.answered}
+          actions={
+            <Actions>
+              <Button
+                buttonStyle={styles.actionPrimaryButton}
+                onPress={() => joinEventRequested(notification.event._id)}
+              >
+                {toUpper('join')}
+              </Button>
+            </Actions>
           }
         />
       );
@@ -293,21 +315,27 @@ const redirectToWeb = async notification => {
   supported && Linking.openURL(url);
 };
 
-const NotificationsListItem = ({ notification }) => {
+const NotificationsListItem = ({ notification, joinEventRequested }) => {
   const Component = getNotificationComponent(notification.type);
   return (
     <Component
       notification={notification}
       onPress={() => redirectToWeb(notification)}
+      joinEventRequested={joinEventRequested}
     />
   );
 };
 
-const NotificationsListItemContainer = connect((state, { id }) => {
-  return {
-    notification: getNotification(id)(state)
-  };
-})(NotificationsListItem);
+const NotificationsListItemContainer = connect(
+  (state, { id }) => {
+    return {
+      notification: getNotification(id)(state)
+    };
+  },
+  {
+    joinEventRequested: actions.events.joinEventRequested
+  }
+)(NotificationsListItem);
 
 const Notifications = ({ notifications, pending, fetchList }) => (
   <FlatList
