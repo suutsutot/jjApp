@@ -4,20 +4,25 @@ import { refresh } from './refreshTokenAPI';
 
 export default async (url, options) => {
   const newToken = await refresh();
-  if (!newToken) Promise.resolve(null);
+  if (!newToken)
+    return Promise.resolve({ error: 'newToken is null or undefined' });
 
-  const response = await fetch(
-    url,
-    merge(
-      {
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: newToken.idToken
+  try {
+    const response = await fetch(
+      url,
+      merge(
+        {
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: newToken.idToken
+          }
         },
-      },
-      options
-    )
-  );
-  return response.json();
+        options
+      )
+    );
+    return await response.json();
+  } catch (error) {
+    return Promise.resolve({ error });
+  }
 };

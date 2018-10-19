@@ -7,7 +7,7 @@ export const getNotifications = () =>
     method: 'GET'
   });
 
-export const postViewedNotification = id =>
-  request(`${config.server}/api/notifications/${id}`, {
+export const postViewedNotification = notificationId =>
+  request(`${config.server}/api/notifications/${notificationId}`, {
     method: 'POST'
   });

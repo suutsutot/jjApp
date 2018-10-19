@@ -73,7 +73,11 @@ const Notification = ({
 const getNotificationComponent = type => ({
   notification,
   onPress,
-  joinEventRequested
+  joinEventRequest,
+  rejectEventRequest,
+  followUserRequest,
+  joinCommunityRequest,
+  leaveCommunityRequest
 }) => {
   switch (type) {
     case 'eventInvitation':
@@ -111,10 +115,18 @@ const getNotificationComponent = type => ({
           actions={
             <Actions>
               <Button
-                buttonStyle={styles.actionPrimaryButton}
-                onPress={() => joinEventRequested(notification.event._id)}
+                type="text"
+                buttonStyle={styles.actionButton}
+                onPress={() => rejectEventRequest(notification.event._id)}
               >
-                {toUpper('join')}
+                {i18n('reject')}
+              </Button>
+              <Button
+                type="primary"
+                buttonStyle={styles.actionButton}
+                onPress={() => joinEventRequest(notification.event._id)}
+              >
+                {toUpper(i18n('join'))}
               </Button>
             </Actions>
           }
@@ -141,6 +153,25 @@ const getNotificationComponent = type => ({
               <SecondaryText> invites you to this community</SecondaryText>
             </Fragment>
           }
+          hasActions={!notification.answered}
+          actions={
+            <Actions>
+              <Button
+                type="text"
+                buttonStyle={styles.actionButton}
+                onPress={() => joinCommunityRequest(notification.community._id)}
+              >
+                {i18n('reject')}
+              </Button>
+              <Button
+                type="primary"
+                buttonStyle={styles.actionButton}
+                onPress={() => leaveCommunityRequest(notification.community._id)}
+              >
+                {toUpper(i18n('join'))}
+              </Button>
+            </Actions>
+          }
         />
       );
     case 'friendRequest':
@@ -156,6 +187,18 @@ const getNotificationComponent = type => ({
               </PrimaryText>
               <SecondaryText> following you</SecondaryText>
             </Fragment>
+          }
+          hasActions={!notification.answered}
+          actions={
+            <Actions>
+              <Button
+                type="primary"
+                buttonStyle={styles.actionButton}
+                onPress={() => followUserRequest(notification.user._id)}
+              >
+                {toUpper(i18n('follow'))}
+              </Button>
+            </Actions>
           }
         />
       );
@@ -315,15 +358,9 @@ const redirectToWeb = async notification => {
   supported && Linking.openURL(url);
 };
 
-const NotificationsListItem = ({ notification, joinEventRequested }) => {
-  const Component = getNotificationComponent(notification.type);
-  return (
-    <Component
-      notification={notification}
-      onPress={() => redirectToWeb(notification)}
-      joinEventRequested={joinEventRequested}
-    />
-  );
+const NotificationsListItem = props => {
+  const Component = getNotificationComponent(props.notification.type);
+  return <Component {...props} />;
 };
 
 const NotificationsListItemContainer = connect(
@@ -333,7 +370,11 @@ const NotificationsListItemContainer = connect(
     };
   },
   {
-    joinEventRequested: actions.events.joinEventRequested
+    joinEventRequest: actions.events.joinEventRequest,
+    rejectEventRequest: actions.events.rejectEventRequest,
+    followUserRequest: actions.users.followUserRequest,
+    joinCommunityRequest: actions.communities.joinCommunityRequest,
+    leaveCommunityRequest: actions.communities.leaveCommunityRequest
   }
 )(NotificationsListItem);
 

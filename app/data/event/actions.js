@@ -83,9 +83,16 @@ export const addRecommenedEvents = (uid, info) => {
   };
 };
 
-export const joinEventRequested = id => {
+export const joinEventRequest = id => {
   return {
     type: types.EVENTS.JOIN_EVENT_REQUEST,
+    payload: { id }
+  };
+};
+
+export const rejectEventRequest = id => {
+  return {
+    type: types.EVENTS.REJECT_EVENT_REQUEST,
     payload: { id }
   };
 };

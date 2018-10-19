@@ -2,7 +2,7 @@ import { takeEvery, call, select, put } from 'redux-saga/effects';
 import { path } from 'ramda';
 
 import types from '../../constants/actionTypes';
-import { joinEvent } from '../../api/eventsApi';
+import { joinEvent, rejectEvent } from '../../api/eventsApi';
 import actions from '../actions';
 
 function* joinRequest(action) {
@@ -14,6 +14,14 @@ function* joinRequest(action) {
   yield put(actions.notifications.fetchList());
 }
 
+function* rejectRequest(action) {
+  const { id } = action.payload;
+
+  yield call(rejectEvent, id);
+  yield put(actions.notifications.fetchList());
+}
+
 export default function*() {
   yield takeEvery(types.EVENTS.JOIN_EVENT_REQUEST, joinRequest);
+  yield takeEvery(types.EVENTS.REJECT_EVENT_REQUEST, rejectRequest);
 }
