@@ -2,12 +2,12 @@ import config from 'app/config';
 
 import request from './request';
 
-export const joinCommunity = (communitieId) =>
-  request(`${config.server}/api/communities/${communitieId}/join`, {
+export const joinCommunity = (communityId) =>
+  request(`${config.server}/api/communities/${communityId}/join`, {
     method: 'POST'
   });
 
-export const leaveCommunity = (communitieId) =>
-  request(`${config.server}/api/communities/${communitieId}/leave`, {
+export const leaveCommunity = (communityId) =>
+  request(`${config.server}/api/communities/${communityId}/leave`, {
     method: 'POST'
   });
