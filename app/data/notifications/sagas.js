@@ -1,5 +1,6 @@
 import { filter, isEmpty, indexBy, prop, map } from 'ramda';
-import { takeEvery, call, put, select } from 'redux-saga/effects';
+import { delay } from 'redux-saga';
+import { takeEvery, call, put, select, takeLatest } from 'redux-saga/effects';
 import { NavigationActions } from 'react-navigation';
 
 import {
@@ -41,13 +42,14 @@ export function* postViewed() {
 
   if (newNotificationsIds && !isEmpty(newNotificationsIds)) {
     for (let notificationId of newNotificationsIds) {
-      // yield call(postViewedNotification, notificationId);
+      yield call(delay, 100);
+      yield call(postViewedNotification, notificationId);
     }
-    // yield call(fetchList);
+    yield call(fetchList);
   }
 }
 
 export default function*() {
-  yield takeEvery(types.NOTIFICATIONS.FETCH_LIST, fetchList);
+  yield takeLatest(types.NOTIFICATIONS.FETCH_LIST, fetchList);
   yield takeEvery(NavigationActions.NAVIGATE, navigate);
 }
