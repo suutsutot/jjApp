@@ -16,6 +16,8 @@ function* fetchList() {
   const list = map(x => x._id, notifications);
   const data = indexBy(prop('_id'), notifications);
 
+  notifications.forEach(notification => console.log(notification.community && notification.community.title));
+
   yield put(actions.notifications.setList(list, data));
 
   const navState = yield select(state => state.nav);
@@ -41,11 +43,11 @@ export function* postViewed() {
   const newNotificationsIds = filter(x => !x.viewed, notificationsIds);
 
   if (newNotificationsIds && !isEmpty(newNotificationsIds)) {
-    for (let notificationId of newNotificationsIds) {
-      yield call(delay, 100);
-      yield call(postViewedNotification, notificationId);
-    }
-    yield call(fetchList);
+    // for (let notificationId of newNotificationsIds) {
+    //   yield call(delay, 100);
+    //   yield call(postViewedNotification, notificationId);
+    // }
+    // yield call(fetchList);
   }
 }
 

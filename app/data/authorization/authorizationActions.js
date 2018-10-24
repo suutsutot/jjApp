@@ -57,7 +57,7 @@ export const dbLoginWithCredentials = (
 
         dispatch(globalActions.showNotificationSuccess());
         dispatch(login(userInfo.email, userInfo));
-        getNotifications()().then(data => dispatch(setList(data)));
+        getNotifications().then(data => dispatch(setList(data)));
         dispatch(NavigationActions.navigate({ routeName: 'Notifications' }));
         dispatch(globalActions.hideLoading());
 
@@ -144,7 +144,7 @@ export const dbLoginViaFacebook = () => {
                     dispatch(globalActions.showNotificationSuccess());
                     dispatch(login(userInfo.email, userInfo));
 
-                    getNotifications()().then(data => dispatch(setList(data)));
+                    getNotifications().then(data => dispatch(setList(data)));
 
                     const resetAction = NavigationActions.navigate({
                       routeName: 'Notifications'
@@ -217,7 +217,7 @@ export const dbLoginViaGoogle = () => {
                     dispatch(globalActions.showNotificationSuccess());
                     dispatch(login(userInfo.email, userInfo));
 
-                    getNotifications()().then(data => dispatch(setList(data)));
+                    getNotifications().then(data => dispatch(setList(data)));
 
                     const resetAction = NavigationActions.navigate({
                       routeName: 'Notifications'

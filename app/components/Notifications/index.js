@@ -1,12 +1,12 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
-import { compose, toUpper } from 'ramda';
+import { compose, toUpper, filter } from 'ramda';
 import { lifecycle } from 'recompose';
 import {
   View,
   Text,
   Linking,
-  FlatList,
+  SectionList,
   Image,
   TouchableOpacity,
   StyleSheet,
@@ -22,7 +22,9 @@ import { refresh } from 'app/api/refreshTokenAPI';
 import actions from 'app/data/actions';
 import {
   getNotification,
-  getListNotificationsIds
+  getListNotificationsIds,
+  getNotViewedNotificationsIds,
+  getViewedNotificationsIds
 } from 'app/data/notifications/selectors';
 
 import styles from './styles';
@@ -159,14 +161,16 @@ const getNotificationComponent = type => ({
               <Button
                 type="text"
                 buttonStyle={styles.actionButton}
-                onPress={() => joinCommunityRequest(notification.community._id)}
+                onPress={() =>
+                  leaveCommunityRequest(notification.community._id)
+                }
               >
                 {i18n('reject')}
               </Button>
               <Button
                 type="primary"
                 buttonStyle={styles.actionButton}
-                onPress={() => leaveCommunityRequest(notification.community._id)}
+                onPress={() => joinCommunityRequest(notification.community._id)}
               >
                 {toUpper(i18n('join'))}
               </Button>
@@ -378,10 +382,19 @@ const NotificationsListItemContainer = connect(
   }
 )(NotificationsListItem);
 
-const Notifications = ({ notifications, pending, fetchList }) => (
-  <FlatList
-    data={notifications}
+const Notifications = ({
+  viewedNotificationsIds,
+  notViewedNotificationsIds,
+  pending,
+  fetchList
+}) => (
+  <SectionList
     renderItem={({ item: id }) => <NotificationsListItemContainer id={id} />}
+    renderSectionHeader={({ section: { title } }) => null}
+    sections={[
+      { title: 'Not viewed', data: notViewedNotificationsIds },
+      { title: 'Viewed', data: viewedNotificationsIds }
+    ]}
     refreshControl={
       <RefreshControl
         colors={['#00bcd4']}
@@ -394,16 +407,20 @@ const Notifications = ({ notifications, pending, fetchList }) => (
 );
 
 const NotificationsPage = ({
-  notifications = [],
+  viewedNotificationsIds = [],
+  notViewedNotificationsIds = [],
   loaded,
   pending,
   fetchList
 }) => (
   <View style={{ flex: 1 }}>
     <HeaderSection />
-    {!loaded || (loaded && notifications.length) ? (
+    {!loaded ||
+    (loaded &&
+      (viewedNotificationsIds.length || notViewedNotificationsIds.length)) ? (
       <Notifications
-        notifications={notifications}
+        viewedNotificationsIds={viewedNotificationsIds}
+        notViewedNotificationsIds={notViewedNotificationsIds}
         pending={pending}
         fetchList={fetchList}
       />
@@ -416,7 +433,8 @@ const NotificationsPage = ({
 export default compose(
   connect(
     state => ({
-      notifications: getListNotificationsIds(state),
+      viewedNotificationsIds: getViewedNotificationsIds(state),
+      notViewedNotificationsIds: getNotViewedNotificationsIds(state),
       loaded: state.notifications.loaded,
       pending: state.notifications.pending
     }),

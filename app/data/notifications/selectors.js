@@ -19,8 +19,20 @@ export const getNotification = id =>
     path(['notifications'])
   );
 
-export const getNotificationsCounter = compose(
+export const getNotViewedNotificationsCount = compose(
   length,
   filter(n => !n.viewed),
+  getListNotifications
+);
+
+export const getNotViewedNotificationsIds = compose(
+  map(x => x._id),
+  filter(n => !n.viewed),
+  getListNotifications
+);
+
+export const getViewedNotificationsIds = compose(
+  map(x => x._id),
+  filter(n => n.viewed),
   getListNotifications
 );

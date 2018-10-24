@@ -19,7 +19,7 @@ const Application = () => (
   <PersistGate loading={null} persistor={persistor}>
     <Router />
 
-    <SocketController />
+    {/*<SocketController />*/}
     <PushNotificationsController />
     <AppStateController />
   </PersistGate>

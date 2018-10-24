@@ -13,7 +13,7 @@ import Notifications from 'app/components/Notifications';
 import Settings from 'app/components/Settings';
 import Login from 'app/components/Login';
 import AuthLoadingScreen from 'app/components/AuthLoadingScreen';
-import { getNotificationsCounter } from 'app/data/notifications/selectors';
+import { getNotViewedNotificationsCount } from 'app/data/notifications/selectors';
 import BottomTabsBadge from 'app/pureComponents/BottomTabsBadge';
 import i18n from 'app/framework/i18n';
 
@@ -111,5 +111,5 @@ const Router = ({ dispatch, nav, notificationsCounter }) => (
 
 export default connect(state => ({
   nav: state.nav,
-  notificationsCounter: getNotificationsCounter(state)
+  notificationsCounter: getNotViewedNotificationsCount(state)
 }))(Router);
