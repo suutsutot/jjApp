@@ -11,3 +11,8 @@ export const postViewedNotification = notificationId =>
   request(`${config.server}/api/notifications/${notificationId}`, {
     method: 'POST'
   });
+
+export const setNotificationAnswered = notificationId =>
+  request(`${config.server}/api/notifications/${notificationId}/answered`, {
+    method: 'POST'
+  });

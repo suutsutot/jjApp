@@ -1,8 +1,8 @@
 import types from 'app/constants/actionTypes';
 
-export const followUserRequest = id => {
+export const followUserRequest = (userId, notificationId) => {
   return {
     type: types.USERS.FOLLOW_USER_REQUEST,
-    payload: { id }
+    payload: { userId, notificationId }
   };
 };

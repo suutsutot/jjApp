@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
-import { compose, toUpper, filter } from 'ramda';
+import { compose, toUpper } from 'ramda';
 import { lifecycle } from 'recompose';
 import {
   View,
@@ -198,7 +198,7 @@ const getNotificationComponent = type => ({
               <Button
                 type="primary"
                 buttonStyle={styles.actionButton}
-                onPress={() => followUserRequest(notification.user._id)}
+                onPress={() => followUserRequest(notification.user._id, notification._id)}
               >
                 {toUpper(i18n('follow'))}
               </Button>
