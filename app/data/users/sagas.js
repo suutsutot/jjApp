@@ -8,7 +8,7 @@ import * as Snackbar from '../../framework/snackbar';
 function* followRequest(action) {
   const { id } = action.payload;
 
-  const response = yield call(followUser, id);
+  const response = yield call(followUser, id, true);
   const { error } = response;
 
   if (!error) {
