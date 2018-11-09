@@ -224,26 +224,26 @@ const getNotificationComponent = type => ({
       );
     case 'communityComment':
       return (
-        <Notification
-          notification={notification}
-          onPress={() => onPress(notification)}
-          imageSource={{
-            uri:
-              notification.community.miniaturePic ||
-              notification.community.backgroundPic
-          }}
-          firstRow={
-            <Fragment>
-              <PrimaryText>{notification.community.title}</PrimaryText>
-              <SecondaryText> wrote comment</SecondaryText>
-            </Fragment>
-          }
-          secondRow={
-            <Fragment>
-              <Text>{notification.details.text}</Text>
-            </Fragment>
-          }
-        />
+          <Notification
+            notification={notification}
+            onPress={() => onPress(notification)}
+            imageSource={{
+              uri:
+                notification.community.miniaturePic ||
+                notification.community.backgroundPic
+            }}
+            firstRow={
+              <Fragment>
+                <PrimaryText>{notification.community.title}</PrimaryText>
+                <SecondaryText> wrote comment</SecondaryText>
+              </Fragment>
+            }
+            secondRow={
+              <Fragment>
+                <Text>{notification.details.text}</Text>
+              </Fragment>
+            }
+          />
       );
     case 'eventComment':
       return (
