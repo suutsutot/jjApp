@@ -5,11 +5,8 @@ import android.app.Application;
 import com.facebook.react.ReactApplication;
 import com.azendoo.reactnativesnackbar.SnackbarPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
-import com.horcrux.svg.SvgPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
-import fr.bamlab.rnimageresizer.ImageResizerPackage;
 import com.imagepicker.ImagePickerPackage;
-import com.RNFetchBlob.RNFetchBlobPackage;
 import com.auth0.react.A0Auth0Package;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -33,11 +30,8 @@ public class MainApplication extends Application implements ReactApplication {
           new MainReactPackage(),
             new SnackbarPackage(),
             new ReactNativePushNotificationPackage(),
-            new SvgPackage(),
             new VectorIconsPackage(),
-            new ImageResizerPackage(),
             new ImagePickerPackage(),
-            new RNFetchBlobPackage(),
             new A0Auth0Package()
       );
     }

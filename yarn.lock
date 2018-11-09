@@ -2890,18 +2890,6 @@ glob-parent@^2.0.0:
   dependencies:
     is-glob "^2.0.0"
 
-glob@7.0.6:
-  version "7.0.6"
-  resolved "https://registry.yarnpkg.com/glob/-/glob-7.0.6.tgz#211bafaf49e525b8cd93260d14ab136152b3f57a"
-  integrity sha1-IRuvr0nlJbjNkyYNFKsTYVKz9Xo=
-  dependencies:
-    fs.realpath "^1.0.0"
-    inflight "^1.0.4"
-    inherits "2"
-    minimatch "^3.0.2"
-    once "^1.3.0"
-    path-is-absolute "^1.0.0"
-
 glob@^7.0.3, glob@^7.0.5, glob@^7.1.1, glob@^7.1.2:
   version "7.1.3"
   resolved "https://registry.yarnpkg.com/glob/-/glob-7.1.3.tgz#3960832d3f1574108342dafd3a67b332c0969df1"
@@ -4626,7 +4614,7 @@ min-document@^2.19.0:
   dependencies:
     dom-walk "^0.1.0"
 
-minimatch@^3.0.2, minimatch@^3.0.3, minimatch@^3.0.4:
+minimatch@^3.0.3, minimatch@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-3.0.4.tgz#5166e286457f03306064be5497e8dbb0c3d32083"
   integrity sha512-yJHVQEhyqPLUTgt9B83PXu6W3rx4MvvHvSUvToogpwoGDOUQ+yDrR0HRot+yOCdCO7u4hX3pWft6kWBBcqh0UA==
@@ -5451,10 +5439,10 @@ react-native-animate-loading-button@^1.0.3:
   resolved "https://registry.yarnpkg.com/react-native-animate-loading-button/-/react-native-animate-loading-button-1.0.3.tgz#6425215f12aca464b8057ac62d9ea4a728375e98"
   integrity sha512-jQhZxx/e9XalyXkuW6HVxKfoVUbHhbrrRMK9gIWgR3lSmVF113//4iJQ01y85A0DkqCpgLnzH3em28SeOVMc8g==
 
-react-native-auth0@1.2.2:
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/react-native-auth0/-/react-native-auth0-1.2.2.tgz#c92e4cdcc4ad7e948323e0dedddab1ecd9dc1622"
-  integrity sha512-Nzc2mbzwOQ9JYKcpzEQ2JHybDItdorromKp8jlC0XsDGTJie/5+7gaG6FQm5N1bUUM080kGdsaMBmKRfxK5xHQ==
+react-native-auth0@1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/react-native-auth0/-/react-native-auth0-1.3.1.tgz#ee3c9502a4d23ba5074bd7d0b173768ad76d9d58"
+  integrity sha512-M1fh/bMHSxK/a/yruzjjO5wHKX76hSV4Pc1eMiTnVVZdS05qS0gaXu/Qflxgi+obgxqd4bu3u1NUS7h4CXlwaA==
   dependencies:
     base-64 "^0.1.0"
     url "^0.11.0"
@@ -5495,14 +5483,6 @@ react-native-elements@1.0.0-beta7:
     opencollective-postinstall "^2.0.0"
     prop-types "^15.5.8"
 
-react-native-fetch-blob@^0.10.8:
-  version "0.10.8"
-  resolved "https://registry.yarnpkg.com/react-native-fetch-blob/-/react-native-fetch-blob-0.10.8.tgz#4fc256abae0cb5f10e7c41f28c11b3ff330d72a9"
-  integrity sha1-T8JWq64MtfEOfEHyjBGz/zMNcqk=
-  dependencies:
-    base-64 "0.1.0"
-    glob "7.0.6"
-
 react-native-google-places-autocomplete@^1.3.6:
   version "1.3.9"
   resolved "https://registry.yarnpkg.com/react-native-google-places-autocomplete/-/react-native-google-places-autocomplete-1.3.9.tgz#34c2e8b51df40ecb55ef3ccf57caba4c89ff9b56"
@@ -5517,10 +5497,10 @@ react-native-icon-badge@^1.1.3:
   resolved "https://registry.yarnpkg.com/react-native-icon-badge/-/react-native-icon-badge-1.1.3.tgz#43de0c923afe4968dfcff127ec5c57057b16f787"
   integrity sha1-Q94Mkjr+SWjfz/En7FxXBXsW94c=
 
-react-native-image-picker@^0.26.4:
-  version "0.26.10"
-  resolved "https://registry.yarnpkg.com/react-native-image-picker/-/react-native-image-picker-0.26.10.tgz#0bb9ab928984948c67aee0b9e64216bee007a9fc"
-  integrity sha512-z6gAbru2E6SyGWm4ZTbiM9hPHZ5Tsl9kXGfRxW6YQXf9us7zybKoS7dKE1fQPsssv/OSvpPDKannJNncE+ATRA==
+react-native-image-picker@^0.27.1:
+  version "0.27.1"
+  resolved "https://registry.yarnpkg.com/react-native-image-picker/-/react-native-image-picker-0.27.1.tgz#32877c667e8c2713466fe178a6c7dd648e6cb5d3"
+  integrity sha512-LuEt5I9TFe3+lfN8E9geuN2OOgnld0QmeHRPTCV+mzkT5zASsoibNIUItt6WQBWG4nXC/90aufQYZn92i3lTxw==
 
 react-native-image-progress@^1.0.1:
   version "1.1.1"
