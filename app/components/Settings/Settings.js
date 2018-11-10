@@ -4,7 +4,7 @@ import {TouchableOpacity, View, ScrollView, Image, Text, ActivityIndicator, Link
 import {CardSection, Button, HeaderSection} from 'app/pureComponents';
 import {Avatar} from 'react-native-elements';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {authorizationActions} from 'app/data/authorization';
+import actions from 'app/data/actions';
 import {refresh} from 'app/api/refreshTokenAPI';
 import config from 'app/config';
 import styles from './styles';
@@ -96,7 +96,7 @@ export class Settings extends Component {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        logout: () => dispatch(authorizationActions.dbLogout())
+        logout: () => dispatch(actions.authorization.dbLogout())
     }
 };
 

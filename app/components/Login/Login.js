@@ -12,7 +12,7 @@ import {
 import { CardSection } from 'app/pureComponents';
 import { SocialIcon, Button, Icon } from 'react-native-elements';
 import { TextField } from 'react-native-material-textfield';
-import { authorizationActions } from 'app/data/authorization';
+import actions from 'app/data/actions';
 import { trim } from 'lodash';
 import styles from './styles';
 import config from 'app/config';
@@ -266,28 +266,28 @@ export class Login extends Component {
             <View style={{ height: 15 }} />
             {this.renderLoginButton()}
             <View style={{ height: 25 }} />
-            <Text
-              style={{ fontSize: 20, color: '#37474f', textAlign: 'center' }}
-            >
-              Are you not registered?
-            </Text>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center'
-              }}
-            >
-              <TouchableOpacity
-                onPress={() => {
-                  this.goToSignIn();
-                }}
-              >
-                <Text style={{ fontSize: 20, color: '#00bcd4', marginTop: 15 }}>
-                  Sign up now
-                </Text>
-              </TouchableOpacity>
-            </View>
+            {/*<Text*/}
+              {/*style={{ fontSize: 20, color: '#37474f', textAlign: 'center' }}*/}
+            {/*>*/}
+              {/*Are you not registered?*/}
+            {/*</Text>*/}
+            {/*<View*/}
+              {/*style={{*/}
+                {/*flexDirection: 'row',*/}
+                {/*justifyContent: 'center',*/}
+                {/*alignItems: 'center'*/}
+              {/*}}*/}
+            {/*>*/}
+              {/*<TouchableOpacity*/}
+                {/*onPress={() => {*/}
+                  {/*this.goToSignIn();*/}
+                {/*}}*/}
+              {/*>*/}
+                {/*<Text style={{ fontSize: 20, color: '#00bcd4', marginTop: 15 }}>*/}
+                  {/*Sign up now*/}
+                {/*</Text>*/}
+              {/*</TouchableOpacity>*/}
+            {/*</View>*/}
           </KeyboardAvoidingView>
         </ScrollView>
       </View>
@@ -298,9 +298,9 @@ export class Login extends Component {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     LoginWithCredentials: (email, password) =>
-      dispatch(authorizationActions.dbLoginWithCredentials(email, password)),
-    loginViaFacebook: () => dispatch(authorizationActions.dbLoginViaFacebook()),
-    loginViaGoogle: () => dispatch(authorizationActions.dbLoginViaGoogle())
+      dispatch(actions.authorization.dbLoginWithCredentials(email, password)),
+    loginViaFacebook: () => dispatch(actions.authorization.dbLoginViaFacebook()),
+    loginViaGoogle: () => dispatch(actions.authorization.dbLoginViaGoogle())
   };
 };
 

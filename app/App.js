@@ -11,7 +11,7 @@ import SocketController from 'app/components/SocketController';
 import PushNotificationsController from 'app/components/PushNotificationsController';
 import AppStateController from 'app/components/AppStateController';
 import Router from 'app/components/Router';
-import * as authorizationActions from 'app/data/authorization/authorizationActions';
+import actions from 'app/data/actions';
 
 console.ignoredYellowBox = ['Setting a timer'];
 
@@ -29,7 +29,7 @@ export default compose(
   withStore(store, Provider),
   connect(
     undefined,
-    { getUserId: authorizationActions.getUserId }
+    { getUserId: actions.authorization.getUserId }
   ),
   lifecycle({
     componentDidMount() {

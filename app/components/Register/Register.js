@@ -3,8 +3,8 @@ import {connect} from 'react-redux';
 import {ScrollView, View, Text, Image} from 'react-native';
 import {CardSection, Button} from 'app/pureComponents';
 import {SocialIcon} from 'react-native-elements';
-import {TextField} from 'react-native-material-textfield';
-import {authorizationActions} from 'app/data/authorization';
+import {TextField} from 'react-native-material-textfield'
+import actions from 'app/data/actions';
 import {trim} from 'lodash';
 import styles from './styles';
 
@@ -175,9 +175,9 @@ export class Register extends Component {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        register: (email, password) => dispatch(authorizationActions.dbSignUp(email, password)),
-        loginViaFacebook: () => dispatch(authorizationActions.dbLoginViaFacebook()),
-        loginViaGoogle: () => dispatch(authorizationActions.dbLoginViaGoogle()),
+        register: (email, password) => dispatch(actions.authorization.dbSignUp(email, password)),
+        loginViaFacebook: () => dispatch(actions.authorization.dbLoginViaFacebook()),
+        loginViaGoogle: () => dispatch(actions.authorization.dbLoginViaGoogle()),
     }
 };
 
