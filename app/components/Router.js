@@ -36,28 +36,28 @@ const routes = {
       )
     })
   },
-  Events: {
-    screen: Events,
-    navigationOptions: ({ navigation, screenProps }) => ({
-      tabBarLabel: <Text>{i18n('my_events')}</Text>,
-      tabBarIcon: ({ tintColor }) => (
-        <MaterialCommunityIcons
-          name={`calendar-range`}
-          size={24}
-          color={tintColor}
-        />
-      )
-    })
-  },
-  Communities: {
-    screen: Communities,
-    navigationOptions: ({ navigation, screenProps }) => ({
-      tabBarLabel: <Text>{i18n('communities_tab')}</Text>,
-      tabBarIcon: ({ tintColor }) => (
-        <MaterialCommunityIcons name={`account`} size={24} color={tintColor} />
-      )
-    })
-  },
+  // Events: {
+  //   screen: Events,
+  //   navigationOptions: ({ navigation, screenProps }) => ({
+  //     tabBarLabel: <Text>{i18n('my_events')}</Text>,
+  //     tabBarIcon: ({ tintColor }) => (
+  //       <MaterialCommunityIcons
+  //         name={`calendar-range`}
+  //         size={24}
+  //         color={tintColor}
+  //       />
+  //     )
+  //   })
+  // },
+  // Communities: {
+  //   screen: Communities,
+  //   navigationOptions: ({ navigation, screenProps }) => ({
+  //     tabBarLabel: <Text>{i18n('communities_tab')}</Text>,
+  //     tabBarIcon: ({ tintColor }) => (
+  //       <MaterialCommunityIcons name={`account`} size={24} color={tintColor} />
+  //     )
+  //   })
+  // },
   Settings: {
     screen: Settings,
     navigationOptions: ({ navigation, screenProps }) => ({
@@ -75,7 +75,7 @@ const routes = {
 
 const config = {
   initialRouteName: 'Notifications',
-  order: ['Notifications', 'Events', 'Communities', 'Settings'],
+  order: ['Notifications', /*'Events', 'Communities', */'Settings'],
   activeTintColor: '#00bcd4',
   inactiveTintColor: 'gray',
   shifting: false,
