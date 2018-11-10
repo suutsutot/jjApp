@@ -13,7 +13,7 @@ const socket = io(config.server, {jsonp: false, transports: ['websocket']});
 
 const handleSocketMessage = payload => async dispatch => {
   const data = await getNotifications();
-  dispatch(setList(data))
+  // dispatch(setList(data)) it works wrong
 };
 
 const title = 'You have new notification';

@@ -1,13 +1,79 @@
 import { AsyncStorage } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 
-import { getNotifications } from 'app/api/notificationsApi';
 import { refreshByCredentials } from 'app/api/refreshTokenAPI';
-import { setList } from 'app/data/notifications/actions';
 import config from 'app/config';
 import * as types from 'app/constants/actionTypes';
 import * as globalActions from 'app/data/global/globalActions';
 import auth0 from 'app/framework/auth0';
+import auth0Config from 'app/config/auth0Config';
+
+const loginRequest = credentials => async dispatch => {
+  dispatch(currentCredentials());
+  await AsyncStorage.setItem('refreshToken', credentials.refreshToken);
+
+  const { accessToken, idToken } = await refreshByCredentials(credentials);
+
+  AsyncStorage.setItem('accessToken', accessToken);
+  AsyncStorage.setItem('idToken', idToken);
+
+  const profile = await auth0.auth.userInfo({ token: accessToken });
+
+  try {
+    const result = await fetch(`${config.server}/api/users/duplicate-auth0`, {
+      method: 'POST',
+      body: JSON.stringify({
+        email: profile.email
+      }),
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: idToken
+      }
+    });
+
+    const response = await result.json();
+
+    if (response && response.user) {
+      dispatch(successUserGet());
+      const userInfo = response.user || {};
+
+      AsyncStorage.setItem('userId', userInfo._id);
+      AsyncStorage.setItem('email', userInfo.email);
+
+      dispatch(globalActions.showNotificationSuccess());
+      dispatch(login(userInfo.email, userInfo));
+      dispatch(NavigationActions.navigate({ routeName: 'Notifications' }));
+      dispatch(globalActions.hideLoading());
+
+      const pushNotificationToken = await AsyncStorage.getItem(
+        'pushNotificationToken'
+      );
+      try {
+        fetch(`${config.server}/api/users/set-push-token`, {
+          method: 'POST',
+          body: JSON.stringify({
+            id: userInfo._id,
+            pushNotificationToken
+          }),
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: idToken
+          }
+        });
+      } catch (e) {}
+    } else {
+      dispatch(noUserGet());
+      dispatch(globalActions.hideLoading());
+    }
+  } catch (error) {
+    console.log('AuthorizeActionError:', error);
+    dispatch(noUserGet());
+    dispatch(globalActions.hideLoading());
+    dispatch(globalActions.showErrorMessageWithTimeout(error.code));
+  }
+};
 
 export const dbLoginWithCredentials = (
   username,
@@ -23,71 +89,7 @@ export const dbLoginWithCredentials = (
       scope: 'openid offline_access'
     });
 
-    dispatch(currentCredentials());
-    await AsyncStorage.setItem('refreshToken', credentials.refreshToken);
-
-    const { accessToken, idToken } = await refreshByCredentials(credentials);
-
-    AsyncStorage.setItem('accessToken', accessToken);
-    AsyncStorage.setItem('idToken', idToken);
-
-    const profile = await auth0.auth.userInfo({ token: accessToken });
-
-    try {
-      const result = await fetch(`${config.server}/api/users/duplicate-auth0`, {
-        method: 'POST',
-        body: JSON.stringify({
-          email: profile.email
-        }),
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: idToken
-        }
-      });
-
-      const response = await result.json();
-
-      if (response && response.user) {
-        dispatch(successUserGet());
-        const userInfo = response.user || {};
-
-        AsyncStorage.setItem('userId', userInfo._id);
-        AsyncStorage.setItem('email', userInfo.email);
-
-        dispatch(globalActions.showNotificationSuccess());
-        dispatch(login(userInfo.email, userInfo));
-        getNotifications().then(data => dispatch(setList(data)));
-        dispatch(NavigationActions.navigate({ routeName: 'Notifications' }));
-        dispatch(globalActions.hideLoading());
-
-        const pushNotificationToken = await AsyncStorage.getItem(
-          'pushNotificationToken'
-        );
-        try {
-          fetch(`${config.server}/api/users/set-push-token`, {
-            method: 'POST',
-            body: JSON.stringify({
-              id: userInfo._id,
-              pushNotificationToken
-            }),
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-              Authorization: idToken
-            }
-          });
-        } catch (e) {}
-      } else {
-        dispatch(noUserGet());
-        dispatch(globalActions.hideLoading());
-      }
-    } catch (error) {
-      console.log('AuthorizeActionError:', error);
-      dispatch(noUserGet());
-      dispatch(globalActions.hideLoading());
-      dispatch(globalActions.showErrorMessageWithTimeout(error.code));
-    }
+    await loginRequest(credentials)(dispatch);
   } catch (error) {
     console.log('AuthorizeActionError:', error);
     dispatch(wrongCredentials());
@@ -100,66 +102,11 @@ export const dbLoginViaFacebook = () => {
     auth0.webAuth
       .authorize({
         scope: 'openid email profile offline_access',
-        audience: 'https://' + credentials.domain + '/userinfo',
+        audience: 'https://' + auth0Config.domain + '/userinfo',
         connection: 'facebook'
       })
       .then(credentials => {
-        dispatch(successUserGet());
-        AsyncStorage.setItem('refreshToken', credentials.refreshToken);
-
-        refreshByCredentials(credentials).then(newToken => {
-          AsyncStorage.setItem('accessToken', newToken.accessToken);
-          AsyncStorage.setItem('idToken', newToken.idToken);
-
-          auth0.auth
-            .userInfo({ token: newToken.accessToken })
-            .then(profile => {
-              dispatch(successUserGet());
-              const url = config.server + '/api/users/duplicate-auth0';
-              const email = profile.email;
-              const data = { email };
-
-              fetch(url, {
-                method: 'POST',
-                body: JSON.stringify(data),
-                headers: {
-                  Accept: 'application/json',
-                  'Content-Type': 'application/json',
-                  Authorization: newToken.idToken
-                }
-              })
-                .then(r => r.json())
-                .catch(error => {
-                  console.log('AuthorizeActionError:', error);
-                  dispatch(noUserGet());
-                })
-                .then(response => {
-                  if (response && response.user) {
-                    dispatch(successUserGet());
-                    const userInfo = response.user || {};
-
-                    AsyncStorage.setItem('userId', userInfo._id);
-                    AsyncStorage.setItem('email', userInfo.email);
-
-                    dispatch(globalActions.showNotificationSuccess());
-                    dispatch(login(userInfo.email, userInfo));
-
-                    getNotifications().then(data => dispatch(setList(data)));
-
-                    const resetAction = NavigationActions.navigate({
-                      routeName: 'Notifications'
-                    });
-                    dispatch(resetAction);
-                  } else {
-                    dispatch(noUserGet());
-                  }
-                });
-            })
-            .catch(error => {
-              console.log('AuthorizeActionError:', error);
-              dispatch(noUserGet());
-            });
-        });
+        return loginRequest(credentials)(dispatch);
       })
       .catch(error => {
         console.log('AuthorizeActionError:', error);
@@ -173,66 +120,11 @@ export const dbLoginViaGoogle = () => {
     auth0.webAuth
       .authorize({
         scope: 'openid email profile offline_access',
-        audience: 'https://' + credentials.domain + '/userinfo',
+        audience: 'https://' + auth0Config.domain + '/userinfo',
         connection: 'google-oauth2'
       })
       .then(credentials => {
-        dispatch(successUserGet());
-        AsyncStorage.setItem('refreshToken', credentials.refreshToken);
-
-        refreshByCredentials(credentials).then(newToken => {
-          AsyncStorage.setItem('accessToken', newToken.accessToken);
-          AsyncStorage.setItem('idToken', newToken.idToken);
-
-          auth0.auth
-            .userInfo({ token: newToken.accessToken })
-            .then(profile => {
-              dispatch(successUserGet());
-              const url = config.server + '/api/users/duplicate-auth0';
-              const email = profile.email;
-              const data = { email };
-
-              fetch(url, {
-                method: 'POST',
-                body: JSON.stringify(data),
-                headers: {
-                  Accept: 'application/json',
-                  'Content-Type': 'application/json',
-                  Authorization: newToken.idToken
-                }
-              })
-                .then(r => r.json())
-                .catch(error => {
-                  console.log('AuthorizeActionError:', error);
-                  dispatch(noUserGet());
-                })
-                .then(response => {
-                  if (response && response.user) {
-                    dispatch(successUserGet());
-                    const userInfo = response.user || {};
-
-                    AsyncStorage.setItem('userId', userInfo._id);
-                    AsyncStorage.setItem('email', userInfo.email);
-
-                    dispatch(globalActions.showNotificationSuccess());
-                    dispatch(login(userInfo.email, userInfo));
-
-                    getNotifications().then(data => dispatch(setList(data)));
-
-                    const resetAction = NavigationActions.navigate({
-                      routeName: 'Notifications'
-                    });
-                    dispatch(resetAction);
-                  } else {
-                    dispatch(noUserGet());
-                  }
-                });
-            })
-            .catch(error => {
-              console.log('AuthorizeActionError:', error);
-              dispatch(noUserGet());
-            });
-        });
+        return loginRequest(credentials)(dispatch);
       })
       .catch(error => {
         console.log('AuthorizeActionError:', error);
