@@ -1,15 +1,16 @@
 import { AsyncStorage } from 'react-native';
-const getToken = () => AsyncStorage.getItem('idToken');
-const getEmail = () => AsyncStorage.getItem('email');
 import { NavigationActions } from 'react-navigation';
+
 import { refresh } from 'app/api/refreshTokenAPI';
 import config from 'app/config';
 import * as types from 'app/constants/actionTypes';
 
+const getToken = () => AsyncStorage.getItem('idToken');
+const getEmail = () => AsyncStorage.getItem('email');
+
 export const dbGetProfile = () => {
   return (dispatch, getState) => {
-    if (getState().authorize.email) {
-      let email = getState().authorize.email;
+    getEmail().then(email => {
       refresh().then(newToken => {
         console.log('dbGetProfile');
 
@@ -24,44 +25,14 @@ export const dbGetProfile = () => {
             Authorization: newToken.idToken
           }
         })
-          .then(r => r.json())
-          .catch(error => console.log('Error: ', error))
-          .then(response => {
-            let userInfo = response.user || {};
-
-            AsyncStorage.setItem('userId', response.user._id);
-            AsyncStorage.setItem('email', response.user.email);
-            dispatch(addProfile(response.user.email, userInfo));
-          });
-      });
-    } else {
-      getEmail().then(email => {
-        refresh().then(newToken => {
-          console.log('dbGetProfile');
-
-          let url = config.server + '/api/users/duplicate-auth0';
-          let data = { email };
-
-          fetch(url, {
-            method: 'POST',
-            body: JSON.stringify(data),
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: newToken.idToken
-            }
-          })
-            .then(r => r.json())
-            .catch(error => console.log('Error: ', error))
-            .then(response => {
-              let userInfo = response.user || {};
-
-              AsyncStorage.setItem('userId', response.user._id);
-              AsyncStorage.setItem('email', response.user.email);
-              dispatch(addProfile(response.user.email, userInfo));
-            });
+        .then(r => r.json())
+        .catch(error => console.log('Error: ', error))
+        .then(response => {
+          let userInfo = response.user || {};
+          dispatch(addProfile(response.user.email, userInfo));
         });
       });
-    }
+    });
   };
 };
 

@@ -27,11 +27,7 @@ export let authorize = (state = defaultState, action) => {
         authed: true
       };
     case types.LOGOUT:
-      return {
-        ...state,
-        email: '',
-        authed: false
-      };
+      return defaultState;
     case types.WRONG_CREDENTIALS:
       return {
         ...state,

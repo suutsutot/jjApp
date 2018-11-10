@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, AsyncStorage, Image } from 'react-native';
 import styles from './styles';
 
-class AuthLoadingScreen extends Component {
+class StartScreen extends Component {
   constructor() {
     super();
     this.bootstrapAsync();
@@ -28,4 +28,4 @@ class AuthLoadingScreen extends Component {
   }
 }
 
-export default AuthLoadingScreen;
+export default StartScreen;

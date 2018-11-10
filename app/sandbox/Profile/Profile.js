@@ -3,9 +3,9 @@ import {connect} from 'react-redux';
 import {Animated, ScrollView, View, Text, Image, ImageBackground, Platform} from 'react-native';
 import {TabViewAnimated, TabBar, TabViewPagerScroll, TabViewPagerPan} from 'react-native-tab-view';
 import {SocialIcon, ListItem} from 'react-native-elements';
-import {HeaderSection} from 'app/pureComponents';
+import {HeaderSection} from 'app/pureComponents/index';
 import styles from './styles';
-import {userActions} from 'app/data/user';
+import {userActions} from 'app/data/user/index';
 
 export class Profile extends Component {
 

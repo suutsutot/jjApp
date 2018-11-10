@@ -4,14 +4,15 @@ export default StyleSheet.create({
   buttonText: {
     alignSelf: 'center',
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '500',
     paddingTop: 10,
     paddingBottom: 10
   },
   buttonView: {
     alignSelf: 'stretch',
     marginLeft: 5,
-    marginRight: 5
+    marginRight: 5,
+    paddingHorizontal: 8
   }
 });
 

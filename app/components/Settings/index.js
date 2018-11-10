@@ -1,17 +1,19 @@
 import React, { Component } from 'react';
+import { toUpper } from 'ramda';
 import { connect } from 'react-redux';
 import {
   TouchableOpacity,
   View,
   ScrollView,
-  Image,
   Text,
   ActivityIndicator,
   Linking
 } from 'react-native';
-import { CardSection, Button, HeaderSection } from 'app/pureComponents';
 import { Avatar } from 'react-native-elements';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { compose, lifecycle } from 'recompose';
+
+import { Button, HeaderSection } from 'app/pureComponents';
 import actions from 'app/data/actions';
 import { refresh } from 'app/api/refreshTokenAPI';
 import config from 'app/config';
@@ -85,52 +87,17 @@ export class Settings extends Component {
                 {name}
               </Text>
               <Text style={[styles.grayColorText, { fontSize: 12 }]}>
-                Go to Profile
+                {i18n('go_to_web_profile')}
               </Text>
             </View>
           </View>
           <MaterialIcons
             name="chevron-right"
             size={24}
-            color={styles.grayColorText}
+            color="#78909c"
           />
         </View>
       </TouchableOpacity>
-    );
-  };
-
-  renderSchedule = () => {
-    return (
-      <View
-        style={[
-          styles.TouchableOpacityStyles,
-          styles.backgroundColorContentWhite,
-          styles.shadowContainer
-        ]}
-      >
-        <Text>Schedule</Text>
-        <View>
-          <Text>Coming soon...</Text>
-        </View>
-      </View>
-    );
-  };
-
-  renderButton() {
-    return (
-      <TouchableOpacity onPress={this.onLogoutButton.bind(this)}>
-        <Text style={{ color: 'gray' }}>Logout</Text>
-      </TouchableOpacity>
-    );
-  }
-
-  renderProcess = () => {
-    return (
-      <View style={styles.containerProcess}>
-        <View>
-          <ActivityIndicator size="large" color="#00bcd4" />
-        </View>
-      </View>
     );
   };
 
@@ -142,44 +109,60 @@ export class Settings extends Component {
         {loaded ? (
           <ScrollView>
             {this.renderProfile()}
-            {this.renderSchedule()}
-            <View style={{ alignItems: 'center' }}>{this.renderButton()}</View>
+            <View style={styles.buttonsContainer}>
+              <Button
+                type="primary"
+                buttonStyle={styles.actionButton}
+                onPress={this.onLogoutButton.bind(this)}
+              >
+                {toUpper(i18n('log_out'))}
+              </Button>
+            </View>
           </ScrollView>
         ) : (
-          this.renderProcess()
+          <View style={styles.containerProcess}>
+            <View>
+              <ActivityIndicator size="large" color="#00bcd4" />
+            </View>
+          </View>
         )}
       </View>
     );
   }
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => {
-  return {
-    logout: () => dispatch(actions.authorization.dbLogout())
-  };
-};
+export default compose(
+  connect(
+    ({ global, user }) => {
+      const { error, loading, loggedIn } = global;
+      const loaded = user.loaded;
+      let profile = {};
+      if (user.loaded) profile = user.profile;
 
-const mapStateToProps = ({ global, user }) => {
-  const { error, loading, loggedIn } = global;
-  let loaded = user.loaded;
-  let profile = {};
-  if (user.loaded) profile = user.profile;
-
-  return {
-    userId: loaded && profile ? profile._id : null,
-    name:
-      loaded && profile && profile.firstName && profile.lastName
-        ? profile.firstName + ' ' + profile.lastName
-        : profile.email,
-    avatar: loaded && profile ? profile.pic : '',
-    loaded,
-    error,
-    loading,
-    loggedIn
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+      return {
+        userId: loaded && profile ? profile._id : null,
+        name:
+          loaded && profile && profile.firstName && profile.lastName
+            ? profile.firstName + ' ' + profile.lastName
+            : profile.email,
+        avatar: loaded && profile ? profile.pic : '',
+        loaded,
+        error,
+        loading,
+        loggedIn
+      };
+    },
+    (dispatch, ownProps) => {
+      return {
+        logout: () => dispatch(actions.authorization.dbLogout()),
+        fetchUserInfo: () => dispatch(actions.user.dbGetProfile())
+      };
+    }
+  ),
+  lifecycle({
+    componentDidMount() {
+      const { fetchUserInfo } = this.props;
+      fetchUserInfo();
+    }
+  })
 )(Settings);

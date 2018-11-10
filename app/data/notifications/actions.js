@@ -11,3 +11,7 @@ export const setList = (list, data) => ({
 export const fetchList = () => ({
   type: types.NOTIFICATIONS.FETCH_LIST
 });
+
+export const fetchListError = () => ({
+  type: types.NOTIFICATIONS.FETCH_LIST_ERROR
+});

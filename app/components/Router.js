@@ -7,12 +7,12 @@ import { createMaterialBottomTabNavigator } from 'react-navigation-material-bott
 import { Text } from 'react-native';
 
 import { navigationListener } from 'app/config/navigationHelpers';
-import Events from 'app/components/Home';
+import Events from 'app/components/Events';
 import Communities from 'app/components/Communities';
 import Notifications from 'app/components/Notifications';
 import Settings from 'app/components/Settings';
 import Login from 'app/components/Login';
-import AuthLoadingScreen from 'app/components/AuthLoadingScreen';
+import StartScreen from 'app/components/StartScreen';
 import { getNotViewedNotificationsCount } from 'app/data/notifications/selectors';
 import BottomTabsBadge from 'app/pureComponents/BottomTabsBadge';
 import i18n from 'app/framework/i18n';
@@ -88,7 +88,7 @@ export const Tabs = createMaterialBottomTabNavigator(routes, config);
 
 export const Navigator = StackNavigator(
   {
-    AuthLoadingScreen,
+    StartScreen,
     Tabs,
     Login
   },

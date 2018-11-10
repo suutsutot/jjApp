@@ -577,5 +577,6 @@
   "vk": "VK",
   "basic_settings":"Basic settings",
 
-  "empty_notifications": ""
+  "empty_notifications": "",
+  "go_to_web_profile": ""
 }

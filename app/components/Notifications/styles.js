@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end'
   },
   actionButton: {
-    width: 130,
+    width: 160,
   }
 });
 

@@ -10,22 +10,32 @@ import {
 import actions from 'app/data/actions';
 import types from 'app/constants/actionTypes';
 import { getNotViewedNotificationsIds } from './selectors';
+import * as Snackbar from '../../framework/snackbar';
 
 function* fetchList() {
   const notifications = yield call(getNotifications);
+  const { error } = notifications;
 
-  const list = map(x => x._id, notifications);
-  const data = indexBy(prop('_id'), notifications);
+  if (!error) {
+    const list = map(x => x._id, notifications);
+    const data = indexBy(prop('_id'), notifications);
 
-  yield put(actions.notifications.setList(list, data));
+    yield put(actions.notifications.setList(list, data));
 
-  const navState = yield select(state => state.nav);
-  const {
-    routes: [AuthLoadingScreen, { index }]
-  } = navState;
-  // TODO: make it more explicit
-  if (index == 0) {
-    yield call(postViewed);
+    const navState = yield select(state => state.nav);
+    const {
+      routes: [StartScreen, { index }]
+    } = navState;
+    // TODO: make it more explicit
+    if (index == 0) {
+      yield call(postViewed);
+    }
+  } else {
+    yield put(actions.notifications.fetchListError());
+    yield call(Snackbar.show, {
+      title: 'Server error on loading list',
+      duration: Snackbar.LENGTH_LONG
+    });
   }
 }
 
