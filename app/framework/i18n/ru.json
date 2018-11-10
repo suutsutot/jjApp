@@ -572,5 +572,7 @@
   "email_edit_event_template": "<div>event_name event_date был(а) изменен(а). Чтобы посмотреть изменения нажмите <a href=\":href\">сюда</a>.</div>",
   "was_changed": "был(а) изменен(а)",
   "vk": "ВКонтакте",
-  "basic_settings":"Основные настройки"
+  "basic_settings":"Основные настройки",
+
+  "empty_notifications": "У Вас пока нет новых уведомлений"
 }

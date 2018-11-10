@@ -575,5 +575,7 @@
   "email_edit_event_template": "<div>event_name on event_date was changed. To check was changed please click <a href=\":href\">here</a>.</div>",
   "was_changed": "was changed",
   "vk": "VK",
-  "basic_settings":"Basic settings"
+  "basic_settings":"Basic settings",
+
+  "empty_notifications": ""
 }

@@ -325,7 +325,7 @@ const getNotificationComponent = type => ({
 const EmptyResults = () => (
   <View style={[styles.containerProcess]}>
     <MaterialIcons name={'notifications-none'} size={48} />
-    <Text>You do not have any notifications yet.</Text>
+    <Text>{i18n('empty_notifications')}.</Text>
   </View>
 );
 
@@ -414,7 +414,7 @@ const NotificationsPage = ({
   fetchList
 }) => (
   <View style={{ flex: 1 }}>
-    <HeaderSection />
+    <HeaderSection title={i18n('notifications')} />
     {!loaded ||
     (loaded &&
       (viewedNotificationsIds.length || notViewedNotificationsIds.length)) ? (
