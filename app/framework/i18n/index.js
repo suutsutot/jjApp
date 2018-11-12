@@ -6,7 +6,7 @@ const translations = {
     general: require('./en.json'),
     activities: require('./activities/activities-en.json')
   },
-  no: {
+  nb: {
     general: require('./no.json'),
     activities: require('./activities/activities-no.json')
   },

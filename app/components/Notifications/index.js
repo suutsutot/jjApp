@@ -22,7 +22,6 @@ import { refresh } from 'app/api/refreshTokenAPI';
 import actions from 'app/data/actions';
 import {
   getNotification,
-  getListNotificationsIds,
   getNotViewedNotificationsIds,
   getViewedNotificationsIds
 } from 'app/data/notifications/selectors';
@@ -99,10 +98,9 @@ const getNotificationComponent = type => ({
                   i18n(notification.event.activity.id, 'activities')}
               </PrimaryText>
               <SecondaryText>
-                {' '}
-                on{' '}
+                {i18n('on')}
                 {moment(notification.event.eventDates.startDate).format(
-                  'Do MMM'
+                  'Do MMMM'
                 )}
               </SecondaryText>
             </Fragment>
@@ -110,7 +108,7 @@ const getNotificationComponent = type => ({
           secondRow={
             <Fragment>
               <PrimaryText>{notification.creatorName}</PrimaryText>
-              <SecondaryText> invites you to this event</SecondaryText>
+              <SecondaryText>{' '}{i18n('invites_you_to_event')}</SecondaryText>
             </Fragment>
           }
           hasActions={!notification.answered}
@@ -152,7 +150,7 @@ const getNotificationComponent = type => ({
           secondRow={
             <Fragment>
               <PrimaryText>{notification.creatorName}</PrimaryText>
-              <SecondaryText> invites you to this community</SecondaryText>
+              <SecondaryText>{' '}{i18n('invites_you_to_community')}</SecondaryText>
             </Fragment>
           }
           hasActions={!notification.answered}
@@ -189,7 +187,7 @@ const getNotificationComponent = type => ({
               <PrimaryText>
                 {notification.user.firstName} {notification.user.lastName}
               </PrimaryText>
-              <SecondaryText> following you</SecondaryText>
+              <SecondaryText>{' '}{i18n('following_you')}</SecondaryText>
             </Fragment>
           }
           hasActions={!notification.answered}
@@ -217,7 +215,7 @@ const getNotificationComponent = type => ({
               <PrimaryText>
                 {notification.user.firstName} {notification.user.lastName}
               </PrimaryText>
-              <SecondaryText> is accepting your request</SecondaryText>
+              <SecondaryText>{' '}{i18n('accepting_request')}</SecondaryText>
             </Fragment>
           }
         />
@@ -235,7 +233,7 @@ const getNotificationComponent = type => ({
             firstRow={
               <Fragment>
                 <PrimaryText>{notification.community.title}</PrimaryText>
-                <SecondaryText> wrote comment</SecondaryText>
+                <SecondaryText>{' '}{i18n('wrote_comment')}</SecondaryText>
               </Fragment>
             }
             secondRow={
@@ -260,7 +258,7 @@ const getNotificationComponent = type => ({
               <PrimaryText>
                 {notification.event.title || notification.event.activity.name}
               </PrimaryText>
-              <SecondaryText> wrote comment</SecondaryText>
+              <SecondaryText>{' '}{i18n('wrote_comment')}</SecondaryText>
             </Fragment>
           }
           secondRow={
@@ -281,7 +279,7 @@ const getNotificationComponent = type => ({
               <PrimaryText>
                 {notification.user.firstName} {notification.user.lastName}
               </PrimaryText>
-              <SecondaryText> wrote comment</SecondaryText>
+              <SecondaryText>{' '}{i18n('wrote_comment')}</SecondaryText>
             </Fragment>
           }
           secondRow={
@@ -307,14 +305,14 @@ const getNotificationComponent = type => ({
               <PrimaryText>{notification.details.eventName}</PrimaryText>
               <SecondaryText>
                 {' '}
-                on {moment(notification.details.date).format('Do MMM')}
+                {i18n('on')} {moment(notification.details.date).format('Do MMM')}
               </SecondaryText>
             </Fragment>
           }
           secondRow={
             <Fragment>
               <PrimaryText>{notification.community.title}</PrimaryText>
-              <SecondaryText> invites you to this event</SecondaryText>
+              <SecondaryText>{' '}{i18n('invites_you_to_event')}</SecondaryText>
             </Fragment>
           }
         />
