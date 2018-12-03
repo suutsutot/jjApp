@@ -70,8 +70,8 @@ export class Settings extends Component {
         >
           <View style={[styles.layoutRow]}>
             <Avatar
-              overlayContainerStyle={{ borderRadius: 50 }}
-              avatarStyle={{ height: 60, width: 60, borderRadius: 50 }}
+              overlayContainerStyle={{ borderRadius: 30 }}
+              avatarStyle={{ height: 60, width: 60, borderRadius: 30 }}
               containerStyle={{ height: 60, width: 60 }}
               source={{ uri: avatar }}
             />

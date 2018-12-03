@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     height: 40,
     width: 40,
-    borderRadius: 50
+    borderRadius: 20
   },
   actionsView: {
     paddingVertical: 5,
