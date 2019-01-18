@@ -5,19 +5,20 @@ import { connect } from 'react-redux';
 import { AsyncStorage, YellowBox } from 'react-native';
 import { PersistGate } from 'redux-persist/integration/react';
 import { path } from 'ramda';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableHighlight } from 'react-native';
 import moment from 'moment';
 
 import store, { persistor } from 'src/store/index';
 import withStore from 'src/hocs/withStore';
 // import SocketController from 'src/components/SocketController';
-// import PushNotificationsController from 'src/components/PushNotificationsController';
+import PushNotificationsController from 'src/components/PushNotificationsController';
 import AppStateController from 'src/components/AppStateController';
 import Router from 'src/components/Router';
 import actions from 'src/data/actions';
 
 import 'moment/locale/ru';
 import 'moment/locale/nb';
+import PushNotification from 'react-native-push-notification';
 
 YellowBox.ignoreWarnings(['Setting a timer']);
 
@@ -25,8 +26,24 @@ const Application = () => (
   <PersistGate loading={null} persistor={persistor}>
     <Router />
 
+    {/*<TouchableHighlight*/}
+      {/*onPress={() => {*/}
+        {/*PushNotification.localNotificationSchedule({*/}
+          {/*date: new Date(Date.now() + 5 * 1000),*/}
+          {/*title: 'Scheduled Notification',*/}
+          {/*message: 'My Notification Message',*/}
+          {/*playSound: true,*/}
+          {/*soundName: 'default'*/}
+        {/*});*/}
+      {/*}}*/}
+    {/*>*/}
+      {/*<View>*/}
+        {/*<Text>Show notification</Text>*/}
+      {/*</View>*/}
+    {/*</TouchableHighlight>*/}
+
     {/*<SocketController />*/}
-    {/*<PushNotificationsController />*/}
+    <PushNotificationsController />
     {/*<AppStateController />*/}
   </PersistGate>
 );

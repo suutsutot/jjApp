@@ -3,7 +3,7 @@ import PushNotification from 'react-native-push-notification';
 import { compose } from 'ramda';
 import { lifecycle } from 'recompose';
 import { connect } from 'react-redux';
-import { AsyncStorage } from 'react-native';
+import { Alert, AsyncStorage } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 
 import config from 'src/config';
@@ -28,6 +28,7 @@ const PushNotificationsController = compose(
         },
         onNotification: notification => {
           console.log('NOTIFICATION:', notification);
+          // Alert.alert(notification.message);
           const { foreground } = notification;
           fetchList();
           if (!foreground) {

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AD_UNIT_ID_FOR_BANNER_TEST</key>
+	<string>ca-app-pub-3940256099942544/2934735716</string>
+	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
+	<string>ca-app-pub-3940256099942544/4411468910</string>
+	<key>CLIENT_ID</key>
+	<string>285952905939-i4lel4ha4vurgkgha22048iuo1fjvbe9.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.285952905939-i4lel4ha4vurgkgha22048iuo1fjvbe9</string>
+	<key>API_KEY</key>
+	<string>AIzaSyALAuXT4o6h38jZZJg0VctVQ1TmJlIZTdg</string>
+	<key>GCM_SENDER_ID</key>
+	<string>285952905939</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.nrg-soft.justJoinApp</string>
+	<key>PROJECT_ID</key>
+	<string>justjoin-4290f</string>
+	<key>STORAGE_BUCKET</key>
+	<string>justjoin-4290f.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<true></true>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<false></false>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:285952905939:ios:de0eb16a20246bb7</string>
+	<key>DATABASE_URL</key>
+	<string>https://justjoin-4290f.firebaseio.com</string>
+</dict>
+</plist>
