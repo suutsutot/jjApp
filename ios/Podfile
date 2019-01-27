@@ -8,5 +8,8 @@ target 'justJoinApp' do
   # Pods for justJoinApp
 
   pod 'Firebase/Core'
+  pod 'Firebase/Messaging'
+  pod 'Fabric'
+  pod 'Crashlytics'
 
 end

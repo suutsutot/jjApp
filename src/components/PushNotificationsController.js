@@ -24,6 +24,7 @@ const PushNotificationsController = compose(
       PushNotification.configure({
         onRegister: ({ token }) => {
           console.log('TOKEN:', token);
+          // Alert.alert(token);
           AsyncStorage.setItem('pushNotificationToken', token);
         },
         onNotification: notification => {

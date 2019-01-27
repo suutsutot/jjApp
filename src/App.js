@@ -18,7 +18,6 @@ import actions from 'src/data/actions';
 
 import 'moment/locale/ru';
 import 'moment/locale/nb';
-import PushNotification from 'react-native-push-notification';
 
 YellowBox.ignoreWarnings(['Setting a timer']);
 
