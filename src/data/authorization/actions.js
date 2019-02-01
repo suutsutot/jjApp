@@ -1,7 +1,8 @@
-import { AsyncStorage } from 'react-native';
+import { Alert, AsyncStorage, Platform } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 
 import { refreshByCredentials } from 'src/api/refreshTokenAPI';
+import { setPushNotificationToken } from 'src/api/userApi';
 import config from 'src/config';
 import * as types from 'src/constants/actionTypes';
 import * as globalActions from 'src/data/global/globalActions';
@@ -46,22 +47,19 @@ const loginRequest = credentials => async dispatch => {
       dispatch(NavigationActions.navigate({ routeName: 'Notifications' }));
       dispatch(globalActions.hideLoading());
 
-      const pushNotificationToken = await AsyncStorage.getItem(
-        'pushNotificationToken'
-      );
       try {
-        fetch(`${config.server}/api/users/set-push-token`, {
-          method: 'POST',
-          body: JSON.stringify({
-            id: userInfo._id,
-            pushNotificationToken
-          }),
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            Authorization: idToken
-          }
-        });
+        const pushNotificationToken = await AsyncStorage.getItem(
+          'pushNotificationToken'
+        );
+        const fcmToken = await AsyncStorage.getItem('fcmToken');
+
+        setPushNotificationToken(
+          userInfo._id,
+          Platform.select({
+            ios: { apnsToken: pushNotificationToken, fcmToken },
+            android: { fcmToken: pushNotificationToken }
+          })
+        );
       } catch (e) {}
     } else {
       dispatch(noUserGet());

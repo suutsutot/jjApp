@@ -5,10 +5,10 @@ import styles from './styles';
 class StartScreen extends Component {
   constructor() {
     super();
-    this.bootstrapAsync();
+    this.redirect();
   }
 
-  bootstrapAsync = async () => {
+  redirect = async () => {
     const userId = await AsyncStorage.getItem('userId');
     this.props.navigation.navigate(userId ? 'Notifications' : 'Login');
   };
