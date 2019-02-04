@@ -3711,6 +3711,11 @@ jest@23.6.0:
     import-local "^1.0.0"
     jest-cli "^23.6.0"
 
+jquery-param@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/jquery-param/-/jquery-param-1.0.1.tgz#fba32ca58a91e8b1d64ac4765d2fe5a25ac46781"
+  integrity sha512-7HN1dLvfweR7lNDtajA8FfhghN+SKsKz/ME7D/PAPQ8eDUr2ub42WqeyrZptWEdslckrpKpp+ZGGiKjE+r7iuQ==
+
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"

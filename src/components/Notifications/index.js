@@ -10,11 +10,11 @@ import {
   Image,
   TouchableOpacity,
   StyleSheet,
-  RefreshControl
+  RefreshControl,
+  Alert
 } from 'react-native';
 import moment from 'moment';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import PushNotification from 'react-native-push-notification';
 
 import i18n from 'src/framework/i18n';
 import { Button, HeaderSection } from 'src/pureComponents';
@@ -26,6 +26,7 @@ import {
   getNotViewedNotificationsIds,
   getViewedNotificationsIds
 } from 'src/data/notifications/selectors';
+import imgix from 'src/framework/imgix';
 
 import styles from './styles';
 
@@ -60,9 +61,7 @@ const Notification = ({
 }) => (
   <View>
     <View style={StyleSheet.flatten([styles.container, styles.layoutRow])}>
-      <NotificationIcon
-        source={{ uri: `https://placeimg.com/120/120/any${notification._id}` }}
-      />
+      <NotificationIcon source={imageSource} />
       <View style={[styles.layoutColumn, styles.leftPaddingText]}>
         <View style={[styles.layoutRow, { flex: 1 }]}>{firstRow}</View>
         <View style={[styles.layoutRow]}>{secondRow}</View>
@@ -88,9 +87,11 @@ const getNotificationComponent = type => ({
           notification={notification}
           onPress={() => onPress(notification)}
           imageSource={{
-            uri:
+            uri: imgix(
               notification.event.miniaturePic ||
-              notification.event.backgroundPic
+                notification.event.backgroundPic,
+              'list'
+            )
           }}
           firstRow={
             <Fragment>
@@ -139,9 +140,11 @@ const getNotificationComponent = type => ({
           notification={notification}
           onPress={() => onPress(notification)}
           imageSource={{
-            uri:
+            uri: imgix(
               notification.community.miniaturePic ||
-              notification.community.backgroundPic
+                notification.community.backgroundPic,
+              'list'
+            )
           }}
           firstRow={
             <Fragment>
@@ -229,9 +232,11 @@ const getNotificationComponent = type => ({
           notification={notification}
           onPress={() => onPress(notification)}
           imageSource={{
-            uri:
+            uri: imgix(
               notification.community.miniaturePic ||
-              notification.community.backgroundPic
+                notification.community.backgroundPic,
+              'list'
+            )
           }}
           firstRow={
             <Fragment>
@@ -252,9 +257,11 @@ const getNotificationComponent = type => ({
           notification={notification}
           onPress={() => onPress(notification)}
           imageSource={{
-            uri:
+            uri: imgix(
               notification.event.miniaturePic ||
-              notification.event.backgroundPic
+                notification.event.backgroundPic,
+              'list'
+            )
           }}
           firstRow={
             <Fragment>
@@ -299,9 +306,11 @@ const getNotificationComponent = type => ({
           notification={notification}
           onPress={() => onPress(notification)}
           imageSource={{
-            uri:
+            uri: imgix(
               notification.community.miniaturePic ||
-              notification.community.backgroundPic
+                notification.community.backgroundPic,
+              'list'
+            )
           }}
           firstRow={
             <Fragment>
