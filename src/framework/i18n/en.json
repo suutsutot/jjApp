@@ -578,5 +578,6 @@
   "basic_settings":"Basic settings",
 
   "empty_notifications": "You do not have any notifications yet",
-  "go_to_web_profile": "Go to profile (web version)"
+  "go_to_web_profile": "Go to profile (web version)",
+  "go_to_profile": "Go to profile"
 }

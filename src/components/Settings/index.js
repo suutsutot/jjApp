@@ -27,28 +27,33 @@ export class Settings extends Component {
     logout();
   }
 
-  goToProfile = id => {
-    refresh().then(newToken => {
-      let url =
-        config.client +
-        '/redirect?type=user&id=' +
-        id +
-        '&idToken=' +
-        newToken.idToken +
-        '&accessToken=' +
-        newToken.accessToken;
-      Linking.canOpenURL(url).then(supported => {
-        if (supported) {
-          Linking.openURL(url);
-        } else {
-          console.log("Don't know how to open URI: " + url);
-        }
-      });
-    });
+  // goToProfile = id => {
+  //   refresh().then(newToken => {
+  //     let url =
+  //       config.client +
+  //       '/redirect?type=user&id=' +
+  //       id +
+  //       '&idToken=' +
+  //       newToken.idToken +
+  //       '&accessToken=' +
+  //       newToken.accessToken;
+  //     Linking.canOpenURL(url).then(supported => {
+  //       if (supported) {
+  //         Linking.openURL(url);
+  //       } else {
+  //         console.log("Don't know how to open URI: " + url);
+  //       }
+  //     });
+  //   });
+  // };
+
+  goToProfile = userId => {
+    this.props.navigation.navigate('UserProfile', { userId } )
   };
 
   renderProfile = () => {
     const { name, avatar, userId } = this.props;
+    console.log('avatar', avatar)
     return (
       <TouchableOpacity
         style={[
@@ -87,7 +92,7 @@ export class Settings extends Component {
                 {name}
               </Text>
               <Text style={[styles.grayColorText, { fontSize: 12 }]}>
-                {i18n('go_to_web_profile')}
+                {i18n('go_to_profile')}
               </Text>
             </View>
           </View>

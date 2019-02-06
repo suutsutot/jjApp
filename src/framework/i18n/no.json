@@ -578,5 +578,6 @@
   "basic_settings":"Basic settings",
 
   "empty_notifications": "",
-  "go_to_web_profile": ""
+  "go_to_web_profile": "",
+  "go_to_profile": ""
 }
