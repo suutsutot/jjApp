@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
         lineHeight: 25,
     },
     materialIconBackStyle: {
-        fontSize: 26,
+        fontSize: 24,
         color: '#fff',
         marginBottom: 22
     }
