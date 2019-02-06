@@ -35,7 +35,7 @@ class UserProfile extends Component {
         <HeaderSection
           leftComponent={<MaterialIcons
             onPress={() => this.props.navigation.goBack()}
-            name="chevron-left"
+            name="arrow-back"
             style={styles.materialIconBackStyle} />}
           title={i18n('profile')} />
         <View style={styles.mainContent}>
