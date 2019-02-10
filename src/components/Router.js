@@ -93,7 +93,7 @@ export const Navigator = StackNavigator(
     Login
   },
   {
-    mode: 'modal',
+    mode: 'card',
     headerMode: 'none'
   }
 );
