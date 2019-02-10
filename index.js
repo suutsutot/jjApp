@@ -1,15 +1,5 @@
-import React, {Component} from 'react';
 import {AppRegistry} from 'react-native';
-import App from './app/App';
+import App from './src/App';
+import {name as appName} from './app.json';
 
-console.disableYellowBox = true;
-
-export default class jjApp extends Component {
-    render() {
-        return (
-            <App />
-        );
-    }
-}
-
-AppRegistry.registerComponent('justJoinApp', () => jjApp);
+AppRegistry.registerComponent(appName, () => App);

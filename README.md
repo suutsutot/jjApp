@@ -13,3 +13,8 @@ or
 ```
 react-native run-android
 ```
+to build release APK
+add .keystore file and run:
+```
+cd android && ./gradlew assembleRelease
+```

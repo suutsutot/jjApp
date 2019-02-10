@@ -2,19 +2,18 @@ package com.justjoinapp;
 
 import android.app.Application;
 
+import com.crashlytics.android.Crashlytics;
 import com.facebook.react.ReactApplication;
+import com.azendoo.reactnativesnackbar.SnackbarPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
-import com.horcrux.svg.SvgPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
-import fr.bamlab.rnimageresizer.ImageResizerPackage;
-import com.imagepicker.ImagePickerPackage;
-import com.RNFetchBlob.RNFetchBlobPackage;
 import com.auth0.react.A0Auth0Package;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 
+import io.fabric.sdk.android.Fabric;
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,12 +29,9 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new SnackbarPackage(),
             new ReactNativePushNotificationPackage(),
-            new SvgPackage(),
             new VectorIconsPackage(),
-            new ImageResizerPackage(),
-            new ImagePickerPackage(),
-            new RNFetchBlobPackage(),
             new A0Auth0Package()
       );
     }
@@ -54,6 +50,7 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public void onCreate() {
     super.onCreate();
+    Fabric.with(this, new Crashlytics());
     SoLoader.init(this, /* native exopackage */ false);
   }
 }
