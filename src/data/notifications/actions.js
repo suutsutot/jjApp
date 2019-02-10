@@ -8,9 +8,13 @@ export const setList = (list, data) => ({
   }
 });
 
-export const fetchList = () => ({
-  type: types.NOTIFICATIONS.FETCH_LIST
-});
+export const fetchList = (payload = { silent: false }) => {
+  const { silent } = payload;
+  return {
+    type: types.NOTIFICATIONS.FETCH_LIST,
+    payload: { silent }
+  };
+};
 
 export const fetchListError = () => ({
   type: types.NOTIFICATIONS.FETCH_LIST_ERROR

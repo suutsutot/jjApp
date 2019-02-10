@@ -1,23 +1,26 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
     margin: 10,
-    alignItems: 'center',
+    alignItems: 'flex-start'
   },
   layoutRow: {
     flexDirection: 'row'
   },
   layoutColumn: {
+    flex: 1,
     flexDirection: 'column'
   },
   blackColorText: {
     color: '#000',
     fontSize: 14,
+    flexWrap: "wrap"
   },
   grayColorText: {
     color: '#78909c',
     fontSize: 14,
+    flexWrap: "wrap"
   },
   leftPaddingText: {
     paddingLeft: 10
@@ -35,11 +38,11 @@ const styles = StyleSheet.create({
     marginBottom: 25
   },
   picker: {
-    width: 100,
+    width: 100
   },
   shadowContainer: {
     shadowColor: '#000',
-    shadowOffset: {height: 0.5},
+    shadowOffset: { height: 0.5 },
     shadowOpacity: 0.1,
     shadowRadius: 0.5,
     elevation: 4
@@ -48,10 +51,9 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   notificationIcon: {
-    alignSelf: 'center',
     height: 40,
     width: 40,
     borderRadius: 20
@@ -63,8 +65,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end'
   },
   actionButton: {
-    width: 160,
+    width: 160
   }
 });
 
-export default styles
+export default styles;

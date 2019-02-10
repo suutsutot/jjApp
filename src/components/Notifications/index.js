@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
-import { compose, toUpper } from 'ramda';
+import { compose, toUpper, toLower } from 'ramda';
 import { lifecycle } from 'recompose';
 import {
   View,
@@ -34,6 +34,16 @@ const Touchable = ({ children, onPress, style }) => (
   <TouchableOpacity onPress={onPress}>{children}</TouchableOpacity>
 );
 
+const NotificationInfo = ({ children }) => (
+  <Text
+    ellipsizeMode="middle"
+    numberOfLines={3}
+    style={{ flexWrap: 'wrap', marginBottom: 5 }}
+  >
+    {children}
+  </Text>
+);
+
 const PrimaryText = ({ children }) => (
   <Text style={styles.blackColorText}>{children}</Text>
 );
@@ -61,7 +71,7 @@ const Notification = ({
 }) => (
   <View>
     <View style={StyleSheet.flatten([styles.container, styles.layoutRow])}>
-      <NotificationIcon source={imageSource} />
+      <NotificationIcon source={{ ...imageSource, cache: 'only-if-cached' }} />
       <View style={[styles.layoutColumn, styles.leftPaddingText]}>
         <View style={[styles.layoutRow, { flex: 1 }]}>{firstRow}</View>
         <View style={[styles.layoutRow]}>{secondRow}</View>
@@ -81,7 +91,10 @@ const getNotificationComponent = type => ({
   leaveCommunityRequest
 }) => {
   switch (type) {
-    case 'eventInvitation':
+    case 'eventInvitation': {
+      const isPassedEvent =
+        moment(notification.event.eventDates.startDate) < moment();
+
       return (
         <Notification
           notification={notification}
@@ -94,7 +107,7 @@ const getNotificationComponent = type => ({
             )
           }}
           firstRow={
-            <Fragment>
+            <NotificationInfo>
               <PrimaryText>
                 {notification.event.title ||
                   i18n(notification.event.activity.id, 'activities')}
@@ -104,16 +117,17 @@ const getNotificationComponent = type => ({
                 {moment(notification.event.eventDates.startDate).format(
                   'Do MMMM'
                 )}
+                {isPassedEvent && `, ${toLower(i18n('event_is_passed'))}`}
               </SecondaryText>
-            </Fragment>
+            </NotificationInfo>
           }
           secondRow={
-            <Fragment>
+            <NotificationInfo>
               <PrimaryText>{notification.creatorName}</PrimaryText>
               <SecondaryText> {i18n('invites_you_to_event')}</SecondaryText>
-            </Fragment>
+            </NotificationInfo>
           }
-          hasActions={!notification.answered}
+          hasActions={!notification.answered && !isPassedEvent}
           actions={
             <Actions>
               <Button
@@ -134,6 +148,7 @@ const getNotificationComponent = type => ({
           }
         />
       );
+    }
     case 'communityInvitation':
       return (
         <Notification
@@ -147,15 +162,15 @@ const getNotificationComponent = type => ({
             )
           }}
           firstRow={
-            <Fragment>
+            <NotificationInfo>
               <PrimaryText>{notification.community.title}</PrimaryText>
-            </Fragment>
+            </NotificationInfo>
           }
           secondRow={
-            <Fragment>
+            <NotificationInfo>
               <PrimaryText>{notification.creatorName}</PrimaryText>
               <SecondaryText> {i18n('invites_you_to_community')}</SecondaryText>
-            </Fragment>
+            </NotificationInfo>
           }
           hasActions={!notification.answered}
           actions={
@@ -187,12 +202,12 @@ const getNotificationComponent = type => ({
           onPress={() => onPress(notification)}
           imageSource={{ uri: notification.user.pic }}
           firstRow={
-            <Fragment>
+            <NotificationInfo>
               <PrimaryText>
                 {notification.user.firstName} {notification.user.lastName}
               </PrimaryText>
               <SecondaryText> {i18n('following_you')}</SecondaryText>
-            </Fragment>
+            </NotificationInfo>
           }
           hasActions={!notification.answered}
           actions={
@@ -217,12 +232,12 @@ const getNotificationComponent = type => ({
           onPress={() => onPress(notification)}
           imageSource={{ uri: notification.user.pic }}
           firstRow={
-            <Fragment>
+            <NotificationInfo>
               <PrimaryText>
                 {notification.user.firstName} {notification.user.lastName}
               </PrimaryText>
               <SecondaryText> {i18n('accepting_request')}</SecondaryText>
-            </Fragment>
+            </NotificationInfo>
           }
         />
       );
@@ -239,15 +254,15 @@ const getNotificationComponent = type => ({
             )
           }}
           firstRow={
-            <Fragment>
+            <NotificationInfo>
               <PrimaryText>{notification.community.title}</PrimaryText>
               <SecondaryText> {i18n('wrote_comment')}</SecondaryText>
-            </Fragment>
+            </NotificationInfo>
           }
           secondRow={
-            <Fragment>
+            <NotificationInfo>
               <Text>{notification.details.text}</Text>
-            </Fragment>
+            </NotificationInfo>
           }
         />
       );
@@ -264,17 +279,17 @@ const getNotificationComponent = type => ({
             )
           }}
           firstRow={
-            <Fragment>
+            <NotificationInfo>
               <PrimaryText>
                 {notification.event.title || notification.event.activity.name}
               </PrimaryText>
               <SecondaryText> {i18n('wrote_comment')}</SecondaryText>
-            </Fragment>
+            </NotificationInfo>
           }
           secondRow={
-            <Fragment>
+            <NotificationInfo>
               <Text>{notification.details.text}</Text>
-            </Fragment>
+            </NotificationInfo>
           }
         />
       );
@@ -285,17 +300,17 @@ const getNotificationComponent = type => ({
           onPress={() => onPress(notification)}
           imageSource={{ uri: notification.user.pic }}
           firstRow={
-            <Fragment>
+            <NotificationInfo>
               <PrimaryText>
                 {notification.user.firstName} {notification.user.lastName}
               </PrimaryText>
               <SecondaryText> {i18n('wrote_comment')}</SecondaryText>
-            </Fragment>
+            </NotificationInfo>
           }
           secondRow={
-            <Fragment>
+            <NotificationInfo>
               <Text>{notification.details.text}</Text>
-            </Fragment>
+            </NotificationInfo>
           }
         />
       );
@@ -313,20 +328,20 @@ const getNotificationComponent = type => ({
             )
           }}
           firstRow={
-            <Fragment>
+            <NotificationInfo>
               <PrimaryText>{notification.details.eventName}</PrimaryText>
               <SecondaryText>
                 {' '}
                 {i18n('on')}{' '}
                 {moment(notification.details.date).format('Do MMM')}
               </SecondaryText>
-            </Fragment>
+            </NotificationInfo>
           }
           secondRow={
-            <Fragment>
+            <NotificationInfo>
               <PrimaryText>{notification.community.title}</PrimaryText>
               <SecondaryText> {i18n('invites_you_to_event')}</SecondaryText>
-            </Fragment>
+            </NotificationInfo>
           }
         />
       );

@@ -34,7 +34,7 @@ class PushNotificationsController extends Component {
         console.log('NOTIFICATION:', notification);
 
         const { foreground } = notification;
-        fetchList();
+        fetchList({ silent: foreground });
         if (!foreground) {
           navigate({ routeName: 'Notifications' });
         }
