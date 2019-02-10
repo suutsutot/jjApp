@@ -71,7 +71,7 @@ const Notification = ({
 }) => (
   <View>
     <View style={StyleSheet.flatten([styles.container, styles.layoutRow])}>
-      <NotificationIcon source={{ ...imageSource, cache: 'only-if-cached' }} />
+      <NotificationIcon source={imageSource} />
       <View style={[styles.layoutColumn, styles.leftPaddingText]}>
         <View style={[styles.layoutRow, { flex: 1 }]}>{firstRow}</View>
         <View style={[styles.layoutRow]}>{secondRow}</View>
