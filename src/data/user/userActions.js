@@ -102,3 +102,10 @@ export const addUserInfo = (email, info) => {
     payload: { email, info }
   };
 };
+
+export const setUserProfile = user => {
+  return {
+    type: types.SET_USER_PROFILE,
+    payload: { user }
+  };
+};

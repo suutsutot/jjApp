@@ -3,7 +3,8 @@ import * as types from 'src/constants/actionTypes';
 let defaultState = {
   info: {},
   loaded: false,
-  profile: {}
+  profile: {},
+  user: {}
 };
 
 export let user = (state = defaultState, action) => {
@@ -26,6 +27,11 @@ export let user = (state = defaultState, action) => {
         },
         loaded: true
       };
+    case types.SET_USER_PROFILE:
+      return {
+        ...state,
+        user: payload.user
+      }
     default:
       return state;
   }

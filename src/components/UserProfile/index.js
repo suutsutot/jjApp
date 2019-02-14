@@ -2,11 +2,13 @@ import React, { Component, Fragment } from 'react';
 import { View, Text, ScrollView, RefreshControl } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import moment from 'moment';
+import { connect } from 'react-redux';
 
 import { HeaderSection } from 'src/pureComponents/HeaderSection';
 import { ArrowBackIcon } from 'src/pureComponents/ArrowBackIcon';
 import { userData } from 'src/api/userApi';
 import i18n from 'src/framework/i18n';
+import actions from 'src/data/actions';
 
 import styles from './styles';
 
@@ -14,7 +16,6 @@ class UserProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: {},
       loaded: false,
       refreshing: false
     };
@@ -31,31 +32,32 @@ class UserProfile extends Component {
 
   fetchUserData() {
     const userId = this.props.navigation.state.params.userId;
-    userData(userId).then(user =>
-      this.setState({ user, loaded: true, refreshing: false })
-    );
+    userData(userId).then(user => {
+      this.props.setUserProfile(user);
+      this.setState({ loaded: true, refreshing: false });
+    });
   }
 
   render() {
-    const { user } = this.state.user;
+    const { user } = this.props.user.user;
 
     return (
-      <ScrollView
-        refreshControl={
-          <RefreshControl
-            colors={['#00bcd4']}
-            refreshing={this.state.refreshing}
-            onRefresh={this.onRefresh}
-          />
-        }
-      >
-        <View>
-          <HeaderSection
-            leftComponent={
-              <ArrowBackIcon onPress={() => this.props.navigation.goBack()} />
-            }
-            title={i18n('profile')}
-          />
+      <View>
+        <HeaderSection
+          leftComponent={
+            <ArrowBackIcon onPress={() => this.props.navigation.goBack()} />
+          }
+          title={i18n('profile')}
+        />
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              colors={['#00bcd4']}
+              refreshing={this.state.refreshing}
+              onRefresh={this.onRefresh}
+            />
+          }
+        >
           <View style={styles.mainContent}>
             {this.state.loaded && (
               <Fragment>
@@ -87,10 +89,17 @@ class UserProfile extends Component {
               </Fragment>
             )}
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </View>
     );
   }
 }
 
-export default UserProfile;
+export default connect(
+  state => ({
+    user: state.user
+  }),
+  dispatch => ({
+    setUserProfile: user => dispatch(actions.user.setUserProfile(user))
+  })
+)(UserProfile);
