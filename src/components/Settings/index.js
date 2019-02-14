@@ -53,7 +53,7 @@ export class Settings extends Component {
 
   renderProfile = () => {
     const { name, avatar, userId } = this.props;
-    console.log('avatar', avatar)
+
     return (
       <TouchableOpacity
         style={[

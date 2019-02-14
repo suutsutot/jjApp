@@ -18,11 +18,6 @@ const styles = StyleSheet.create({
     blackTextBlock: {
         fontSize: 16,
         lineHeight: 25,
-    },
-    materialIconBackStyle: {
-        fontSize: 24,
-        color: '#fff',
-        marginBottom: 22
     }
 })
 
