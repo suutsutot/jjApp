@@ -16,7 +16,7 @@ class UserProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loaded: false,
+      // loaded: false,
       refreshing: false
     };
   }
@@ -34,7 +34,7 @@ class UserProfile extends Component {
     const userId = this.props.navigation.state.params.userId;
     userData(userId).then(user => {
       this.props.setUserProfile(user);
-      this.setState({ loaded: true, refreshing: false });
+      this.setState({ refreshing: false });
     });
   }
 
@@ -59,7 +59,7 @@ class UserProfile extends Component {
           }
         >
           <View style={styles.mainContent}>
-            {this.state.loaded && (
+            {user && (
               <Fragment>
                 <Avatar
                   size="xlarge"
