@@ -95,7 +95,7 @@ export const Navigator = StackNavigator(
     UserProfile
   },
   {
-    mode: 'modal',
+    mode: 'card',
     headerMode: 'none'
   }
 );

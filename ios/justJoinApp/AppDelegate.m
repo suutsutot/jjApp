@@ -7,6 +7,8 @@
 
 #import "AppDelegate.h"
 
+#import <Foundation/Foundation.h>
+
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 #import <React/RCTLinkingManager.h>
@@ -19,6 +21,10 @@
 #import <Crashlytics/Crashlytics.h>
 
 @implementation AppDelegate
+{
+  RCTRootView *_rootView;
+  NSString *_fcmToken;
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -35,6 +41,9 @@
                                                       moduleName:@"justJoinApp"
                                                initialProperties:nil
                                                    launchOptions:launchOptions];
+  
+  _rootView = rootView;
+  
   rootView.backgroundColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:1];
 
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
@@ -85,6 +94,32 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
   NSLog(@"[PushNOtification] didReceiveLocalNotification@");
   [RCTPushNotificationManager didReceiveLocalNotification:notification];
+}
+
+- (void)setToken {
+  [_rootView setAppProperties:@{@"fcmToken":_fcmToken}];
+}
+
+- (void)messaging:(FIRMessaging *)messaging didReceiveRegistrationToken:(NSString *)fcmToken {
+  NSLog(@"FCM registration token: %@", fcmToken);
+  // Notify about received token.
+  NSDictionary *dataDict = [NSDictionary dictionaryWithObject:fcmToken forKey:@"token"];
+  [[NSNotificationCenter defaultCenter] postNotificationName:
+   @"FCMToken" object:nil userInfo:dataDict];
+  // TODO: If necessary send token to application server.
+  // Note: This callback is fired at each app startup and whenever a new token is generated.
+//  [self.window.rootViewController.view setAppProperties:@{@"fcmToken": fcmToken}];
+//  NSDictionary *props = @{@"fcmToken" : fcmToken};
+  
+  _fcmToken = fcmToken;
+  
+  [NSTimer
+   scheduledTimerWithTimeInterval:4
+   target:self
+   selector:@selector(setToken)
+   userInfo:nil
+   repeats:NO
+   ];
 }
 
 @end

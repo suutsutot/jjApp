@@ -19,11 +19,11 @@ import 'moment/locale/nb';
 
 YellowBox.ignoreWarnings(['Setting a timer']);
 
-const Application = () => (
+const Application = ({ fcmToken }) => (
   <PersistGate loading={null} persistor={persistor}>
     <Router />
 
-    <PushNotificationsController />
+    <PushNotificationsController fcmToken={fcmToken} />
     <AppStateController />
   </PersistGate>
 );

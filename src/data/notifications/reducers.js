@@ -13,7 +13,7 @@ export let notifications = (state = defaultState, action) => {
   let { payload } = action;
   switch (action.type) {
     case types.NOTIFICATIONS.FETCH_LIST:
-      return assoc('pending', true, state);
+      return assoc('pending', !payload.silent, state);
     case types.NOTIFICATIONS.FETCH_LIST_ERROR:
       return assoc('pending', false, state);
     case types.NOTIFICATIONS.SET_LIST:

@@ -6,6 +6,7 @@
  */
 
 #import <UIKit/UIKit.h>
+#import <React/RCTRootView.h>
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 

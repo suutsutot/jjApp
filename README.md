@@ -1,13 +1,20 @@
 # jjApp
-#### dev
+
 ```
 yarn install
-react-native run-android
 ```
 
-#### building release APK
+### Android
+```
+cd android && ./gradlew installDevDebug
+cd .. && npm start (manual start app in emultaor)
+```
+or
+```
+react-native run-android
+```
+to build release APK
 add .keystore file and run:
 ```
-cd android
-./gradlew assembleRelease
+cd android && ./gradlew assembleRelease
 ```
