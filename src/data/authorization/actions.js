@@ -108,40 +108,42 @@ export const dbLoginWithCredentials = (
   }
 };
 
-export const dbLoginViaFacebook = () => {
-  return (dispatch, getState) => {
-    auth0.webAuth
-      .authorize({
-        scope: 'openid email profile offline_access',
-        audience: 'https://' + auth0Config.domain + '/userinfo',
-        connection: 'facebook'
-      })
-      .then(credentials => {
-        return loginRequest(credentials)(dispatch);
-      })
-      .catch(error => {
-        console.log('AuthorizeActionError:', error);
-        dispatch(noUserGet());
-      });
-  };
+export const dbLoginViaFacebook = () => dispatch => {
+  dispatch(applicationActions.showLoading());
+
+  auth0.webAuth
+    .authorize({
+      scope: 'openid email profile offline_access',
+      audience: 'https://' + auth0Config.domain + '/userinfo',
+      connection: 'facebook'
+    })
+    .then(credentials => {
+      return loginRequest(credentials)(dispatch);
+    })
+    .catch(error => {
+      console.log('AuthorizeActionError:', error);
+      dispatch(noUserGet());
+      dispatch(applicationActions.hideLoading());
+    });
 };
 
-export const dbLoginViaGoogle = () => {
-  return (dispatch, getState) => {
-    auth0.webAuth
-      .authorize({
-        scope: 'openid email profile offline_access',
-        audience: 'https://' + auth0Config.domain + '/userinfo',
-        connection: 'google-oauth2'
-      })
-      .then(credentials => {
-        return loginRequest(credentials)(dispatch);
-      })
-      .catch(error => {
-        console.log('AuthorizeActionError:', error);
-        dispatch(noUserGet());
-      });
-  };
+export const dbLoginViaGoogle = () => dispatch => {
+  dispatch(applicationActions.showLoading());
+
+  auth0.webAuth
+    .authorize({
+      scope: 'openid email profile offline_access',
+      audience: 'https://' + auth0Config.domain + '/userinfo',
+      connection: 'google-oauth2'
+    })
+    .then(credentials => {
+      return loginRequest(credentials)(dispatch);
+    })
+    .catch(error => {
+      console.log('AuthorizeActionError:', error);
+      dispatch(noUserGet());
+      dispatch(applicationActions.hideLoading());
+    });
 };
 
 export const dbSignUp = (email, password) => {
