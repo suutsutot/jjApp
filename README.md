@@ -18,3 +18,6 @@ add .keystore file and run:
 ```
 cd android && ./gradlew assembleRelease
 ```
+
+### Fabric
+https://docs.fabric.io/android/beta/gradle.html
