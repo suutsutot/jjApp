@@ -5,7 +5,7 @@ import { refreshByCredentials } from 'src/api/refreshTokenAPI';
 import { setPushNotificationToken } from 'src/api/userApi';
 import config from 'src/config';
 import * as types from 'src/constants/actionTypes';
-import * as globalActions from 'src/data/global/globalActions';
+import * as applicationActions from 'src/data/application/actions';
 import actions from 'src/data/actions';
 import auth0 from 'src/framework/auth0';
 import auth0Config from 'src/config/auth0Config';
@@ -50,10 +50,10 @@ const loginRequest = credentials => async dispatch => {
         })
       );
 
-      dispatch(globalActions.showNotificationSuccess());
+      dispatch(applicationActions.showNotificationSuccess());
       dispatch(login(userInfo.email, userInfo));
       dispatch(NavigationActions.navigate({ routeName: 'Notifications' }));
-      dispatch(globalActions.hideLoading());
+      dispatch(applicationActions.hideLoading());
 
       try {
         const pushNotificationToken = await AsyncStorage.getItem(
@@ -71,13 +71,13 @@ const loginRequest = credentials => async dispatch => {
       } catch (e) {}
     } else {
       dispatch(noUserGet());
-      dispatch(globalActions.hideLoading());
+      dispatch(applicationActions.hideLoading());
     }
   } catch (error) {
     console.log('AuthorizeActionError:', error);
     dispatch(noUserGet());
-    dispatch(globalActions.hideLoading());
-    dispatch(globalActions.showErrorMessageWithTimeout(error.code));
+    dispatch(applicationActions.hideLoading());
+    dispatch(applicationActions.showErrorMessageWithTimeout(error.code));
   }
 };
 
@@ -85,7 +85,7 @@ export const dbLoginWithCredentials = (
   username,
   password
 ) => async dispatch => {
-  dispatch(globalActions.showLoading());
+  dispatch(applicationActions.showLoading());
 
   try {
     const credentials = await auth0.auth.passwordRealm({
@@ -99,7 +99,7 @@ export const dbLoginWithCredentials = (
   } catch (error) {
     console.log('AuthorizeActionError:', error);
     dispatch(wrongCredentials());
-    dispatch(globalActions.hideLoading());
+    dispatch(applicationActions.hideLoading());
   }
 };
 
@@ -141,7 +141,7 @@ export const dbLoginViaGoogle = () => {
 
 export const dbSignUp = (email, password) => {
   return (dispatch, getState) => {
-    dispatch(globalActions.showLoading());
+    dispatch(applicationActions.showLoading());
 
     const url = 'https://ynpl.auth0.com/dbconnections/signup';
     const data = {
@@ -167,25 +167,24 @@ export const dbSignUp = (email, password) => {
           });
           dispatch(resetAction);
           alert('Successfully! Please log in');
-          dispatch(globalActions.hideLoading());
+          dispatch(applicationActions.hideLoading());
         } else {
           alert('Sorry, there was a sign up error');
-          dispatch(globalActions.hideLoading());
+          dispatch(applicationActions.hideLoading());
         }
       })
       .catch(error => {
         console.log('AuthorizeActionError:', error);
-        dispatch(globalActions.hideLoading());
+        dispatch(applicationActions.hideLoading());
       });
   };
 };
 
 export const dbLogout = () => {
-  return (dispatch, getState) => {
+  return dispatch => {
+    dispatch(NavigationActions.navigate({ routeName: 'Login' }));
     dispatch(logout());
     AsyncStorage.clear();
-    const resetAction = NavigationActions.navigate({ routeName: 'Login' });
-    dispatch(resetAction);
   };
 };
 

@@ -181,8 +181,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   }
 };
 
-const mapStateToProps = ({global}) => {
-  const {error, loading} = global;
+const mapStateToProps = ({application}) => {
+  const {error, loading} = application;
   return {error, loading}
 };
 

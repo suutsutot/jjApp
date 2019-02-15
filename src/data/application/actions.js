@@ -1,14 +1,14 @@
-import * as types from 'src/constants/actionTypes';
+import types from 'src/constants/actionTypes';
 
 export const showNotificationSuccess = () => {
   return {
-    type: types.SHOW_REQUEST_SUCCESS_MESSAGE_GLOBAL
+    type: types.APPLICATION.SHOW_REQUEST_SUCCESS_MESSAGE_GLOBAL
   };
 };
 
 export const hideMessage = () => {
   return {
-    type: types.HIDE_MESSAGE_GLOBAL
+    type: types.APPLICATION.HIDE_MESSAGE_GLOBAL
   };
 };
 
@@ -23,19 +23,19 @@ export const showErrorMessageWithTimeout = error => {
 
 export const showErrorMessage = error => {
   return {
-    type: types.SHOW_ERROR_MESSAGE_GLOBAL,
+    type: types.APPLICATION.SHOW_ERROR_MESSAGE_GLOBAL,
     payload: error
   };
 };
 
 export const showLoading = () => {
   return {
-    type: types.SHOW_LOADING
+    type: types.APPLICATION.SHOW_LOADING
   };
 };
 
 export const hideLoading = () => {
   return {
-    type: types.HIDE_LOADING
+    type: types.APPLICATION.HIDE_LOADING
   };
 };

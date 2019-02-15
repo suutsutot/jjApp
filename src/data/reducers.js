@@ -5,11 +5,11 @@ import { AsyncStorage } from 'react-native';
 import { LOGOUT } from 'src/constants/actionTypes';
 import {activityReducer} from './activity/activityReducer';
 import {authorize} from './authorization/reducer';
-import {globalReducer} from './global/globalReducer';
+import {applicationReducer} from './application/reducer';
 import {user} from './user/reducer';
 import {navReducer} from './nav/navReducer';
 import {events} from './event/reducer';
-import {notifications} from './notifications/reducers';
+import {notifications} from './notifications/reducer';
 
 const appReducer = combineReducers({
   nav: navReducer,
@@ -19,7 +19,7 @@ const appReducer = combineReducers({
     storage: AsyncStorage,
     whitelist: ['profile', 'auth0Id']
   }, authorize),
-  global: globalReducer,
+  application: applicationReducer,
   user: persistReducer({
     key: 'user',
     storage: AsyncStorage,
@@ -35,7 +35,7 @@ const appReducer = combineReducers({
 
 export default (state, action) => {
   if (action.type === LOGOUT) {
-    appReducer(undefined, action);
+    return appReducer(undefined, action);
   }
 
   return appReducer(state, action);

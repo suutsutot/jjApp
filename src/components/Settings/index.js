@@ -134,8 +134,8 @@ export class Settings extends Component {
 
 export default compose(
   connect(
-    ({ global, user }) => {
-      const { error, loading, loggedIn } = global;
+    ({ application, user }) => {
+      const { error, loading, loggedIn } = application;
       const loaded = !isNil(user.profile) && !isEmpty(user.profile);
       const profile = user.profile;
 
