@@ -23,7 +23,7 @@ const appReducer = combineReducers({
   user: persistReducer({
     key: 'user',
     storage: AsyncStorage,
-    whitelist: ['userId', 'profile']
+    whitelist: ['userId', 'email', 'profile']
   }, user),
   events,
   notifications: persistReducer({
