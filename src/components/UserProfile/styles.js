@@ -1,10 +1,15 @@
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1
+    },
     mainContent: {
         flexDirection: 'column',
         justifyContent: 'space-around',
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        paddingVertical: 20
     },
     nameBlock: {
         fontSize: 20,
@@ -19,6 +24,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         lineHeight: 25,
     }
-})
+});
 
 export default styles;

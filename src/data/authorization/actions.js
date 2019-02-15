@@ -6,6 +6,7 @@ import { setPushNotificationToken } from 'src/api/userApi';
 import config from 'src/config';
 import * as types from 'src/constants/actionTypes';
 import * as globalActions from 'src/data/global/globalActions';
+import actions from 'src/data/actions';
 import auth0 from 'src/framework/auth0';
 import auth0Config from 'src/config/auth0Config';
 
@@ -41,6 +42,13 @@ const loginRequest = credentials => async dispatch => {
 
       AsyncStorage.setItem('userId', userInfo._id);
       AsyncStorage.setItem('email', userInfo.email);
+
+      dispatch(
+        actions.user.setUserBase({
+          userId: userInfo._id,
+          email: userInfo.email
+        })
+      );
 
       dispatch(globalActions.showNotificationSuccess());
       dispatch(login(userInfo.email, userInfo));

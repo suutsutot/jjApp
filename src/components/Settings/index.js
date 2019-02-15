@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { toUpper } from 'ramda';
+import { isNil, isEmpty, toUpper } from 'ramda';
 import { connect } from 'react-redux';
 import {
   TouchableOpacity,
@@ -7,7 +7,8 @@ import {
   ScrollView,
   Text,
   ActivityIndicator,
-  Linking
+  Linking,
+  AsyncStorage
 } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -47,12 +48,13 @@ export class Settings extends Component {
   //   });
   // };
 
-  goToProfile = userId => {
-    this.props.navigation.navigate('UserProfile', { userId } )
+  goToProfile = async () => {
+    const userId = await AsyncStorage.getItem('userId');
+    this.props.navigation.navigate('UserProfile', { userId });
   };
 
   renderProfile = () => {
-    const { name, avatar, userId } = this.props;
+    const { name, avatar } = this.props;
 
     return (
       <TouchableOpacity
@@ -62,9 +64,7 @@ export class Settings extends Component {
           styles.shadowContainer,
           { marginBottom: 20 }
         ]}
-        onPress={() => {
-          this.goToProfile(userId);
-        }}
+        onPress={this.goToProfile}
       >
         <View
           style={[
@@ -96,11 +96,7 @@ export class Settings extends Component {
               </Text>
             </View>
           </View>
-          <MaterialIcons
-            name="chevron-right"
-            size={24}
-            color="#78909c"
-          />
+          <MaterialIcons name="chevron-right" size={24} color="#78909c" />
         </View>
       </TouchableOpacity>
     );
@@ -140,16 +136,15 @@ export default compose(
   connect(
     ({ global, user }) => {
       const { error, loading, loggedIn } = global;
-      const loaded = user.loaded;
-      let profile = {};
-      if (user.loaded) profile = user.profile;
+      const loaded = !isNil(user.profile) && !isEmpty(user.profile);
+      const profile = user.profile;
 
       return {
-        userId: loaded && profile ? profile._id : null,
+        userId: user.userId,
         name:
           loaded && profile && profile.firstName && profile.lastName
             ? profile.firstName + ' ' + profile.lastName
-            : profile.email,
+            : user.email,
         avatar: loaded && profile ? profile.pic : '',
         loaded,
         error,
@@ -160,7 +155,7 @@ export default compose(
     (dispatch, ownProps) => {
       return {
         logout: () => dispatch(actions.authorization.dbLogout()),
-        fetchUserInfo: () => dispatch(actions.user.dbGetProfile())
+        fetchUserInfo: () => dispatch(actions.user.fetchUserProfile())
       };
     }
   ),

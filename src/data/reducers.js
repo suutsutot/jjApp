@@ -20,7 +20,11 @@ const appReducer = combineReducers({
     whitelist: ['profile', 'auth0Id']
   }, authorize),
   global: globalReducer,
-  user,
+  user: persistReducer({
+    key: 'user',
+    storage: AsyncStorage,
+    whitelist: ['userId', 'profile']
+  }, user),
   events,
   notifications: persistReducer({
     key: 'notifications',

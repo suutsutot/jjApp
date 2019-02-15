@@ -1,8 +1,9 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { View, Text, ScrollView, RefreshControl } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import moment from 'moment';
 import { connect } from 'react-redux';
+import { isEmpty, isNil } from 'ramda';
 
 import { HeaderSection } from 'src/pureComponents/HeaderSection';
 import { ArrowBackIcon } from 'src/pureComponents/ArrowBackIcon';
@@ -13,15 +14,13 @@ import actions from 'src/data/actions';
 import styles from './styles';
 
 class UserProfile extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      // loaded: false,
-      refreshing: false
-    };
-  }
+  state = {
+    refreshing: false
+  };
 
   componentDidMount() {
+    const { loaded } = this.props;
+    !loaded && this.setState({ refreshing: true });
     this.fetchUserData();
   }
 
@@ -32,63 +31,63 @@ class UserProfile extends Component {
 
   fetchUserData() {
     const userId = this.props.navigation.state.params.userId;
-    userData(userId).then(user => {
-      this.props.setUserProfile(user);
+    userData(userId).then(data => {
+      this.props.setUserProfile(data.user);
       this.setState({ refreshing: false });
     });
   }
 
   render() {
-    const { user } = this.props.user.user;
+    const { profile, loaded, navigation } = this.props;
+    const { refreshing } = this.state;
 
     return (
-      <View>
+      <View style={styles.container}>
         <HeaderSection
-          leftComponent={
-            <ArrowBackIcon onPress={() => this.props.navigation.goBack()} />
-          }
+          leftComponent={<ArrowBackIcon onPress={() => navigation.goBack()} />}
           title={i18n('profile')}
         />
         <ScrollView
           refreshControl={
             <RefreshControl
               colors={['#00bcd4']}
-              refreshing={this.state.refreshing}
+              refreshing={refreshing}
               onRefresh={this.onRefresh}
             />
           }
         >
-          <View style={styles.mainContent}>
-            {user && (
-              <Fragment>
-                <Avatar
-                  size="xlarge"
-                  rounded
-                  containerStyle={{ margin: 10 }}
-                  source={{ uri: user.pic }}
-                />
-                <Text style={styles.nameBlock}>
-                  {user.firstName + ' ' + user.lastName}
+          {loaded && (
+            <View style={styles.mainContent}>
+              <Avatar
+                size="xlarge"
+                rounded
+                containerStyle={{ marginBottom: 10 }}
+                source={{ uri: profile.pic }}
+              />
+              <Text style={styles.nameBlock}>
+                {profile.firstName + ' ' + profile.lastName}
+              </Text>
+              <Text>
+                <Text style={styles.textBlock}>{i18n('city')} </Text>
+                <Text style={styles.blackTextBlock}>
+                  {profile.location.details.city ||
+                    profile.location.details.state}
                 </Text>
-                <Text>
-                  <Text style={styles.textBlock}>{i18n('city')} </Text>
-                  <Text style={styles.blackTextBlock}>
-                    {user.location.details.city || user.location.details.state}
-                  </Text>
+              </Text>
+              <Text>
+                <Text style={styles.textBlock}>{i18n('gender')} </Text>
+                <Text style={styles.blackTextBlock}>
+                  {i18n(profile.gender)}
                 </Text>
-                <Text>
-                  <Text style={styles.textBlock}>{i18n('gender')} </Text>
-                  <Text style={styles.blackTextBlock}>{i18n(user.gender)}</Text>
+              </Text>
+              <Text>
+                <Text style={styles.textBlock}>{i18n('age')} </Text>
+                <Text style={styles.blackTextBlock}>
+                  {moment().diff(profile.birthday, 'years', false)}
                 </Text>
-                <Text>
-                  <Text style={styles.textBlock}>{i18n('age')} </Text>
-                  <Text style={styles.blackTextBlock}>
-                    {moment().diff(user.birthday, 'years', false)}
-                  </Text>
-                </Text>
-              </Fragment>
-            )}
-          </View>
+              </Text>
+            </View>
+          )}
         </ScrollView>
       </View>
     );
@@ -96,8 +95,9 @@ class UserProfile extends Component {
 }
 
 export default connect(
-  state => ({
-    user: state.user
+  ({ user }) => ({
+    loaded: !isNil(user.profile) && !isEmpty(user.profile),
+    profile: user.profile
   }),
   dispatch => ({
     setUserProfile: user => dispatch(actions.user.setUserProfile(user))
