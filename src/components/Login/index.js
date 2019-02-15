@@ -107,6 +107,7 @@ class Login extends Component {
           onChangeText={this.onPasswordChange.bind(this)}
           value={passwordInput}
           error={passwordInputError}
+          autoCapitalize="none"
           labelHeight={15}
         />
         {wrongCredentials ? (
