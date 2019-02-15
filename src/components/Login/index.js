@@ -22,10 +22,8 @@ class Login extends Component {
     super(props);
 
     this.state = {
-      emailInput: '',
-      emailInputError: '',
-      passwordInput: '',
-      passwordInputError: '',
+      emailError: '',
+      passwordError: '',
       loading: false,
       isLogin: false
     };
@@ -81,13 +79,8 @@ class Login extends Component {
   }
 
   renderInputs() {
-    const {
-      emailInput,
-      emailInputError,
-      passwordInput,
-      passwordInputError
-    } = this.state;
-    const { wrongCredentials, errorUserGet } = this.props;
+    const { emailError, passwordError } = this.state;
+    const { wrongCredentials, errorUserGet, email, password } = this.props;
 
     return (
       <View>
@@ -96,8 +89,8 @@ class Login extends Component {
           keyboardType="email-address"
           tintColor="#00bcd4"
           onChangeText={this.onEmailChange.bind(this)}
-          value={emailInput}
-          error={emailInputError}
+          value={email}
+          error={emailError}
           labelHeight={15}
         />
         <TextField
@@ -105,8 +98,8 @@ class Login extends Component {
           label="Password"
           tintColor="#00bcd4"
           onChangeText={this.onPasswordChange.bind(this)}
-          value={passwordInput}
-          error={passwordInputError}
+          value={password}
+          error={passwordError}
           autoCapitalize="none"
           labelHeight={15}
         />
@@ -156,38 +149,37 @@ class Login extends Component {
   }
 
   onEmailChange(text) {
+    this.props.changeField({ email: text })
     this.setState({
-      emailInput: text,
-      emailInputError: ''
+      emailError: ''
     });
   }
 
   onPasswordChange(text) {
+    this.props.changeField({ password: text })
     this.setState({
-      passwordInput: text,
-      passwordInputError: ''
+      passwordError: ''
     });
   }
 
   onLoginWithCredentials() {
-    const { LoginWithCredentials, wrongCredentials, errorUserGet } = this.props;
-    const { emailInput, passwordInput } = this.state;
+    const { loginWithCredentials, wrongCredentials, errorUserGet, email, password } = this.props;
 
-    if (trim(emailInput) === '') {
+    if (trim(email) === '') {
       this.setState({
-        emailInputError: 'Field is required.'
+        emailError: 'Field is required.'
       });
       return;
     }
 
-    if (trim(passwordInput) === '') {
+    if (trim(password) === '') {
       this.setState({
-        passwordInputError: 'Field is required.'
+        passwordError: 'Field is required.'
       });
       return;
     }
 
-    LoginWithCredentials(emailInput, passwordInput);
+    loginWithCredentials(email, password);
   }
 
   goToSignIn() {
@@ -267,17 +259,20 @@ class Login extends Component {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    LoginWithCredentials: (email, password) =>
+    loginWithCredentials: (email, password) =>
       dispatch(actions.authorization.dbLoginWithCredentials(email, password)),
-    loginViaFacebook: () => dispatch(actions.authorization.dbLoginViaFacebook()),
-    loginViaGoogle: () => dispatch(actions.authorization.dbLoginViaGoogle())
+    loginViaFacebook: () =>
+      dispatch(actions.authorization.dbLoginViaFacebook()),
+    loginViaGoogle: () => dispatch(actions.authorization.dbLoginViaGoogle()),
+    changeField: (payload) => dispatch(actions.loginForm.changeField(payload))
   };
 };
 
-const mapStateToProps = ({ application, authorize }) => {
+const mapStateToProps = ({ application, authorize, loginForm }) => {
   const { wrongCredentials, errorUserGet } = authorize;
   const { error, loading } = application;
-  return { error, loading, wrongCredentials, errorUserGet };
+  const { email, password } = loginForm;
+  return { error, loading, wrongCredentials, errorUserGet, email, password };
 };
 
 export default connect(
