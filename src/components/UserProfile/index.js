@@ -3,8 +3,9 @@ import { View, Text, ScrollView, RefreshControl } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import moment from 'moment';
 import { connect } from 'react-redux';
-import { isEmpty, isNil } from 'ramda';
+import { isEmpty, isNil, compose } from 'ramda';
 
+import withBackHandler from 'src/hocs/withBackHandler';
 import { HeaderSection } from 'src/pureComponents/HeaderSection';
 import { ArrowBackIcon } from 'src/pureComponents/ArrowBackIcon';
 import { userData } from 'src/api/userApi';
@@ -94,12 +95,15 @@ class UserProfile extends Component {
   }
 }
 
-export default connect(
-  ({ user }) => ({
-    loaded: !isNil(user.profile) && !isEmpty(user.profile),
-    profile: user.profile
-  }),
-  dispatch => ({
-    setUserProfile: user => dispatch(actions.user.setUserProfile(user))
-  })
+export default compose(
+  connect(
+    ({ user }) => ({
+      loaded: !isNil(user.profile) && !isEmpty(user.profile),
+      profile: user.profile
+    }),
+    dispatch => ({
+      setUserProfile: user => dispatch(actions.user.setUserProfile(user))
+    })
+  ),
+  withBackHandler(({ navigation }) => navigation.goBack())
 )(UserProfile);

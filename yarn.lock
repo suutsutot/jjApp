@@ -5308,6 +5308,11 @@ react-native@0.57.4:
     xmldoc "^0.4.0"
     yargs "^9.0.0"
 
+react-navigation-backhandler@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/react-navigation-backhandler/-/react-navigation-backhandler-1.2.0.tgz#f803ecd7980c9f019a92547f1cae805e329eebd5"
+  integrity sha512-ykY9rAe0bDB7fV75UcTW0xvKKZj5fr6KSooghAQlAryfY34vWBdxiTNMP3s6LEMUtquFaFeXIpushVwz0xfLmw==
+
 react-navigation-deprecated-tab-navigator@1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/react-navigation-deprecated-tab-navigator/-/react-navigation-deprecated-tab-navigator-1.2.0.tgz#e0d969c196dcd3a4a440770a7bd97fa058eb4aaf"
