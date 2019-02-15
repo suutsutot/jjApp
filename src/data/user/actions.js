@@ -7,19 +7,9 @@ export const fetchUserProfile = () => async (dispatch, getState) => {
   dispatch(setUserProfile(data.user));
 };
 
-export const setUserBase = ({ userId, email }) => {
-  return {
-    type: types.USER_PROFILE.SET_USER_BASE,
-    payload: {
-      userId,
-      email
-    }
-  };
-};
-
 export const setUserProfile = profile => {
   return {
-    type: types.USER_PROFILE.SET_USER_PROFILE,
+    type: types.USER.SET_USER_PROFILE,
     payload: profile
   };
 };

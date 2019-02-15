@@ -1,10 +1,16 @@
-import { Alert, AsyncStorage, Platform } from 'react-native';
+import { AsyncStorage, Platform } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 
 import { refreshByCredentials } from 'src/api/refreshTokenAPI';
 import { setPushNotificationToken } from 'src/api/userApi';
 import config from 'src/config';
-import * as types from 'src/constants/actionTypes';
+import types from 'src/constants/actionTypes';
+import {
+  WRONG_CREDENTIALS,
+  CURRENT_CREDENTIALS,
+  NO_USER_GET,
+  SUCCESS_USER_GET
+} from 'src/constants/actionTypes';
 import * as applicationActions from 'src/data/application/actions';
 import actions from 'src/data/actions';
 import auth0 from 'src/framework/auth0';
@@ -38,20 +44,19 @@ const loginRequest = credentials => async dispatch => {
 
     if (response && response.user) {
       dispatch(successUserGet());
-      const userInfo = response.user || {};
+      const userInfo = response.user;
 
       AsyncStorage.setItem('userId', userInfo._id);
       AsyncStorage.setItem('email', userInfo.email);
 
       dispatch(
-        actions.user.setUserBase({
+        actions.authorization.login({
           userId: userInfo._id,
           email: userInfo.email
         })
       );
 
       dispatch(applicationActions.showNotificationSuccess());
-      dispatch(login(userInfo.email, userInfo));
       dispatch(NavigationActions.navigate({ routeName: 'Notifications' }));
       dispatch(applicationActions.hideLoading());
 
@@ -180,41 +185,34 @@ export const dbSignUp = (email, password) => {
   };
 };
 
-export const dbLogout = () => {
-  return dispatch => {
-    dispatch(NavigationActions.navigate({ routeName: 'Login' }));
-    dispatch(logout());
-    AsyncStorage.clear();
-  };
-};
-
-const login = (email, profile) => {
-  return { type: types.LOGIN, payload: { email, profile } };
-};
-
-const logout = () => {
-  return { type: types.LOGOUT };
-};
-
-export const getUserId = (userId, email) => {
+export const login = ({ userId, email }) => {
   return {
-    type: types.GET_USER_ID,
-    payload: { userId, email }
+    type: types.AUTHORIZATION.LOGIN,
+    payload: {
+      userId,
+      email
+    }
   };
+};
+
+export const logout = () => dispatch => {
+  dispatch(NavigationActions.navigate({ routeName: 'Login' }));
+  AsyncStorage.clear();
+  dispatch({ type: types.AUTHORIZATION.LOGOUT });
 };
 
 const wrongCredentials = () => {
-  return { type: types.WRONG_CREDENTIALS };
+  return { type: WRONG_CREDENTIALS };
 };
 
 const currentCredentials = () => {
-  return { type: types.CURRENT_CREDENTIALS };
+  return { type: CURRENT_CREDENTIALS };
 };
 
 const noUserGet = () => {
-  return { type: types.NO_USER_GET };
+  return { type: NO_USER_GET };
 };
 
 const successUserGet = () => {
-  return { type: types.SUCCESS_USER_GET };
+  return { type: SUCCESS_USER_GET };
 };

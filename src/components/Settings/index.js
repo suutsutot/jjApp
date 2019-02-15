@@ -48,13 +48,12 @@ export class Settings extends Component {
   //   });
   // };
 
-  goToProfile = async () => {
-    const userId = await AsyncStorage.getItem('userId');
+  goToProfile = (userId) => {
     this.props.navigation.navigate('UserProfile', { userId });
   };
 
   renderProfile = () => {
-    const { name, avatar } = this.props;
+    const { name, avatar, userId } = this.props;
 
     return (
       <TouchableOpacity
@@ -64,7 +63,7 @@ export class Settings extends Component {
           styles.shadowContainer,
           { marginBottom: 20 }
         ]}
-        onPress={this.goToProfile}
+        onPress={() => this.goToProfile(userId)}
       >
         <View
           style={[
@@ -154,7 +153,7 @@ export default compose(
     },
     (dispatch, ownProps) => {
       return {
-        logout: () => dispatch(actions.authorization.dbLogout()),
+        logout: () => dispatch(actions.authorization.logout()),
         fetchUserInfo: () => dispatch(actions.user.fetchUserProfile())
       };
     }

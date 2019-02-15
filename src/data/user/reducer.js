@@ -11,11 +11,11 @@ let defaultState = {
 export let user = (state = defaultState, action) => {
   const { payload } = action;
   switch (action.type) {
-    case types.USER_PROFILE.SET_USER_BASE: {
+    case types.AUTHORIZATION.LOGIN: {
       const { userId, email } = payload;
       return merge(state, { userId, email });
     }
-    case types.USER_PROFILE.SET_USER_PROFILE: {
+    case types.USER.SET_USER_PROFILE: {
       return merge(state, { profile: payload });
     }
     default:

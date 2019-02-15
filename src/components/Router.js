@@ -96,7 +96,8 @@ export const Navigator = StackNavigator(
   },
   {
     mode: 'card',
-    headerMode: 'none'
+    headerMode: 'none',
+    initialRouteName: 'StartScreen'
   }
 );
 
