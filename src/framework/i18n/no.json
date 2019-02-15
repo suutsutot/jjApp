@@ -629,5 +629,6 @@
   "Thai":"Thai",
   "Dutch": "Dutch",
   "empty_notifications": "",
-  "go_to_web_profile": ""
+  "go_to_web_profile": "",
+  "go_to_profile": ""
 }

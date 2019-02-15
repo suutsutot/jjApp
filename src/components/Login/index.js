@@ -274,9 +274,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   };
 };
 
-const mapStateToProps = ({ global, authorize }) => {
+const mapStateToProps = ({ application, authorize }) => {
   const { wrongCredentials, errorUserGet } = authorize;
-  const { error, loading } = global;
+  const { error, loading } = application;
   return { error, loading, wrongCredentials, errorUserGet };
 };
 

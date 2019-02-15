@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { toUpper } from 'ramda';
+import { isNil, isEmpty, toUpper } from 'ramda';
 import { connect } from 'react-redux';
 import {
   TouchableOpacity,
@@ -7,7 +7,8 @@ import {
   ScrollView,
   Text,
   ActivityIndicator,
-  Linking
+  Linking,
+  AsyncStorage
 } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -27,28 +28,33 @@ export class Settings extends Component {
     logout();
   }
 
-  goToProfile = id => {
-    refresh().then(newToken => {
-      let url =
-        config.client +
-        '/redirect?type=user&id=' +
-        id +
-        '&idToken=' +
-        newToken.idToken +
-        '&accessToken=' +
-        newToken.accessToken;
-      Linking.canOpenURL(url).then(supported => {
-        if (supported) {
-          Linking.openURL(url);
-        } else {
-          console.log("Don't know how to open URI: " + url);
-        }
-      });
-    });
+  // goToProfile = id => {
+  //   refresh().then(newToken => {
+  //     let url =
+  //       config.client +
+  //       '/redirect?type=user&id=' +
+  //       id +
+  //       '&idToken=' +
+  //       newToken.idToken +
+  //       '&accessToken=' +
+  //       newToken.accessToken;
+  //     Linking.canOpenURL(url).then(supported => {
+  //       if (supported) {
+  //         Linking.openURL(url);
+  //       } else {
+  //         console.log("Don't know how to open URI: " + url);
+  //       }
+  //     });
+  //   });
+  // };
+
+  goToProfile = (userId) => {
+    this.props.navigation.navigate('UserProfile', { userId });
   };
 
   renderProfile = () => {
     const { name, avatar, userId } = this.props;
+
     return (
       <TouchableOpacity
         style={[
@@ -57,9 +63,7 @@ export class Settings extends Component {
           styles.shadowContainer,
           { marginBottom: 20 }
         ]}
-        onPress={() => {
-          this.goToProfile(userId);
-        }}
+        onPress={() => this.goToProfile(userId)}
       >
         <View
           style={[
@@ -87,15 +91,11 @@ export class Settings extends Component {
                 {name}
               </Text>
               <Text style={[styles.grayColorText, { fontSize: 12 }]}>
-                {i18n('go_to_web_profile')}
+                {i18n('go_to_profile')}
               </Text>
             </View>
           </View>
-          <MaterialIcons
-            name="chevron-right"
-            size={24}
-            color="#78909c"
-          />
+          <MaterialIcons name="chevron-right" size={24} color="#78909c" />
         </View>
       </TouchableOpacity>
     );
@@ -133,18 +133,17 @@ export class Settings extends Component {
 
 export default compose(
   connect(
-    ({ global, user }) => {
-      const { error, loading, loggedIn } = global;
-      const loaded = user.loaded;
-      let profile = {};
-      if (user.loaded) profile = user.profile;
+    ({ application, user }) => {
+      const { error, loading, loggedIn } = application;
+      const loaded = !isNil(user.profile) && !isEmpty(user.profile);
+      const profile = user.profile;
 
       return {
-        userId: loaded && profile ? profile._id : null,
+        userId: user.userId,
         name:
           loaded && profile && profile.firstName && profile.lastName
             ? profile.firstName + ' ' + profile.lastName
-            : profile.email,
+            : user.email,
         avatar: loaded && profile ? profile.pic : '',
         loaded,
         error,
@@ -154,8 +153,8 @@ export default compose(
     },
     (dispatch, ownProps) => {
       return {
-        logout: () => dispatch(actions.authorization.dbLogout()),
-        fetchUserInfo: () => dispatch(actions.user.dbGetProfile())
+        logout: () => dispatch(actions.authorization.logout()),
+        fetchUserInfo: () => dispatch(actions.user.fetchUserProfile())
       };
     }
   ),

@@ -4422,10 +4422,10 @@ mkdirp@^0.5.0, mkdirp@^0.5.1:
   dependencies:
     minimist "0.0.8"
 
-moment@2.18.1:
-  version "2.18.1"
-  resolved "https://registry.yarnpkg.com/moment/-/moment-2.18.1.tgz#c36193dd3ce1c2eed2adb7c802dbbc77a81b1c0f"
-  integrity sha1-w2GT3Tzhwu7SrbfIAtu8d6gbHA8=
+moment@^2.24.0:
+  version "2.24.0"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
+  integrity sha512-bV7f+6l2QigeBBZSM/6yTNq4P2fNpSWj/0e7jQcy87A8e7o2nAfP/34/2ky5Vw4B9S446EtIhodAzkFCcR4dQg==
 
 morgan@^1.9.0:
   version "1.9.1"
@@ -5307,6 +5307,11 @@ react-native@0.57.4:
     xcode "^1.0.0"
     xmldoc "^0.4.0"
     yargs "^9.0.0"
+
+react-navigation-backhandler@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/react-navigation-backhandler/-/react-navigation-backhandler-1.2.0.tgz#f803ecd7980c9f019a92547f1cae805e329eebd5"
+  integrity sha512-ykY9rAe0bDB7fV75UcTW0xvKKZj5fr6KSooghAQlAryfY34vWBdxiTNMP3s6LEMUtquFaFeXIpushVwz0xfLmw==
 
 react-navigation-deprecated-tab-navigator@1.2.0:
   version "1.2.0"

@@ -1,31 +1,22 @@
-import React, { Component } from 'react';
-import { View, AsyncStorage, Image } from 'react-native';
-import styles from './styles';
+import React from 'react';
+import { connect } from 'react-redux';
+import { lifecycle, compose } from 'recompose';
 
-class StartScreen extends Component {
-  constructor() {
-    super();
-    this.redirect();
-  }
+import StartScreen from 'src/pureComponents/StartScreen';
+import { isUserLoggedIn } from 'src/data/user/selector';
 
-  redirect = async () => {
-    const userId = await AsyncStorage.getItem('userId');
-    this.props.navigation.navigate(userId ? 'Notifications' : 'Login');
-  };
-
-  render() {
-    return (
-      <View style={styles.container}>
-        <Image
-          style={styles.logo}
-          source={{
-            uri:
-              'https://s3-eu-west-1.amazonaws.com/jj-files/logo/safari_180.png'
-          }}
-        />
-      </View>
-    );
-  }
-}
-
-export default StartScreen;
+export default compose(
+  connect(state => ({
+    loggedIn: isUserLoggedIn(state)
+  })),
+  lifecycle({
+    componentDidMount() {
+      const { loggedIn } = this.props;
+      setTimeout(
+        () =>
+          this.props.navigation.navigate(loggedIn ? 'Notifications' : 'Login'),
+        1000 // for animation
+      );
+    }
+  })
+)(StartScreen);

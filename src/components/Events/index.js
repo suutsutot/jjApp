@@ -14,7 +14,7 @@ import { refresh } from 'src/api/refreshTokenAPI';
 import config from 'src/config';
 import { HeaderSection } from 'src/pureComponents';
 import { eventActions } from 'src/data/event';
-import { userActions } from 'src/data/user';
+import { actions } from 'src/data/actions';
 import { activityActions } from 'src/data/activity';
 import styles from './styles';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -197,7 +197,7 @@ export class Events extends Component {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     loadData: () => {
-      dispatch(userActions.dbGetProfile());
+      dispatch(actions.user.fetchUserProfile());
       dispatch(eventActions.dbGetEventsList());
     }
   };
