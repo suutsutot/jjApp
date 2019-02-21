@@ -3,14 +3,7 @@ import { NavigationActions } from 'react-navigation';
 
 import { refreshByCredentials } from 'src/api/refreshTokenAPI';
 import { setPushNotificationToken } from 'src/api/userApi';
-// import config from 'src/config';
 import types from 'src/constants/actionTypes';
-// import {
-//   WRONG_CREDENTIALS,
-//   CURRENT_CREDENTIALS,
-//   NO_USER_GET,
-//   SUCCESS_USER_GET
-// } from 'src/constants/actionTypes';
 import * as applicationActions from 'src/data/application/actions';
 import actions from 'src/data/actions';
 import auth0 from 'src/framework/auth0';
@@ -18,14 +11,14 @@ import auth0Config from 'src/config/auth0Config';
 import { isLoginFormValid } from 'src/data/loginPage/selector';
 import { postUserData } from 'src/api/authorizationAPI';
 
-const loginRequest = credentials => async dispatch => {
+const loginRequest = (credentials, errorType) => async dispatch => {
   await AsyncStorage.setItem('refreshToken', credentials.refreshToken);
   const { accessToken, idToken } = await refreshByCredentials(credentials);
   AsyncStorage.setItem('accessToken', accessToken);
   AsyncStorage.setItem('idToken', idToken);
   const profile = await auth0.auth.userInfo({ token: accessToken });
 
-  const response = await postUserData(idToken, profile);
+  const response = await postUserData(idToken, profile.email);
 
   if (response && response.user && !response.error) {
     const userInfo = response.user;
@@ -55,21 +48,20 @@ const loginRequest = credentials => async dispatch => {
       );
     } catch (e) {}
   } else {
-    // dispatch(noUserGet());
-    // dispatch(applicationActions.hideLoading());
+    dispatch(loginError(errorType));
   }
 };
 
-export const loginWithCredentials = (
-  username,
-  password
-) => async dispatch => {
-  dispatch(actions.loginPage.loginRequest());
+const isNotConnected = async () => {
   const connectionInfo = await NetInfo.getConnectionInfo();
-  if (connectionInfo.type === 'none') {
-    dispatch(loginError('conection'));
-  }
+  return connectionInfo.type === 'none';
+}
 
+export const loginWithCredentials = (username, password) => async dispatch => {
+  dispatch(actions.loginPage.loginRequest());
+  if  (await isNotConnected()) {
+    return dispatch(loginError('conection'));
+  }
   if (!isLoginFormValid(username, password)) return;
 
   dispatch(actions.loginPage.toggleLoading(true));
@@ -82,36 +74,18 @@ export const loginWithCredentials = (
       scope: 'openid offline_access'
     });
 
-    await loginRequest(credentials)(dispatch);
+    await loginRequest(credentials, 'credentials')(dispatch);
   } catch (error) {
     console.log('AuthorizeActionError:', error);
     dispatch(loginError('credentials'));
   }
 };
 
-//external login error
-
-export const loginViaFacebook = () => dispatch => {
-  // dispatch(applicationActions.showLoading());
-
-  auth0.webAuth
-    .authorize({
-      scope: 'openid email profile offline_access',
-      audience: 'https://' + auth0Config.domain + '/userinfo',
-      connection: 'facebook'
-    })
-    .then(credentials => {
-      return loginRequest(credentials)(dispatch);
-    })
-    .catch(error => {
-      console.log('AuthorizeActionError:', error);
-      // dispatch(noUserGet());
-      // dispatch(applicationActions.hideLoading());
-    });
-};
-
-export const loginWithGoogle = () => dispatch => {
-  // dispatch(applicationActions.showLoading());
+export const loginWithGoogle = () => async dispatch => {
+  dispatch(actions.loginPage.toggleLoading(true));
+  if  (await isNotConnected()) {
+    return dispatch(loginError('conection'));
+  }
 
   auth0.webAuth
     .authorize({
@@ -120,12 +94,32 @@ export const loginWithGoogle = () => dispatch => {
       connection: 'google-oauth2'
     })
     .then(credentials => {
-      return loginRequest(credentials)(dispatch);
+      return loginRequest(credentials, 'externalError')(dispatch);
     })
     .catch(error => {
       console.log('AuthorizeActionError:', error);
-      // dispatch(noUserGet());
-      // dispatch(applicationActions.hideLoading());
+      dispatch(loginError('externalError'));
+    });
+};
+
+export const loginWithFacebook = () => async dispatch => {
+  dispatch(actions.loginPage.toggleLoading(true));
+  if  (await isNotConnected()) {
+    return dispatch(loginError('conection'));
+  }
+
+  auth0.webAuth
+    .authorize({
+      scope: 'openid email profile offline_access',
+      audience: 'https://' + auth0Config.domain + '/userinfo',
+      connection: 'facebook'
+    })
+    .then(credentials => {
+      return loginRequest(credentials, 'externalError')(dispatch);
+    })
+    .catch(error => {
+      console.log('AuthorizeActionError:', error);
+      dispatch(loginError('externalError'));
     });
 };
 
@@ -189,4 +183,3 @@ export const logout = () => dispatch => {
   AsyncStorage.clear();
   dispatch({ type: types.AUTHORIZATION.LOGOUT });
 };
-

@@ -8,7 +8,7 @@ import {
   Linking,
   KeyboardAvoidingView
 } from 'react-native';
-import { SocialIcon, Button, Icon } from 'react-native-elements';
+import { Button } from 'react-native-elements';
 import { TextField } from 'react-native-material-textfield';
 import actions from 'src/data/actions';
 import styles from './styles';
@@ -102,6 +102,11 @@ class Login extends Component {
             Wrong email or password.
           </Text>
         ) : null}
+        {error === 'externalError' ? (
+          <Text style={{ color: 'red', textAlign: 'center' }}>
+            External login error.
+          </Text>
+        ) : null}
       </View>
     );
   }
@@ -171,28 +176,6 @@ class Login extends Component {
             <View style={{ height: 15 }} />
             {this.renderLoginButton()}
             <View style={{ height: 25 }} />
-            {/* <Text*/}
-            {/*style={{ fontSize: 20, color: '#37474f', textAlign: 'center' }}*/}
-            {/*>*/}
-            {/*Are you not registered?*/}
-            {/*</Text>*/}
-            {/*<View*/}
-            {/*style={{*/}
-            {/*flexDirection: 'row',*/}
-            {/*justifyContent: 'center',*/}
-            {/*alignItems: 'center'*/}
-            {/*}}*/}
-            {/*>*/}
-            {/*<TouchableOpacity*/}
-            {/*onPress={() => {*/}
-            {/*this.goToSignIn();*/}
-            {/*}}*/}
-            {/*>*/}
-            {/*<Text style={{ fontSize: 20, color: '#00bcd4', marginTop: 15 }}>*/}
-            {/*Sign up now*/}
-            {/*</Text>*/}
-            {/*</TouchableOpacity>*/}
-            {/*</View> */}
           </KeyboardAvoidingView>
         </ScrollView>
       </View>
@@ -210,8 +193,8 @@ export default connect(
       loginWithCredentials: (email, password) =>
         dispatch(actions.authorization.loginWithCredentials(email, password)),
       loginViaFacebook: () =>
-        dispatch(actions.authorization.loginViaFacebook()),
-      loginViaGoogle: () => dispatch(actions.authorization.loginViaGoogle()),
+        dispatch(actions.authorization.loginWithFacebook()),
+      loginViaGoogle: () => dispatch(actions.authorization.loginWithGoogle()),
       changeField: payload => dispatch(actions.loginPage.changeField(payload))
     };
   }
