@@ -55,11 +55,11 @@ const loginRequest = (credentials, errorType) => async dispatch => {
 const isNotConnected = async () => {
   const connectionInfo = await NetInfo.getConnectionInfo();
   return connectionInfo.type === 'none';
-}
+};
 
 export const loginWithCredentials = (username, password) => async dispatch => {
   dispatch(actions.loginPage.loginRequest());
-  if  (await isNotConnected()) {
+  if (await isNotConnected()) {
     return dispatch(loginError('conection'));
   }
   if (!isLoginFormValid(username, password)) return;
@@ -83,7 +83,7 @@ export const loginWithCredentials = (username, password) => async dispatch => {
 
 export const loginWithGoogle = () => async dispatch => {
   dispatch(actions.loginPage.toggleLoading(true));
-  if  (await isNotConnected()) {
+  if (await isNotConnected()) {
     return dispatch(loginError('conection'));
   }
 
@@ -104,7 +104,7 @@ export const loginWithGoogle = () => async dispatch => {
 
 export const loginWithFacebook = () => async dispatch => {
   dispatch(actions.loginPage.toggleLoading(true));
-  if  (await isNotConnected()) {
+  if (await isNotConnected()) {
     return dispatch(loginError('conection'));
   }
 

@@ -630,5 +630,12 @@
   "Dutch": "Dutch",
   "empty_notifications": "",
   "go_to_web_profile": "",
-  "go_to_profile": ""
+  "go_to_profile": "",
+  "google_log_in": "Logg på med Google",
+  "facebook_log_in": "Logg inn med Facebook",
+  "login_page_connection_problems_warning": "Du er frakoblet. Vennligst sjekk forbindelsen din.",
+  "login_page_wrong_credentials_warning": "Feil e-post eller passord.",
+  "login_page_external_error_warning": "Ekstern påloggingsfeil.",
+  "log_in_button": "LOGG INN",
+  "login_title": "Logg inn"
 }

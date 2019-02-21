@@ -10,11 +10,13 @@ import {
 } from 'react-native';
 import { Button } from 'react-native-elements';
 import { TextField } from 'react-native-material-textfield';
-import actions from 'src/data/actions';
-import styles from './styles';
-import config from 'src/config';
 
+import actions from 'src/data/actions';
+import config from 'src/config';
 import LoadingButton from 'src/pureComponents/LoadingButton';
+import i18n from 'src/framework/i18n';
+
+import styles from './styles';
 
 class Login extends Component {
   redirect(route) {
@@ -38,7 +40,7 @@ class Login extends Component {
               />
             </View>
           }
-          title="Log In With Google"
+          title={i18n('google_log_in')}
           titleStyle={{ flex: 1 }}
           buttonStyle={[
             styles.social_button,
@@ -59,7 +61,7 @@ class Login extends Component {
               />
             </View>
           }
-          title="Log In With Facebook"
+          title={i18n('facebook_log_in')}          
           titleStyle={{ flex: 1 }}
           buttonStyle={[styles.social_button, { backgroundColor: '#5e81a8' }]}
           onPress={() => loginViaFacebook()}
@@ -74,37 +76,38 @@ class Login extends Component {
     return (
       <View>
         <TextField
-          label="Email"
-          keyboardType="email-address"
+          label={i18n('email_label')}
           tintColor="#00bcd4"
+          keyboardType="email-address"
           onChangeText={value => changeField({ email: value })}
           value={email}
-          error={validation.indexOf('email') !== -1 ? 'Email is required' : null}
+          error={validation.indexOf('email') !== -1 ? i18n('email_required') : null}
+          autoCapitalize="none"
           labelHeight={15}
         />
         <TextField
-          secureTextEntry
-          label="Password"
+          label={i18n('password_label')}
           tintColor="#00bcd4"
           onChangeText={value => changeField({ password: value })}
           value={password}
-          error={validation.indexOf('password') !== -1 ? 'Password is required' : null}
+          error={validation.indexOf('password') !== -1 ? i18n('password_required') : null}
           autoCapitalize="none"
+          secureTextEntry
           labelHeight={15}
         />
         {error === 'conection' ? (
           <Text style={{ color: 'red', textAlign: 'center' }}>
-            You're offline. Please, check your connection.
+            {i18n('login_page_connection_problems_warning')}
           </Text>
         ) : null}
         {error === 'credentials' ? (
           <Text style={{ color: 'red', textAlign: 'center' }}>
-            Wrong email or password.
+            {i18n('login_page_wrong_credentials_warning')}
           </Text>
         ) : null}
         {error === 'externalError' ? (
           <Text style={{ color: 'red', textAlign: 'center' }}>
-            External login error.
+            {i18n('login_page_external_error_warning')}
           </Text>
         ) : null}
       </View>
@@ -119,7 +122,7 @@ class Login extends Component {
         <LoadingButton
           onPress={() => loginWithCredentials(email, password)}
           loading={loading}
-          title="LOG IN"
+          title={i18n("log_in_button")}
           height={40}
           width={340}
           titleFontSize={16}
@@ -158,7 +161,7 @@ class Login extends Component {
               }}
             />
             <View style={{ height: 10 }} />
-            <Text style={styles.logo_title}>Login</Text>
+            <Text style={styles.logo_title}>{i18n('login_title')}</Text>
             <View style={{ height: 10 }} />
             {this.renderSocialButtons()}
             <Text
@@ -170,7 +173,7 @@ class Login extends Component {
                 color: '#b0bec5'
               }}
             >
-              or
+              {i18n('or')}
             </Text>
             {this.renderInputs()}
             <View style={{ height: 15 }} />

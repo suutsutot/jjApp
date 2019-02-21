@@ -583,5 +583,12 @@
   "Dutch": "Dutch",
   "empty_notifications": "You do not have any notifications yet",
   "go_to_web_profile": "Go to profile (web version)",
-  "go_to_profile": "Go to profile"
+  "go_to_profile": "Go to profile",
+  "google_log_in": "Log In With Google",
+  "facebook_log_in": "Log In With Facebook",
+  "login_page_connection_problems_warning": "You're offline. Please, check your connection.",
+  "login_page_wrong_credentials_warning": "Wrong email or password.",
+  "login_page_external_error_warning": "External login error.",
+  "log_in_button": "LOG IN",
+  "login_title": "Login"
 }
