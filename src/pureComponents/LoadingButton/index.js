@@ -31,6 +31,10 @@ export default class Component extends React.PureComponent {
     };
   }
 
+  componentDidMount() {
+    this.showLoading(this.props.loading);
+  }
+
   componentDidUpdate(prevProps) {
     if (prevProps.loading !== this.props.loading) {
       this.showLoading(this.props.loading);

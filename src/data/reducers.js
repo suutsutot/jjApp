@@ -5,12 +5,11 @@ import { AsyncStorage } from 'react-native';
 import types from 'src/constants/actionTypes';
 import {activityReducer} from './activity/activityReducer';
 import {authorize} from './authorization/reducer';
-import {applicationReducer} from './application/reducer';
 import {user} from './user/reducer';
 import {navReducer} from './nav/navReducer';
 import {events} from './event/reducer';
 import {notifications} from './notifications/reducer';
-import {loginForm} from './loginForm/reducer'
+import {loginPage} from './loginPage/reducer'
 
 const appReducer = combineReducers({
   nav: navReducer,
@@ -20,7 +19,6 @@ const appReducer = combineReducers({
     storage: AsyncStorage,
     whitelist: ['profile', 'auth0Id']
   }, authorize),
-  application: applicationReducer,
   user: persistReducer({
     key: 'user',
     storage: AsyncStorage,
@@ -32,7 +30,7 @@ const appReducer = combineReducers({
     storage: AsyncStorage,
     whitelist: ['list', 'data']
   }, notifications),
-  loginForm
+  loginPage
 });
 
 export default (state, action) => {

@@ -11,29 +11,19 @@ import {
 import { SocialIcon, Button, Icon } from 'react-native-elements';
 import { TextField } from 'react-native-material-textfield';
 import actions from 'src/data/actions';
-import { trim } from 'lodash';
 import styles from './styles';
 import config from 'src/config';
 
 import LoadingButton from 'src/pureComponents/LoadingButton';
 
 class Login extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      emailError: '',
-      passwordError: '',
-      loading: false,
-      isLogin: false
-    };
-  }
-
   redirect(route) {
     this.props.navigation.navigate(route);
   }
 
   renderSocialButtons() {
+    const { loginViaFacebook, loginViaGoogle } = this.props;
+
     return (
       <View>
         <Button
@@ -54,7 +44,7 @@ class Login extends Component {
             styles.social_button,
             { backgroundColor: '#dc4e41', marginBottom: 24 }
           ]}
-          onPress={this.onLoginWithGoogle.bind(this)}
+          onPress={() => loginViaGoogle()}
         />
 
         <Button
@@ -72,15 +62,14 @@ class Login extends Component {
           title="Log In With Facebook"
           titleStyle={{ flex: 1 }}
           buttonStyle={[styles.social_button, { backgroundColor: '#5e81a8' }]}
-          onPress={this.onLoginWithFacebook.bind(this)}
+          onPress={() => loginViaFacebook()}
         />
       </View>
     );
   }
 
   renderInputs() {
-    const { emailError, passwordError } = this.state;
-    const { wrongCredentials, errorUserGet, email, password } = this.props;
+    const { email, password, error, validation, changeField } = this.props;
 
     return (
       <View>
@@ -88,29 +77,29 @@ class Login extends Component {
           label="Email"
           keyboardType="email-address"
           tintColor="#00bcd4"
-          onChangeText={this.onEmailChange.bind(this)}
+          onChangeText={value => changeField({ email: value })}
           value={email}
-          error={emailError}
+          error={validation.indexOf('email') !== -1 ? 'Email is required' : null}
           labelHeight={15}
         />
         <TextField
           secureTextEntry
           label="Password"
           tintColor="#00bcd4"
-          onChangeText={this.onPasswordChange.bind(this)}
+          onChangeText={value => changeField({ password: value })}
           value={password}
-          error={passwordError}
+          error={validation.indexOf('password') !== -1 ? 'Password is required' : null}
           autoCapitalize="none"
           labelHeight={15}
         />
-        {wrongCredentials ? (
+        {error === 'conection' ? (
           <Text style={{ color: 'red', textAlign: 'center' }}>
-            Wrong email or password.
+            You're offline. Please, check your connection.
           </Text>
         ) : null}
-        {errorUserGet ? (
+        {error === 'credentials' ? (
           <Text style={{ color: 'red', textAlign: 'center' }}>
-            Sorry, there was an authorization error
+            Wrong email or password.
           </Text>
         ) : null}
       </View>
@@ -118,12 +107,12 @@ class Login extends Component {
   }
 
   renderLoginButton() {
-    const { loading } = this.props;
+    const { loading, loginWithCredentials, email, password } = this.props;
 
     return (
       <View>
         <LoadingButton
-          onPress={this.onLoginWithCredentials.bind(this)}
+          onPress={() => loginWithCredentials(email, password)}
           loading={loading}
           title="LOG IN"
           height={40}
@@ -134,52 +123,6 @@ class Login extends Component {
         />
       </View>
     );
-  }
-
-  onLoginWithFacebook() {
-    const { loginViaFacebook } = this.props;
-    loginViaFacebook();
-    console.log('facebook');
-  }
-
-  onLoginWithGoogle() {
-    const { loginViaGoogle } = this.props;
-    loginViaGoogle();
-    console.log('google');
-  }
-
-  onEmailChange(text) {
-    this.props.changeField({ email: text })
-    this.setState({
-      emailError: ''
-    });
-  }
-
-  onPasswordChange(text) {
-    this.props.changeField({ password: text })
-    this.setState({
-      passwordError: ''
-    });
-  }
-
-  onLoginWithCredentials() {
-    const { loginWithCredentials, wrongCredentials, errorUserGet, email, password } = this.props;
-
-    if (trim(email) === '') {
-      this.setState({
-        emailError: 'Field is required.'
-      });
-      return;
-    }
-
-    if (trim(password) === '') {
-      this.setState({
-        passwordError: 'Field is required.'
-      });
-      return;
-    }
-
-    loginWithCredentials(email, password);
   }
 
   goToSignIn() {
@@ -228,7 +171,7 @@ class Login extends Component {
             <View style={{ height: 15 }} />
             {this.renderLoginButton()}
             <View style={{ height: 25 }} />
-            {/*<Text*/}
+            {/* <Text*/}
             {/*style={{ fontSize: 20, color: '#37474f', textAlign: 'center' }}*/}
             {/*>*/}
             {/*Are you not registered?*/}
@@ -249,7 +192,7 @@ class Login extends Component {
             {/*Sign up now*/}
             {/*</Text>*/}
             {/*</TouchableOpacity>*/}
-            {/*</View>*/}
+            {/*</View> */}
           </KeyboardAvoidingView>
         </ScrollView>
       </View>
@@ -257,25 +200,19 @@ class Login extends Component {
   }
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => {
-  return {
-    loginWithCredentials: (email, password) =>
-      dispatch(actions.authorization.dbLoginWithCredentials(email, password)),
-    loginViaFacebook: () =>
-      dispatch(actions.authorization.dbLoginViaFacebook()),
-    loginViaGoogle: () => dispatch(actions.authorization.dbLoginViaGoogle()),
-    changeField: (payload) => dispatch(actions.loginForm.changeField(payload))
-  };
-};
-
-const mapStateToProps = ({ application, authorize, loginForm }) => {
-  const { wrongCredentials, errorUserGet } = authorize;
-  const { error, loading } = application;
-  const { email, password } = loginForm;
-  return { error, loading, wrongCredentials, errorUserGet, email, password };
-};
-
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+  ({ loginPage }) => {
+    const { email, password, validation, error, loading } = loginPage;
+    return { email, password, validation, error, loading };
+  },
+  dispatch => {
+    return {
+      loginWithCredentials: (email, password) =>
+        dispatch(actions.authorization.loginWithCredentials(email, password)),
+      loginViaFacebook: () =>
+        dispatch(actions.authorization.loginViaFacebook()),
+      loginViaGoogle: () => dispatch(actions.authorization.loginViaGoogle()),
+      changeField: payload => dispatch(actions.loginPage.changeField(payload))
+    };
+  }
 )(Login);
