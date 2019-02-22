@@ -1,4 +1,4 @@
-import { filter, isEmpty, indexBy, prop, map } from 'ramda';
+import { isEmpty, indexBy, prop, map } from 'ramda';
 import { delay } from 'redux-saga';
 import { takeEvery, call, put, select, takeLatest } from 'redux-saga/effects';
 import { NavigationActions } from 'react-navigation';
@@ -10,7 +10,7 @@ import {
 import actions from 'src/data/actions';
 import types from 'src/constants/actionTypes';
 import { getNotViewedNotificationsIds } from './selectors';
-import * as Snackbar from '../../framework/snackbar';
+import * as Snackbar from 'src/framework/snackbar';
 
 function* fetchList() {
   const notifications = yield call(getNotifications);
