@@ -32,7 +32,7 @@ function* leaveRequest(action) {
     yield put(
       actions.communities.leaveCommunitySuccess(response, notificationId)
     );
-    yield put(actions.notifications.fetchList({ silent: true }));
+    // yield put(actions.notifications.fetchList({ silent: true }));
   } else {
     yield put(actions.communities.leaveCommunityError(error, notificationId));
     yield showNotificationsSnackbar();
