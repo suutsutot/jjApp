@@ -4,7 +4,6 @@ import { NavigationActions } from 'react-navigation';
 import { refreshByCredentials } from 'src/api/refreshTokenAPI';
 import { setPushNotificationToken } from 'src/api/userApi';
 import types from 'src/constants/actionTypes';
-import * as applicationActions from 'src/data/application/actions';
 import actions from 'src/data/actions';
 import auth0 from 'src/framework/auth0';
 import auth0Config from 'src/config/auth0Config';
