@@ -12,7 +12,6 @@ export const getListNotificationsIds = compose(
   getListNotifications
 );
 
-
 export const getNotification = id =>
   compose(
     ({ data }) => path([id], data),
@@ -36,3 +35,6 @@ export const getViewedNotificationsIds = compose(
   filter(n => n.viewed),
   getListNotifications
 );
+
+export const getLoadingStatus = id =>
+  compose(path(['notifications', 'loadingItems', id]));

@@ -1,21 +1,48 @@
-// import Snackbar from 'react-native-snackbar';
+import Snackbar from 'react-native-snackbar';
 
-export const show = ({ title, duration, action }) => {
+let isShown = false;
+const { LENGTH_SHORT, LENGTH_LONG } = Snackbar;
+
+const getMs = duration => {
+  switch (duration) {
+    case LENGTH_SHORT: {
+      return 1000;
+    }
+    case LENGTH_LONG: {
+      return 3500;
+    }
+    default:
+      return 1000;
+  }
+};
+
+export const show = ({ title, duration = LENGTH_SHORT, action }) => {
   return new Promise(resolve => {
-    let options = { title, duration };
-    if (action) {
-      options.action = action;
-      options.action.color = action.color || '#00bcd4';
-      options.action.onPress = () => resolve();
+    let options = {
+      title,
+      duration,
+      action: action && {
+        ...action,
+        color: action.color || '#00bcd4',
+        onPress: () => {
+          isShown = false;
+          resolve();
+        }
+      }
+    };
+
+    if (isShown) {
+      return;
     }
 
-    // Snackbar.show(options);
+    Snackbar.show(options);
+    isShown = true;
+    setTimeout(() => {
+      isShown = false;
+      action && resolve();
+    }, getMs(duration));
   });
 };
 
-// const { LENGTH_SHORT, LENGTH_LONG, LENGTH_INDEFINITE } = Snackbar;
-const { LENGTH_SHORT, LENGTH_LONG, LENGTH_INDEFINITE } = {};
-
 export { LENGTH_SHORT };
 export { LENGTH_LONG };
-export { LENGTH_INDEFINITE };

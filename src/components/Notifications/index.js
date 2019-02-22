@@ -1,6 +1,7 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { compose, toUpper, toLower } from 'ramda';
+import { isNilOrEmpty } from 'ramda-extension';
 import { lifecycle } from 'recompose';
 import {
   View,
@@ -10,8 +11,7 @@ import {
   Image,
   TouchableOpacity,
   StyleSheet,
-  RefreshControl,
-  Alert
+  RefreshControl
 } from 'react-native';
 import moment from 'moment';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -24,9 +24,12 @@ import actions from 'src/data/actions';
 import {
   getNotification,
   getNotViewedNotificationsIds,
-  getViewedNotificationsIds
+  getViewedNotificationsIds,
+  getLoadingStatus
 } from 'src/data/notifications/selectors';
 import imgix from 'src/framework/imgix';
+import LoadingButton from 'src/pureComponents/Button/LoadingButton';
+import types from 'src/constants/actionTypes';
 
 import styles from './styles';
 
@@ -81,8 +84,10 @@ const Notification = ({
   </View>
 );
 
-const getNotificationComponent = type => ({
+const NotificationsListItem = ({
+  type,
   notification,
+  loadingStatus = {},
   onPress,
   joinEventRequest,
   rejectEventRequest,
@@ -133,17 +138,22 @@ const getNotificationComponent = type => ({
               <Button
                 type="text"
                 buttonStyle={styles.actionButton}
-                onPress={() => rejectEventRequest(notification.event._id)}
+                onPress={() =>
+                  isNilOrEmpty(loadingStatus) &&
+                  rejectEventRequest(notification.event._id, notification._id)
+                }
               >
                 {i18n('reject')}
               </Button>
-              <Button
+              <LoadingButton
                 type="primary"
-                buttonStyle={styles.actionButton}
-                onPress={() => joinEventRequest(notification.event._id)}
-              >
-                {toUpper(i18n('join'))}
-              </Button>
+                onPress={() =>
+                  isNilOrEmpty(loadingStatus) &&
+                  joinEventRequest(notification.event._id, notification._id)
+                }
+                loading={loadingStatus.type === types.EVENTS.JOIN_EVENT_REQUEST}
+                title={toUpper(i18n('join'))}
+              />
             </Actions>
           }
         />
@@ -178,19 +188,31 @@ const getNotificationComponent = type => ({
               <Button
                 type="text"
                 buttonStyle={styles.actionButton}
-                onPress={() =>
-                  leaveCommunityRequest(notification.community._id)
-                }
+                onPress={() => {
+                  isNilOrEmpty(loadingStatus) &&
+                    leaveCommunityRequest(
+                      notification.community._id,
+                      notification._id
+                    );
+                }}
               >
                 {i18n('reject')}
               </Button>
-              <Button
+              <LoadingButton
                 type="primary"
-                buttonStyle={styles.actionButton}
-                onPress={() => joinCommunityRequest(notification.community._id)}
-              >
-                {toUpper(i18n('join'))}
-              </Button>
+                onPress={() =>
+                  isNilOrEmpty(loadingStatus) &&
+                  joinCommunityRequest(
+                    notification.community._id,
+                    notification._id
+                  )
+                }
+                loading={
+                  loadingStatus.type ===
+                  types.COMMUNITIES.JOIN_COMMUNITY_REQUEST
+                }
+                title={toUpper(i18n('join'))}
+              />
             </Actions>
           }
         />
@@ -212,15 +234,15 @@ const getNotificationComponent = type => ({
           hasActions={!notification.answered}
           actions={
             <Actions>
-              <Button
+              <LoadingButton
                 type="primary"
-                buttonStyle={styles.actionButton}
                 onPress={() =>
+                  isNilOrEmpty(loadingStatus) &&
                   followUserRequest(notification.user._id, notification._id)
                 }
-              >
-                {toUpper(i18n('follow'))}
-              </Button>
+                loading={loadingStatus.type === types.USERS.FOLLOW_USER_REQUEST}
+                title={toUpper(i18n('follow'))}
+              />
             </Actions>
           }
         />
@@ -388,15 +410,13 @@ const redirectToWeb = async notification => {
   supported && Linking.openURL(url);
 };
 
-const NotificationsListItem = props => {
-  const Component = getNotificationComponent(props.notification.type);
-  return <Component {...props} />;
-};
-
 const NotificationsListItemContainer = connect(
   (state, { id }) => {
+    const notification = getNotification(id)(state);
     return {
-      notification: getNotification(id)(state)
+      type: notification.type,
+      notification,
+      loadingStatus: getLoadingStatus(id)(state)
     };
   },
   {
@@ -428,7 +448,7 @@ const Notifications = ({
         onRefresh={fetchList}
       />
     }
-    keyExtractor={notification => notification}
+    keyExtractor={notificationId => notificationId}
   />
 );
 

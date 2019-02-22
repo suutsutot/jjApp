@@ -630,5 +630,6 @@
   "Dutch": "Dutch",
   "empty_notifications": "",
   "go_to_web_profile": "",
-  "go_to_profile": ""
+  "go_to_profile": "",
+  "notification_action_error": "Det har oppstått en feil"
 }
