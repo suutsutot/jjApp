@@ -98,7 +98,11 @@ const NotificationsListItem = ({
   switch (type) {
     case 'eventInvitation': {
       const isPassedEvent =
-        moment(notification.event.eventDates.startDate) < moment();
+        moment(notification.event.eventDates.startDateTime) < moment();
+      console.log(
+        'notification.event.eventDates.startDateTime',
+        notification.event.eventDates.startDateTime
+      );
 
       return (
         <Notification
@@ -119,8 +123,12 @@ const NotificationsListItem = ({
               </PrimaryText>
               <SecondaryText>
                 {i18n('on')}
-                {moment(notification.event.eventDates.startDate).format(
+                {moment(notification.event.eventDates.startDateTime).format(
                   'Do MMMM'
+                )}{' '}
+                {i18n('at')}{' '}
+                {moment(notification.event.eventDates.startDateTime).format(
+                  'LT'
                 )}
                 {isPassedEvent && `, ${toLower(i18n('event_is_passed'))}`}
               </SecondaryText>
