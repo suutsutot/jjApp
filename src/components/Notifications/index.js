@@ -99,10 +99,6 @@ const NotificationsListItem = ({
     case 'eventInvitation': {
       const isPassedEvent =
         moment(notification.event.eventDates.startDateTime) < moment();
-      console.log(
-        'notification.event.eventDates.startDateTime',
-        notification.event.eventDates.startDateTime
-      );
 
       return (
         <Notification
