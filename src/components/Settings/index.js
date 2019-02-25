@@ -127,10 +127,6 @@ export class Settings extends Component {
   }
 }
 
-// Avatar.propTypes = {
-//   ImageComponent: PropTypes.object
-// }
-
 export default compose(
   connect(
     ({ application, user }) => {
