@@ -64,8 +64,6 @@ const Actions = ({ children }) => (
 );
 
 const Notification = ({
-  notification,
-  onPress,
   imageSource,
   firstRow,
   secondRow,
@@ -341,6 +339,37 @@ const NotificationsListItem = ({
         />
       );
     case 'oneTimeEventCreate':
+      return (
+        <Notification
+          notification={notification}
+          onPress={() => onPress(notification)}
+          imageSource={{
+            uri: imgix(
+              notification.community.miniaturePic ||
+                notification.community.backgroundPic,
+              'list'
+            )
+          }}
+          firstRow={
+            <NotificationInfo>
+              <PrimaryText>{notification.community.title}</PrimaryText>
+              <SecondaryText> {i18n('created_new_event')}</SecondaryText>
+            </NotificationInfo>
+          }
+          secondRow={
+            <NotificationInfo>
+              <PrimaryText>
+                {notification.event.title ||
+                  i18n(notification.event.activity.id, 'activities')}
+              </PrimaryText>
+              <SecondaryText>
+                {i18n('on')}{' '}
+                {moment(notification.details.date).format('Do MMMM')}
+              </SecondaryText>
+            </NotificationInfo>
+          }
+        />
+      );
     case 'repeatedEventCreate':
       return (
         <Notification
@@ -355,18 +384,18 @@ const NotificationsListItem = ({
           }}
           firstRow={
             <NotificationInfo>
-              <PrimaryText>{notification.details.eventName}</PrimaryText>
-              <SecondaryText>
-                {' '}
-                {i18n('on')}{' '}
-                {moment(notification.details.date).format('Do MMM')}
-              </SecondaryText>
+              <PrimaryText>{notification.community.title}</PrimaryText>
+              <SecondaryText> {i18n('created_new_event_series')}</SecondaryText>
             </NotificationInfo>
           }
           secondRow={
             <NotificationInfo>
-              <PrimaryText>{notification.community.title}</PrimaryText>
-              <SecondaryText> {i18n('invites_you_to_event')}</SecondaryText>
+              <PrimaryText>
+                {i18n(notification.community.activity.id, 'activities')}
+              </PrimaryText>
+              <SecondaryText>
+                {' '}{moment(notification.details.date).format('Do MMMM')}
+              </SecondaryText>
             </NotificationInfo>
           }
         />
