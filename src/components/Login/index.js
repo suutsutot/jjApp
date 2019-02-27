@@ -6,7 +6,8 @@ import {
   Text,
   Image,
   Linking,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  TouchableOpacity
 } from 'react-native';
 import { SocialIcon, Button, Icon } from 'react-native-elements';
 import { TextField } from 'react-native-material-textfield';
@@ -190,16 +191,20 @@ class Login extends Component {
     LoginWithCredentials(emailInput, passwordInput);
   }
 
-  goToSignIn() {
-    let url = config.client + '/login';
-    Linking.canOpenURL(url).then(supported => {
-      if (supported) {
-        Linking.openURL(url);
-      } else {
-        console.log("Don't know how to open URI: " + url);
-      }
-    });
-  }
+  // goToSignIn() {
+  //   let url = config.client + '/login';
+  //   Linking.canOpenURL(url).then(supported => {
+  //     if (supported) {
+  //       Linking.openURL(url);
+  //     } else {
+  //       console.log("Don't know how to open URI: " + url);
+  //     }
+  //   });
+  // }
+
+  goToRegistration = () => {
+    this.props.navigation.navigate('Registration');
+  };
 
   render() {
     return (
@@ -236,28 +241,24 @@ class Login extends Component {
             <View style={{ height: 15 }} />
             {this.renderLoginButton()}
             <View style={{ height: 25 }} />
-            {/*<Text*/}
-            {/*style={{ fontSize: 20, color: '#37474f', textAlign: 'center' }}*/}
-            {/*>*/}
-            {/*Are you not registered?*/}
-            {/*</Text>*/}
-            {/*<View*/}
-            {/*style={{*/}
-            {/*flexDirection: 'row',*/}
-            {/*justifyContent: 'center',*/}
-            {/*alignItems: 'center'*/}
-            {/*}}*/}
-            {/*>*/}
-            {/*<TouchableOpacity*/}
-            {/*onPress={() => {*/}
-            {/*this.goToSignIn();*/}
-            {/*}}*/}
-            {/*>*/}
-            {/*<Text style={{ fontSize: 20, color: '#00bcd4', marginTop: 15 }}>*/}
-            {/*Sign up now*/}
-            {/*</Text>*/}
-            {/*</TouchableOpacity>*/}
-            {/*</View>*/}
+            <Text
+              style={{ fontSize: 20, color: '#37474f', textAlign: 'center' }}
+            >
+              Are you not registered?
+            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+            >
+              <TouchableOpacity onPress={() => this.goToRegistration()}>
+                <Text style={{ fontSize: 20, color: '#00bcd4', marginTop: 15 }}>
+                  Sign up now
+                </Text>
+              </TouchableOpacity>
+            </View>
           </KeyboardAvoidingView>
         </ScrollView>
       </View>
@@ -265,11 +266,12 @@ class Login extends Component {
   }
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch) => {
   return {
     LoginWithCredentials: (email, password) =>
       dispatch(actions.authorization.dbLoginWithCredentials(email, password)),
-    loginViaFacebook: () => dispatch(actions.authorization.dbLoginViaFacebook()),
+    loginViaFacebook: () =>
+      dispatch(actions.authorization.dbLoginViaFacebook()),
     loginViaGoogle: () => dispatch(actions.authorization.dbLoginViaGoogle())
   };
 };

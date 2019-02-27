@@ -6,9 +6,7 @@ import {
   View,
   ScrollView,
   Text,
-  ActivityIndicator,
-  Linking,
-  AsyncStorage
+  ActivityIndicator
 } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -16,8 +14,6 @@ import { compose, lifecycle } from 'recompose';
 
 import { Button, HeaderSection } from 'src/pureComponents';
 import actions from 'src/data/actions';
-import { refresh } from 'src/api/refreshTokenAPI';
-import config from 'src/config';
 import i18n from 'src/framework/i18n';
 
 import styles from './styles';
@@ -27,26 +23,6 @@ export class Settings extends Component {
     const { logout } = this.props;
     logout();
   }
-
-  // goToProfile = id => {
-  //   refresh().then(newToken => {
-  //     let url =
-  //       config.client +
-  //       '/redirect?type=user&id=' +
-  //       id +
-  //       '&idToken=' +
-  //       newToken.idToken +
-  //       '&accessToken=' +
-  //       newToken.accessToken;
-  //     Linking.canOpenURL(url).then(supported => {
-  //       if (supported) {
-  //         Linking.openURL(url);
-  //       } else {
-  //         console.log("Don't know how to open URI: " + url);
-  //       }
-  //     });
-  //   });
-  // };
 
   goToProfile = (userId) => {
     this.props.navigation.navigate('UserProfile', { userId });

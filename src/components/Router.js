@@ -14,6 +14,7 @@ import Settings from 'src/components/Settings';
 import Login from 'src/components/Login';
 import StartScreen from 'src/components/StartScreen';
 import UserProfile from 'src/components/UserProfile';
+import Registration from 'src/components/Registration';
 import { getNotViewedNotificationsCount } from 'src/data/notifications/selectors';
 import BottomTabsBadge from 'src/pureComponents/BottomTabsBadge';
 import i18n from 'src/framework/i18n';
@@ -92,6 +93,7 @@ export const Navigator = StackNavigator(
     StartScreen,
     Tabs,
     Login,
+    Registration,
     UserProfile
   },
   {
