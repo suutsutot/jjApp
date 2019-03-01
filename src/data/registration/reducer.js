@@ -1,11 +1,14 @@
+import types from 'src/constants/actionTypes';
+import { merge } from 'ramda';
+
 const defaultState = {
   data: {
-      activities: {}
+    activities: {}
   },
   form: {
     firstName: 'Gucci',
     lastName: 'Mane',
-    birthday: new Date(),
+    birthday: 'Wed Feb 20 2019 16:50:00 GMT+0300',
     gender: 'male',
     location: {
       string: 'Los Angeles, CA, USA',
@@ -40,5 +43,13 @@ const defaultState = {
 };
 
 export const registration = (state = defaultState, action) => {
-    return state;
-}
+  const { payload } = action;
+  console.log({ payload });
+
+  switch (action.type) {
+    case types.REGISTRATION.CHANGE_FIELD:
+      return merge(state, { form: merge(state.form, payload) });
+    default:
+      return state;
+  }
+};

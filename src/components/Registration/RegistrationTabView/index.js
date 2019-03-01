@@ -34,14 +34,9 @@ export default class RegistrationTabView extends React.Component {
             style={{ backgroundColor: '#00bcd4', height: 46 }}
             labelStyle={{ fontSize: 15, color: '#fff', fontWeight: 'bold' }}
             indicatorStyle={{ backgroundColor: 'rgba(0,172,193,1)', height: 4 }}
-            // activeColor={"#006773"}
-            // inactiveColor={"red"}
           />
         }
       />
     );
   }
 }
-
-// color: '#fff',
-// fontSize: 18

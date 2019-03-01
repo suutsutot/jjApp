@@ -4,6 +4,7 @@ import * as events from './event/actions';
 import * as user from './user/actions';
 import * as users from './users/actions';
 import * as communities from './communities/actions';
+import * as registration from './registration/actions';
 
 export default {
   authorization,
@@ -11,5 +12,6 @@ export default {
   events,
   users,
   user,
+  registration,
   communities
 };

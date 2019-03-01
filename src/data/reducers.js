@@ -10,6 +10,7 @@ import {user} from './user/reducer';
 import {navReducer} from './nav/navReducer';
 import {events} from './event/reducer';
 import {notifications} from './notifications/reducer';
+import {registration} from './registration/reducer'
 
 const appReducer = combineReducers({
   nav: navReducer,
@@ -31,6 +32,7 @@ const appReducer = combineReducers({
     storage: AsyncStorage,
     whitelist: ['list', 'data']
   }, notifications),
+  registration
 });
 
 export default (state, action) => {
