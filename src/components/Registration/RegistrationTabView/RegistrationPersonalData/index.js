@@ -4,7 +4,7 @@ import { TextField } from 'react-native-material-textfield';
 import { connect } from 'react-redux';
 import actions from 'src/data/actions';
 import { Dropdown } from 'react-native-material-dropdown';
-import DatePicker from 'react-native-date-picker';
+
 class RegistrationPersonalData extends Component {
   constructor(props) {
     super(props);
@@ -34,10 +34,8 @@ class RegistrationPersonalData extends Component {
         <TextField
           label="Location"
           tintColor="#00bcd4"
-          onChangeText={value => changeField({ city: value })}
-          value={
-            form.location.details.country + ', ' + form.location.details.city
-          }
+          onChangeText={value => changeField({ location: value })}
+          value={form.location}
           labelHeight={15}
         />
         <Dropdown
@@ -45,11 +43,6 @@ class RegistrationPersonalData extends Component {
           data={gender}
           value={form.gender}
           onChangeText={value => changeField({ gender: value })}
-        />
-        <DatePicker
-          date={form.birthday}
-          mode='date'
-          onDateChange={date => changeField({ birthday: date })}
         />
         <Text>{JSON.stringify(this.props, null, 2)}</Text>
       </View>
