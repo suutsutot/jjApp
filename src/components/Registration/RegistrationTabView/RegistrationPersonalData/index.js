@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { TextField } from 'react-native-material-textfield';
 import { connect } from 'react-redux';
 import actions from 'src/data/actions';
@@ -17,34 +17,39 @@ class RegistrationPersonalData extends Component {
 
     return (
       <View>
-        <TextField
-          label="FirstName"
-          tintColor="#00bcd4"
-          onChangeText={value => changeField({ firstName: value })}
-          value={form.firstName}
-          labelHeight={15}
-        />
-        <TextField
-          label="LastName"
-          tintColor="#00bcd4"
-          onChangeText={value => changeField({ lastName: value })}
-          value={form.lastName}
-          labelHeight={15}
-        />
-        <TextField
-          label="Location"
-          tintColor="#00bcd4"
-          onChangeText={value => changeField({ location: value })}
-          value={form.location}
-          labelHeight={15}
-        />
-        <Dropdown
-          label="Gender"
-          data={gender}
-          value={form.gender}
-          onChangeText={value => changeField({ gender: value })}
-        />
-        <Text>{JSON.stringify(this.props, null, 2)}</Text>
+        <ScrollView>
+          <Text style={{ fontSize: 18, fontWeight: 'bold' }}>
+            General information
+          </Text>
+          <TextField
+            label="FirstName"
+            tintColor="#00bcd4"
+            onChangeText={value => changeField({ firstName: value })}
+            value={form.firstName}
+            labelHeight={15}
+          />
+          <TextField
+            label="LastName"
+            tintColor="#00bcd4"
+            onChangeText={value => changeField({ lastName: value })}
+            value={form.lastName}
+            labelHeight={15}
+          />
+          <TextField
+            label="Location"
+            tintColor="#00bcd4"
+            onChangeText={value => changeField({ location: value })}
+            value={form.location}
+            labelHeight={15}
+          />
+          <Dropdown
+            label="Gender"
+            data={gender}
+            value={form.gender}
+            onChangeText={value => changeField({ gender: value })}
+          />
+          <Text>{JSON.stringify(this.props, null, 2)}</Text>
+        </ScrollView>
       </View>
     );
   }
@@ -62,3 +67,14 @@ export default connect(
     };
   }
 )(RegistrationPersonalData);
+
+// - datepicker
+// - logo, back button +
+// - add Gnereal information title
+// - scroll +
+// - languages picker render from data.languages
+// - add next button
+
+// - translations
+
+// - move tabIndex to redux

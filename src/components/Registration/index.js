@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Image } from 'react-native';
 import styles from './styles';
+import { ArrowBackIcon } from 'src/pureComponents/ArrowBackIcon';
 
 import { HeaderSection } from 'src/pureComponents/HeaderSection';
 import RegistrationTabView from 'src/components/Registration/RegistrationTabView';
@@ -9,16 +10,14 @@ const uri = 'https://s3-eu-west-1.amazonaws.com/jj-files/logo/New_Logo.png';
 
 class Registration extends React.Component {
   render() {
+    const { navigation } = this.props;
+
     return (
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         <HeaderSection
-          leftComponent={
-            <Image
-              style={styles.logo}
-              source={{ uri }}
-            />
-          }
+          leftComponent={<ArrowBackIcon onPress={() => navigation.goBack()} />}
           title={' '}
+          rightComponent={<Image style={styles.logo} source={{ uri }} />}
         />
         <RegistrationTabView />
       </View>
