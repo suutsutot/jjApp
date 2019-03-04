@@ -628,5 +628,7 @@
   "empty_notifications": "У Вас пока нет новых уведомлений",
   "go_to_web_profile": "Перейти в профиль (веб версия)",
   "go_to_profile": "Перейти в профиль",
-  "notification_action_error": "Произошла ошибка"
+  "notification_action_error": "Произошла ошибка",
+  "general_information": "Основная информация",
+  "choose_date_birthday": "Выберите дату своего дня рождения"
 }

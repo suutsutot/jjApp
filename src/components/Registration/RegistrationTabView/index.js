@@ -1,42 +1,59 @@
 import * as React from 'react';
-import { Dimensions } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
+import { connect } from 'react-redux';
+
 import RegistrationPersonalData from 'src/components/Registration/RegistrationTabView/RegistrationPersonalData';
 import RegistrationActities from 'src/components/Registration/RegistrationTabView/RegistrationActities';
+import actions from 'src/data/actions';
+import i18n from 'src/framework/i18n';
+
+import styles from './styles';
 
 const PersonalData = () => <RegistrationPersonalData />;
 const Activities = () => <RegistrationActities />;
- 
-export default class RegistrationTabView extends React.Component {
+
+class RegistrationTabView extends React.Component {
   state = {
-    index: 0,
     routes: [
-      { key: 'PersonalData', title: 'Personal' },
-      { key: 'Activities', title: 'Activities' },
-    ],
+      { key: 'PersonalData', title: i18n('general_tab') },
+      { key: 'Activities', title: i18n('activities_tab') }
+    ]
   };
- 
+
   render() {
+    const { changeTabIndex, tabIndex } = this.props;
+
     return (
       <TabView
-        navigationState={this.state}
+        navigationState={{ index: tabIndex, routes: this.state.routes }}
         renderScene={SceneMap({
           PersonalData,
           Activities
         })}
-        onIndexChange={index => this.setState({ index })}
-        initialLayout={{ width: Dimensions.get('window').width, height: Dimensions.get('window').height }}
-        style={{ backgroundColor: '#fff' }}
+        onIndexChange={index => changeTabIndex(index)}
         swipeEnabled={false}
-        renderTabBar={props =>
+        renderTabBar={props => (
           <TabBar
             {...props}
-            style={{ backgroundColor: '#00bcd4', height: 46 }}
-            labelStyle={{ fontSize: 15, color: '#fff', fontWeight: 'bold' }}
-            indicatorStyle={{ backgroundColor: 'rgba(0,172,193,1)', height: 4 }}
+            style={styles.tabBarStyle}
+            labelStyle={styles.labelStyle}
+            indicatorStyle={styles.indicatorStyle}
           />
-        }
+        )}
       />
     );
   }
 }
+
+export default connect(
+  ({ registration }) => {
+    const { tabIndex } = registration;
+    return { tabIndex };
+  },
+  dispatch => {
+    return {
+      changeTabIndex: payload =>
+        dispatch(actions.registration.changeTabIndex(payload))
+    };
+  }
+)(RegistrationTabView);

@@ -6,3 +6,10 @@ export const changeField = payload => {
     payload
   };
 };
+
+export const changeTabIndex = payload => {
+  return {
+    type: types.REGISTRATION.CHANGE_TAB_INDEX,
+    payload
+  };
+};
