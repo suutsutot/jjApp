@@ -55,7 +55,7 @@ export const dbGetRecommendedEvents = () => {
           .catch(error => console.log('Error: ', error))
           .then(response => {
             let eventsList = response.recommended || {};
-            dispatch(addRecommenedEvents(userId, eventsList));
+            dispatch(addRecommendedEvents(userId, eventsList));
           });
       });
     });
@@ -76,37 +76,51 @@ export const addNewEventsListInfo = (uid, info) => {
   };
 };
 
-export const addRecommenedEvents = (uid, info) => {
+export const addRecommendedEvents = (uid, info) => {
   return {
     type: types.EVENTS.ADD_RECOMMENDED_EVENTS,
     payload: { uid, info }
   };
 };
 
-export const joinEventRequest = id => {
-  return {
-    type: types.EVENTS.JOIN_EVENT_REQUEST,
-    payload: { id }
-  };
-};
-
-export const rejectEventRequest = id => {
+export const rejectEventRequest = (id, notificationId) => {
   return {
     type: types.EVENTS.REJECT_EVENT_REQUEST,
-    payload: { id }
+    payload: { id, notificationId }
   };
 };
 
-export const joinEventSuccess = response => {
+export const rejectEventSuccess = (response, notificationId) => {
+  return {
+    type: types.EVENTS.REJECT_EVENT_SUCCESS,
+    payload: { response, notificationId }
+  };
+};
+
+export const rejectEventError = (error, notificationId) => {
+  return {
+    type: types.EVENTS.REJECT_EVENT_ERROR,
+    payload: { error, notificationId }
+  };
+};
+
+export const joinEventRequest = (id, notificationId) => {
+  return {
+    type: types.EVENTS.JOIN_EVENT_REQUEST,
+    payload: { id, notificationId }
+  };
+};
+
+export const joinEventSuccess = (response, notificationId) => {
   return {
     type: types.EVENTS.JOIN_EVENT_SUCCESS,
-    payload: response
+    payload: { response, notificationId }
   };
 };
 
-export const joinEventError = response => {
+export const joinEventError = (error, notificationId) => {
   return {
     type: types.EVENTS.JOIN_EVENT_ERROR,
-    payload: response
+    payload: { error, notificationId }
   };
 };

@@ -583,5 +583,6 @@
   "Dutch": "Dutch",
   "empty_notifications": "You do not have any notifications yet",
   "go_to_web_profile": "Go to profile (web version)",
-  "go_to_profile": "Go to profile"
+  "go_to_profile": "Go to profile",
+  "notification_action_error": "An error has occurred"
 }

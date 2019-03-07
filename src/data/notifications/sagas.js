@@ -3,6 +3,8 @@ import { delay } from 'redux-saga';
 import { takeEvery, call, put, select, takeLatest } from 'redux-saga/effects';
 import { NavigationActions } from 'react-navigation';
 
+import { showNotificationsSnackbar } from '../shared/snackbar';
+
 import {
   getNotifications,
   postViewedNotification
@@ -10,9 +12,11 @@ import {
 import actions from 'src/data/actions';
 import types from 'src/constants/actionTypes';
 import { getNotViewedNotificationsIds } from './selectors';
-import * as Snackbar from 'src/framework/snackbar';
 
-function* fetchList() {
+function* fetchList(action) {
+  const { payload } = action;
+  const { silent } = payload;
+
   const notifications = yield call(getNotifications);
   const { error } = notifications;
 
@@ -32,10 +36,9 @@ function* fetchList() {
     }
   } else {
     yield put(actions.notifications.fetchListError());
-    yield call(Snackbar.show, {
-      title: 'Server error on loading list',
-      duration: Snackbar.LENGTH_LONG
-    });
+    if (!silent) {
+      yield showNotificationsSnackbar();
+    }
   }
 }
 
@@ -43,8 +46,8 @@ function* navigate(action) {
   const { routeName } = action;
 
   if (routeName === 'Notifications') {
-    yield call(postViewed);
-  }
+  yield call(postViewed);
+}
 }
 
 export function* postViewed() {
@@ -56,7 +59,7 @@ export function* postViewed() {
       yield call(delay, 250);
       yield call(postViewedNotification, notificationId);
     }
-    yield call(fetchList);
+    yield call(fetchList, { payload: { silent: true } });
   }
 }
 

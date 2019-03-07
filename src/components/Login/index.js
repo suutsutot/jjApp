@@ -15,7 +15,7 @@ import { trim } from 'lodash';
 import styles from './styles';
 import config from 'src/config';
 
-import LoadingButton from 'src/pureComponents/LoadingButton';
+import LoadingButton from 'src/pureComponents/Button/LoadingButton';
 
 class Login extends Component {
   constructor(props) {

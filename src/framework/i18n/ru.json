@@ -627,5 +627,6 @@
   "Dutch": "Голландский",
   "empty_notifications": "У Вас пока нет новых уведомлений",
   "go_to_web_profile": "Перейти в профиль (веб версия)",
-  "go_to_profile": "Перейти в профиль"
+  "go_to_profile": "Перейти в профиль",
+  "notification_action_error": "Произошла ошибка"
 }
