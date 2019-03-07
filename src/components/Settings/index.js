@@ -6,9 +6,7 @@ import {
   View,
   ScrollView,
   Text,
-  ActivityIndicator,
-  Linking,
-  AsyncStorage
+  ActivityIndicator
 } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -16,8 +14,6 @@ import { compose, lifecycle } from 'recompose';
 
 import { Button, HeaderSection } from 'src/pureComponents';
 import actions from 'src/data/actions';
-import { refresh } from 'src/api/refreshTokenAPI';
-import config from 'src/config';
 import i18n from 'src/framework/i18n';
 
 import styles from './styles';
