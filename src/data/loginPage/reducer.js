@@ -1,4 +1,4 @@
-import { merge, filter, difference, keys } from 'ramda';
+import { mergeRight, filter, difference, keys } from 'ramda';
 import { trim } from 'lodash';
 import { NavigationActions } from 'react-navigation';
 
@@ -17,17 +17,20 @@ export const loginPage = (state = defaultState, action) => {
   const { payload } = action;
   switch (action.type) {
     case types.LOGIN_PAGE.CHANGE_FIELD:
-      const statePayload = merge(state, payload);
+      const statePayload = mergeRight(state, payload);
       const validatedKeys = keys(filter(value => trim(value), statePayload));
-      return merge(statePayload, {
+      return mergeRight(statePayload, {
         validation: difference(statePayload.validation, validatedKeys)
       });
     case types.LOGIN_PAGE.TOGGLE_LOADING:
-      return merge(state, { loading: payload });
+      return mergeRight(state, { loading: payload });
     case types.AUTHORIZATION.LOGIN_REQUEST:
-      return merge(state, { validation: getValidationErrors(state), error: '' });
+      return mergeRight(state, {
+        validation: getValidationErrors(state),
+        error: ''
+      });
     case types.AUTHORIZATION.LOGIN_ERROR:
-      return merge(state, { error: payload, loading: false });
+      return mergeRight(state, { error: payload, loading: false });
     case NavigationActions.NAVIGATE:
       return action.routeName !== 'Login' ? defaultState : state;
     default:

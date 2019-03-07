@@ -15,10 +15,15 @@ import actions from 'src/data/actions';
 import config from 'src/config';
 import LoadingButton from 'src/pureComponents/Button/LoadingButton';
 import i18n from 'src/framework/i18n';
+import { getPhoneJJLocale } from 'src/framework/i18n/getPhoneLocale';
 
 import styles from './styles';
 
 class Login extends Component {
+  phoneLocale = getPhoneJJLocale();
+
+  i18n = key => i18n(key, 'general', this.phoneLocale);
+
   redirect(route) {
     this.props.navigation.navigate(route);
   }
@@ -40,7 +45,7 @@ class Login extends Component {
               />
             </View>
           }
-          title={i18n('google_log_in')}
+          title={this.i18n('google_log_in')}
           titleStyle={{ flex: 1 }}
           buttonStyle={[
             styles.social_button,
@@ -61,7 +66,7 @@ class Login extends Component {
               />
             </View>
           }
-          title={i18n('facebook_log_in')}          
+          title={this.i18n('facebook_log_in')}
           titleStyle={{ flex: 1 }}
           buttonStyle={[styles.social_button, { backgroundColor: '#5e81a8' }]}
           onPress={() => loginViaFacebook()}
@@ -76,38 +81,46 @@ class Login extends Component {
     return (
       <View>
         <TextField
-          label={i18n('email_label')}
+          label={this.i18n('email_label')}
           tintColor="#00bcd4"
           keyboardType="email-address"
           onChangeText={value => changeField({ email: value })}
           value={email}
-          error={validation.indexOf('email') !== -1 ? i18n('email_required') : null}
+          error={
+            validation.indexOf('email') !== -1
+              ? this.i18n('email_required')
+              : null
+          }
           autoCapitalize="none"
           labelHeight={15}
         />
         <TextField
-          label={i18n('password_label')}
+          label={this.i18n('password_label')}
           tintColor="#00bcd4"
           onChangeText={value => changeField({ password: value })}
           value={password}
-          error={validation.indexOf('password') !== -1 ? i18n('password_required') : null}
+          error={
+            validation.indexOf('password') !== -1
+              ? this.i18n('password_required')
+              : null
+          }
           autoCapitalize="none"
           secureTextEntry
           labelHeight={15}
         />
         {error === 'conection' ? (
           <Text style={{ color: 'red', textAlign: 'center' }}>
-            {i18n('login_page_connection_problems_warning')}
+            {this.i18n('login_page_connection_problems_warning')}
           </Text>
         ) : null}
         {error === 'credentials' ? (
           <Text style={{ color: 'red', textAlign: 'center' }}>
-            {i18n('login_page_wrong_credentials_warning')}
+            {this.i18n('login_page_wrong_credentials_warning')}
           </Text>
         ) : null}
         {error === 'externalError' ? (
           <Text style={{ color: 'red', textAlign: 'center' }}>
-            {i18n('login_page_external_error_warning')}
+            {this.i18n('login_page_external_error_warning')}
           </Text>
         ) : null}
       </View>
@@ -122,7 +135,7 @@ class Login extends Component {
         <LoadingButton
           onPress={() => loginWithCredentials(email, password)}
           loading={loading}
-          title={i18n("log_in_button")}
+          title={this.i18n('log_in_button')}
           height={40}
           width={340}
           titleFontSize={16}
@@ -161,7 +174,7 @@ class Login extends Component {
               }}
             />
             <View style={{ height: 10 }} />
-            <Text style={styles.logo_title}>{i18n('login_title')}</Text>
+            <Text style={styles.logo_title}>{this.i18n('login_title')}</Text>
             <View style={{ height: 10 }} />
             {this.renderSocialButtons()}
             <Text
@@ -173,7 +186,7 @@ class Login extends Component {
                 color: '#b0bec5'
               }}
             >
-              {i18n('or')}
+              {this.i18n('or')}
             </Text>
             {this.renderInputs()}
             <View style={{ height: 15 }} />
