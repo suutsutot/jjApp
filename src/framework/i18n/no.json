@@ -628,8 +628,8 @@
   "Hausa":"Hausa",
   "Thai":"Thai",
   "Dutch": "Dutch",
-  "empty_notifications": "",
-  "go_to_web_profile": "",
-  "go_to_profile": "",
+  "empty_notifications": "Du har ingen meldinger ennå",
+  "go_to_web_profile": "Gå til profil (webversjon)",
+  "go_to_profile": "Gå til profil"
   "notification_action_error": "Det har oppstått en feil"
 }
