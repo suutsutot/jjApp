@@ -1,12 +1,12 @@
 import types from 'src/constants/actionTypes';
-import { merge } from 'ramda';
+import { merge, append, without, includes } from 'ramda';
 
 const defaultState = {
   tabIndex: 0,
   data: {
     activities: {
       ROWING: {
-        type: 'ROWING',
+        type: 'CHECKERS',
         name: 'Академическая гребля Rowing Rowing',
         level: 'No experience',
         interest: 'Middle'
@@ -28,7 +28,7 @@ const defaultState = {
     location: 'Los Angeles, CA, USA',
     language: 'English'
   },
-  activities: ['ROWING']
+  selectedActivities: ['ROWING']
 };
 
 export const registration = (state = defaultState, action) => {
@@ -39,6 +39,10 @@ export const registration = (state = defaultState, action) => {
       return merge(state, { form: merge(state.form, payload) });
     case types.REGISTRATION.CHANGE_TAB_INDEX:
       return merge(state, { tabIndex: payload });
+    case types.REGISTRATION.TOGGLE_ACTIVITY:
+      if (!includes(payload, state.selectedActivities)) {
+        return merge(state, {selectedActivities: append(payload, state.selectedActivities) });
+      } else return merge(state, {selectedActivities: without(payload, state.selectedActivities) });
     default:
       return state;
   }

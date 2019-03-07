@@ -2,7 +2,8 @@ import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   view: {
-    flex: 1
+    flex: 1,
+    backgroundColor: '#fff'
   },
   mainContainer: {
     paddingHorizontal: 30
@@ -12,7 +13,7 @@ const styles = StyleSheet.create({
   },
   generalInformationText: {
     fontSize: 18,
-    fontWeight: '400'
+    fontWeight: '500'
   },
   nextButton: {
     paddingTop: 25,

@@ -13,3 +13,10 @@ export const changeTabIndex = payload => {
     payload
   };
 };
+
+export const toogleActivity = payload => {
+  return {
+    type: types.REGISTRATION.TOGGLE_ACTIVITY,
+    payload
+  };
+};
