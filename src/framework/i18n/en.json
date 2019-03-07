@@ -590,5 +590,6 @@
   "login_page_wrong_credentials_warning": "Wrong email or password.",
   "login_page_external_error_warning": "External login error.",
   "log_in_button": "LOG IN",
-  "login_title": "Login"
+  "login_title": "Login",
+  "notification_action_error": "An error has occurred"
 }

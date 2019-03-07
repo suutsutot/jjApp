@@ -1,11 +1,11 @@
 import { takeEvery, call, put, all } from 'redux-saga/effects';
 import { compose, find, values } from 'ramda';
 
-import types from '../../constants/actionTypes';
-import { followUser } from '../../api/usersApi';
-import { setNotificationAnswered } from '../../api/notificationsApi';
+import types from 'src/constants/actionTypes';
+import { followUser } from 'src/api/usersApi';
+import { setNotificationAnswered } from 'src/api/notificationsApi';
 import actions from '../actions';
-import * as Snackbar from '../../framework/snackbar';
+import { showNotificationsSnackbar } from '../shared/snackbar';
 
 const getErrorResponse = compose(
   find(x => x && x.error),
@@ -20,20 +20,20 @@ function* followRequest(action) {
     call(setNotificationAnswered, notificationId)
   ]);
 
+  console.log('responses', responses);
+
   if (responses) {
     const errorResponse = getErrorResponse(responses);
 
     if (!errorResponse) {
-      yield put(actions.notifications.fetchList());
+      const [response] = responses;
+      yield put(actions.users.followUserSuccess(response, notificationId));
+      // yield put(actions.notifications.fetchList({ silent: true }));
     } else {
-      yield call(Snackbar.show, {
-        title: 'Please try again',
-        duration: Snackbar.LENGTH_LONG,
-        action: {
-          title: 'Try again'
-        }
-      });
-      yield put(actions.users.followUserRequest(id));
+      const { error } = errorResponse;
+
+      yield put(actions.users.followUserError(error, notificationId));
+      yield showNotificationsSnackbar();
     }
   }
 }

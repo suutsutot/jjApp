@@ -13,7 +13,7 @@ import { TextField } from 'react-native-material-textfield';
 
 import actions from 'src/data/actions';
 import config from 'src/config';
-import LoadingButton from 'src/pureComponents/LoadingButton';
+import LoadingButton from 'src/pureComponents/Button/LoadingButton';
 import i18n from 'src/framework/i18n';
 
 import styles from './styles';

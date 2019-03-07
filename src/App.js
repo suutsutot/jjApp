@@ -36,6 +36,11 @@ export default compose(
     })
   ),
   lifecycle({
+
+    componentDidMount() {
+      console.log(this.props.locale);
+    },
+
     componentDidUpdate(prevProps) {
       const { locale } = this.props;
       if (prevProps.locale !== locale) {

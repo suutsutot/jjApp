@@ -28,7 +28,8 @@ const loginRequest = (credentials, errorType) => async dispatch => {
     dispatch(
       actions.authorization.login({
         userId: userInfo._id,
-        email: userInfo.email
+          email: userInfo.email,
+          profile: userInfo
       })
     );
 
@@ -163,12 +164,13 @@ export const dbSignUp = (email, password) => {
   };
 };
 
-export const login = ({ userId, email }) => {
+export const login = ({ userId, email, profile }) => {
   return {
     type: types.AUTHORIZATION.LOGIN,
     payload: {
       userId,
-      email
+      email,
+      profile
     }
   };
 };

@@ -8,13 +8,16 @@ export const Button = ({
   children,
   textStyle,
   buttonStyle,
+  loading = false,
   type = 'primary'
 }) => {
   const specificStyles = getSpecificStyles(type);
 
   return (
     <TouchableOpacity
-      onPress={onPress}
+      onPress={() => {
+        !loading && onPress && onPress();
+      }}
       style={[styles.buttonView, specificStyles.buttonView, buttonStyle]}
     >
       <Text style={[styles.buttonText, specificStyles.buttonText, textStyle]}>
