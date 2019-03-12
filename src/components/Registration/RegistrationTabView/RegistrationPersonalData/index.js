@@ -20,7 +20,7 @@ class RegistrationPersonalData extends Component {
   }
 
   render() {
-    const { changeField, changeTabIndex, form, data } = this.props;
+    const { changeField, changeTabIndex, personalDataForm, data } = this.props;
     const gender = [{ value: i18n('male') }, { value: i18n('female') }];
 
     return (
@@ -36,27 +36,27 @@ class RegistrationPersonalData extends Component {
               label={i18n('first_name')}
               tintColor="#00bcd4"
               onChangeText={value => changeField({ firstName: value })}
-              value={form.firstName}
+              value={personalDataForm.firstName}
               labelHeight={15}
             />
             <TextField
               label={i18n('last_name')}
               tintColor="#00bcd4"
               onChangeText={value => changeField({ lastName: value })}
-              value={form.lastName}
+              value={personalDataForm.lastName}
               labelHeight={15}
             />
             <View style={styles.dateView}>
               <TouchableOpacity
                 onPress={() => this.setState({ isDateTimePickerVisible: true })}
               >
-                {form.birthday ? (
+                {personalDataForm.birthday ? (
                   <View style={styles.birthdayView}>
                     <Text style={styles.birthdayText}>
                       {i18n('date_of_birthday')}
                     </Text>
                     <Text style={styles.birthdayDate}>
-                      {moment(form.birthday).format('l')}
+                      {moment(personalDataForm.birthday).format('l')}
                     </Text>
                   </View>
                 ) : (
@@ -79,7 +79,7 @@ class RegistrationPersonalData extends Component {
             <Dropdown
               label={i18n('gender')}
               data={gender}
-              value={form.gender}
+              value={personalDataForm.gender}
               labelHeight={15}
               onChangeText={value => changeField({ gender: value })}
             />
@@ -87,19 +87,20 @@ class RegistrationPersonalData extends Component {
               label={i18n('choose_location')}
               tintColor="#00bcd4"
               onChangeText={value => changeField({ location: value })}
-              value={form.location}
+              value={personalDataForm.location}
               labelHeight={15}
             />
             <Dropdown
               label={i18n('language')}
               data={data.languages}
-              value={form.language}
+              value={personalDataForm.language}
               labelHeight={15}
               onChangeText={value => changeField({ language: value })}
             />
             <View style={styles.nextButton}>
-              <LoadingButton title="NEXT" onPress={() => changeTabIndex(1)} />
+              <LoadingButton title="NEXT" onPress={() => changeTabIndex(2)} />
             </View>
+            <Text>{JSON.stringify(this.props, null, 2)}</Text>
           </View>
         </ScrollView>
       </View>
@@ -109,13 +110,13 @@ class RegistrationPersonalData extends Component {
 
 export default connect(
   ({ registration }) => {
-    const { form, data } = registration;
-    return { form, data };
+    const { personalDataForm, data } = registration;
+    return { personalDataForm, data };
   },
   dispatch => {
     return {
       changeField: payload =>
-        dispatch(actions.registration.changeField(payload)),
+        dispatch(actions.registration.changeField('personalDataForm', payload)),
       changeTabIndex: payload =>
         dispatch(actions.registration.changeTabIndex(payload))
     };

@@ -586,5 +586,8 @@
   "go_to_profile": "Go to profile",
   "notification_action_error": "An error has occurred",
   "general_information": "General information",
-  "choose_date_birthday": "Choose your date of birthday"
+  "choose_date_birthday": "Choose your date of birthday",
+  "registration_tab": "Registration",
+  "confirm_password": "Confirm password",
+  "email_password_title": "Type your email and password"
 }

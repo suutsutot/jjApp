@@ -6,6 +6,7 @@ import { values } from 'ramda';
 import actions from 'src/data/actions';
 import i18n from 'src/framework/i18n';
 import Icon from 'src/config/icon-font.js';
+import { activitiesData } from 'src/api/registrationAPI.js';
 
 import styles from './styles';
 
@@ -14,30 +15,21 @@ const ActivityView = ({ item, toogleActivity, selectedActivities }) => {
     i18n(item.type)
       .charAt(0)
       .toUpperCase() + i18n(item.type).slice(1);
+  const noActivity = selectedActivities.indexOf(item.type) === -1;
 
   return (
     <TouchableOpacity
-      style={
-        selectedActivities.indexOf(item.type) === -1
-          ? styles.notActiveView
-          : styles.activeView
-      }
+      style={noActivity ? styles.notActiveView : styles.activeView}
       onPress={() => toogleActivity(item.type)}
     >
       <Icon
         name={item.type.toLowerCase()}
         size={40}
-        style={
-          selectedActivities.indexOf(item.type) === -1
-            ? styles.notActiveLogo
-            : styles.activeLogo
-        }
+        style={noActivity ? styles.notActiveLogo : styles.activeLogo}
       />
       <Text
         style={
-          selectedActivities.indexOf(item.type) === -1
-            ? styles.notActiveTitleStyle
-            : styles.activeTitleStyle
+          noActivity ? styles.notActiveTitleStyle : styles.activeTitleStyle
         }
       >
         {activityTitle}
@@ -48,6 +40,16 @@ const ActivityView = ({ item, toogleActivity, selectedActivities }) => {
 class RegistrationActivities extends Component {
   constructor(props) {
     super(props);
+  }
+
+  componentDidMount() {
+    this.fetchActivities();
+  }
+
+  fetchActivities() {
+    activitiesData().then(data => {
+      console.log('data', data)
+    });
   }
 
   render() {
