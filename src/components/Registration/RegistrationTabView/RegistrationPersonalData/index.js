@@ -11,6 +11,7 @@ import actions from 'src/data/actions';
 import i18n from 'src/framework/i18n';
 
 import styles from './styles';
+import { isFieldNotValid } from '../../../../data/registration/selector';
 class RegistrationPersonalData extends Component {
   constructor(props) {
     super(props);
@@ -20,8 +21,22 @@ class RegistrationPersonalData extends Component {
   }
 
   render() {
-    const { changeField, changeTabIndex, personalDataForm, data } = this.props;
-    const gender = [{ value: i18n('male') }, { value: i18n('female') }];
+    const {
+      changeField,
+      validateField,
+      changeTabIndex,
+      personalDataForm: {
+        firstName,
+        lastName,
+        birthday,
+        gender,
+        location,
+        language
+      },
+      data,
+      personalDataValidation
+    } = this.props;
+    const genderData = [{ value: i18n('male') }, { value: i18n('female') }];
 
     return (
       <View style={styles.view}>
@@ -36,27 +51,41 @@ class RegistrationPersonalData extends Component {
               label={i18n('first_name')}
               tintColor="#00bcd4"
               onChangeText={value => changeField({ firstName: value })}
-              value={personalDataForm.firstName}
+              value={firstName}
               labelHeight={15}
+              onBlur={() => validateField(['firstName'])}
+              error={
+                personalDataValidation.indexOf('firstName') !== -1 &&
+                isFieldNotValid(firstName)
+                  ? i18n('first_name_required')
+                  : null
+              }
             />
             <TextField
               label={i18n('last_name')}
               tintColor="#00bcd4"
               onChangeText={value => changeField({ lastName: value })}
-              value={personalDataForm.lastName}
+              value={lastName}
               labelHeight={15}
+              onBlur={() => validateField(['lastName'])}
+              error={
+                personalDataValidation.indexOf('lastName') !== -1 &&
+                isFieldNotValid(lastName)
+                  ? i18n('last_name_required')
+                  : null
+              }
             />
             <View style={styles.dateView}>
               <TouchableOpacity
                 onPress={() => this.setState({ isDateTimePickerVisible: true })}
               >
-                {personalDataForm.birthday ? (
+                {birthday ? (
                   <View style={styles.birthdayView}>
                     <Text style={styles.birthdayText}>
                       {i18n('date_of_birthday')}
                     </Text>
                     <Text style={styles.birthdayDate}>
-                      {moment(personalDataForm.birthday).format('l')}
+                      {moment(birthday).format('l')}
                     </Text>
                   </View>
                 ) : (
@@ -78,8 +107,8 @@ class RegistrationPersonalData extends Component {
             </View>
             <Dropdown
               label={i18n('gender')}
-              data={gender}
-              value={personalDataForm.gender}
+              data={genderData}
+              value={gender}
               labelHeight={15}
               onChangeText={value => changeField({ gender: value })}
             />
@@ -87,13 +116,13 @@ class RegistrationPersonalData extends Component {
               label={i18n('choose_location')}
               tintColor="#00bcd4"
               onChangeText={value => changeField({ location: value })}
-              value={personalDataForm.location}
+              value={location}
               labelHeight={15}
             />
             <Dropdown
               label={i18n('language')}
               data={data.languages}
-              value={personalDataForm.language}
+              value={language}
               labelHeight={15}
               onChangeText={value => changeField({ language: value })}
             />
@@ -110,13 +139,17 @@ class RegistrationPersonalData extends Component {
 
 export default connect(
   ({ registration }) => {
-    const { personalDataForm, data } = registration;
-    return { personalDataForm, data };
+    const { personalDataForm, data, personalDataValidation } = registration;
+    return { personalDataForm, data, personalDataValidation };
   },
   dispatch => {
     return {
       changeField: payload =>
         dispatch(actions.registration.changeField('personalDataForm', payload)),
+      validateField: payload =>
+        dispatch(
+          actions.registration.validateField('personalDataValidation', payload)
+        ),
       changeTabIndex: payload =>
         dispatch(actions.registration.changeTabIndex(payload))
     };

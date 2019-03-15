@@ -7,6 +7,13 @@ export const changeField = (formId, fields) => {
   };
 };
 
+export const validateField = (validationId, fields) => {
+  return {
+    type: types.REGISTRATION.VALIDATE_FIELD,
+    payload: { validationId, fields }
+  };
+};
+
 export const changeTabIndex = payload => {
   return {
     type: types.REGISTRATION.CHANGE_TAB_INDEX,

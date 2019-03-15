@@ -1,5 +1,6 @@
 import types from 'src/constants/actionTypes';
-import { merge, append, without, includes } from 'ramda';
+import { merge, append, without, includes, uniq, concat, keys } from 'ramda';
+// import { isFieldNotValid } from 'src/data/registration/selector.js';
 
 const defaultState = {
   tabIndex: 0,
@@ -26,25 +27,37 @@ const defaultState = {
     confirmPassword: 'qwerasd'
   },
   personalDataForm: {
-    firstName: 'Gucci',
+    firstName: '',
     lastName: 'Mane',
     birthday: 'Wed Feb 20 2019 16:50:00 GMT+0300',
     gender: 'male',
     location: 'Los Angeles, CA, USA',
     language: 'English'
   },
-  selectedActivities: ['ROWING']
+  selectedActivities: ['ROWING'],
+  personalDataValidation: [],
+  registrationValidation: []
 };
 
 export const registration = (state = defaultState, action) => {
   const { payload } = action;
-  console.log({ payload });
-  // console.log('action', action)
   switch (action.type) {
-    case types.REGISTRATION.CHANGE_FIELD:
+    case types.REGISTRATION.CHANGE_FIELD: {
+      const validationId = {
+        personalDataForm: 'personalDataValidation',
+        registrationForm: 'registrationValidation'
+      }[payload.formId];
       return merge(state, {
-        [payload.formId]: merge(state[payload.formId], payload.fields)
+        [payload.formId]: merge(state[payload.formId], payload.fields),
+        [validationId]: uniq(concat(keys(payload.fields), state[validationId]))
       });
+    }
+    case types.REGISTRATION.VALIDATE_FIELD: {
+      const validationId = payload.validationId;
+      return merge(state, {
+        [validationId]: uniq(concat(payload.fields, state[validationId]))
+      });
+    }
     case types.REGISTRATION.CHANGE_TAB_INDEX:
       return merge(state, { tabIndex: payload });
     case types.REGISTRATION.TOGGLE_ACTIVITY:
@@ -60,3 +73,9 @@ export const registration = (state = defaultState, action) => {
       return state;
   }
 };
+
+//       const key = Object.keys(payload.fields);
+//       return merge(state, {
+//         [payload.formId]: merge(state[payload.formId], payload.fields),
+//         [payload.validationId]: without(key, state[payload.validationId])
+//       });

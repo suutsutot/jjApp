@@ -589,5 +589,6 @@
   "choose_date_birthday": "Choose your date of birthday",
   "registration_tab": "Registration",
   "confirm_password": "Confirm password",
-  "email_password_title": "Type your email and password"
+  "email_password_title": "Type your email and password",
+  "confirm_password_required": "Confirm password is required"
 }
