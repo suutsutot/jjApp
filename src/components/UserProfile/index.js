@@ -101,9 +101,9 @@ export default compose(
       loaded: !isNil(user.profile) && !isEmpty(user.profile),
       profile: user.profile
     }),
-    dispatch => ({
-      setUserProfile: user => dispatch(actions.user.setUserProfile(user))
-    })
+    {
+      setUserProfile: actions.user.setUserProfile
+    }
   ),
   withBackHandler(({ navigation }) => navigation.goBack())
 )(UserProfile);

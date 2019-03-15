@@ -13,9 +13,3 @@ export const toggleLoading = payload => {
     payload
   };
 };
-
-export const loginRequest = () => {
-  return {
-    type: types.AUTHORIZATION.LOGIN_REQUEST
-  };
-};

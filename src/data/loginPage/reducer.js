@@ -29,8 +29,19 @@ export const loginPage = (state = defaultState, action) => {
         validation: getValidationErrors(state),
         error: ''
       });
+    case types.AUTHORIZATION.EXTERNAL_LOGIN_REQUEST:
+      return mergeRight(state, {
+        validation: [],
+        error: ''
+      });
     case types.AUTHORIZATION.LOGIN_ERROR:
-      return mergeRight(state, { error: payload, loading: false });
+      return mergeRight(state, {
+        error:
+          payload.error.error === 'a0.session.user_cancelled'
+            ? ''
+            : payload.errorType,
+        loading: false
+      });
     case NavigationActions.NAVIGATE:
       return action.routeName !== 'Login' ? defaultState : state;
     default:

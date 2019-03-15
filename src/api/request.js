@@ -1,4 +1,4 @@
-import { merge } from 'ramda';
+import { mergeRight } from 'ramda';
 
 import { delayPayload } from 'src/utils/asyncUtils';
 import { refresh } from './refreshTokenAPI';
@@ -18,7 +18,7 @@ export default (url, options) =>
           delayPayload(5000, { error: 'timeout', timeout: true }),
           fetch(
             url,
-            merge(
+            mergeRight(
               {
                 headers: {
                   Accept: 'application/json',

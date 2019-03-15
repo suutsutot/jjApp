@@ -11,7 +11,7 @@ import { isLoginFormValid } from 'src/data/loginPage/selector';
 import { postUserData } from 'src/api/authorizationAPI';
 import { isNotConnected } from 'src/framework/connection';
 
-const loginRequest = (credentials, errorType) => async dispatch => {
+const sharedLogin = (credentials, errorType) => async dispatch => {
   await AsyncStorage.setItem('refreshToken', credentials.refreshToken);
   const { accessToken, idToken } = await refreshByCredentials(credentials);
   AsyncStorage.setItem('accessToken', accessToken);
@@ -29,8 +29,8 @@ const loginRequest = (credentials, errorType) => async dispatch => {
     dispatch(
       actions.authorization.login({
         userId: userInfo._id,
-          email: userInfo.email,
-          profile: userInfo
+        email: userInfo.email,
+        profile: userInfo
       })
     );
 
@@ -54,7 +54,7 @@ const loginRequest = (credentials, errorType) => async dispatch => {
 };
 
 export const internalLogin = (username, password) => async dispatch => {
-  dispatch(actions.loginPage.loginRequest());
+  dispatch(actions.authorization.loginRequest());
   if (await isNotConnected()) {
     return dispatch(loginError('connection'));
   }
@@ -70,32 +70,46 @@ export const internalLogin = (username, password) => async dispatch => {
       scope: 'openid offline_access'
     });
 
-    await loginRequest(credentials, 'credentials')(dispatch);
+    await sharedLogin(credentials, 'credentials')(dispatch);
   } catch (error) {
     console.log('AuthorizeActionError:', error);
     dispatch(loginError('credentials'));
   }
 };
 
-export const externalLogin = (connection) => async dispatch => {
-  dispatch(actions.loginPage.toggleLoading(true));
+export const externalLogin = connection => async dispatch => {
+  dispatch(actions.authorization.externalLoginRequest());
   if (await isNotConnected()) {
     return dispatch(loginError('connection'));
   }
 
+  dispatch(actions.loginPage.toggleLoading(true));
+
   auth0.webAuth
-  .authorize({
-    scope: 'openid email profile offline_access',
-    audience: 'https://' + auth0Config.domain + '/userinfo',
-    connection
-  })
-  .then(credentials => {
-    return loginRequest(credentials, 'externalError')(dispatch);
-  })
-  .catch(error => {
-    console.log('AuthorizeActionError:', error);
-    dispatch(loginError('externalError'));
-  });
+    .authorize({
+      scope: 'openid email profile offline_access',
+      audience: 'https://' + auth0Config.domain + '/userinfo',
+      connection
+    })
+    .then(credentials => {
+      return sharedLogin(credentials, 'externalError')(dispatch);
+    })
+    .catch(error => {
+      console.log('AuthorizeActionError:', error);
+      dispatch(loginError('externalError', error));
+    });
+};
+
+export const externalLoginRequest = () => {
+  return {
+    type: types.AUTHORIZATION.EXTERNAL_LOGIN_REQUEST
+  };
+};
+
+export const loginRequest = () => {
+  return {
+    type: types.AUTHORIZATION.LOGIN_REQUEST
+  };
 };
 
 export const login = ({ userId, email, profile }) => {
@@ -109,8 +123,11 @@ export const login = ({ userId, email, profile }) => {
   };
 };
 
-const loginError = payload => {
-  return { type: types.AUTHORIZATION.LOGIN_ERROR, payload };
+const loginError = (errorType, error = {}) => {
+  return {
+    type: types.AUTHORIZATION.LOGIN_ERROR,
+    payload: { errorType, error }
+  };
 };
 
 export const logout = () => dispatch => {
