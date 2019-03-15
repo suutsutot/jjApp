@@ -186,5 +186,4 @@ const mapStateToProps = ({application}) => {
   return {error, loading}
 };
 
-
 export default connect(mapStateToProps, mapDispatchToProps)(Register)
