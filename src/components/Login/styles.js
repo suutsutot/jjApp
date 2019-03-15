@@ -1,10 +1,10 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     position: 'relative',
-    backgroundColor: '#fff',
+    backgroundColor: '#fff'
   },
   auth_content: {
     paddingHorizontal: 30
@@ -32,17 +32,16 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center',
-
+    alignItems: 'center'
   },
   icon_aria: {
     height: 38,
     width: 38,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 2,
+    borderRadius: 2
   },
   social_button: {
     height: 48,
@@ -55,8 +54,9 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 20,
     backgroundColor: '#00bcd4'
-  }
-
+  },
+  errorView: { height: 14 },
+  errorText: { color: 'red', textAlign: 'center' }
 });
 
-export default styles
+export default styles;

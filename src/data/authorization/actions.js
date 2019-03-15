@@ -9,6 +9,7 @@ import auth0 from 'src/framework/auth0';
 import auth0Config from 'src/config/auth0Config';
 import { isLoginFormValid } from 'src/data/loginPage/selector';
 import { postUserData } from 'src/api/authorizationAPI';
+import { isNotConnected } from 'src/framework/connection';
 
 const loginRequest = (credentials, errorType) => async dispatch => {
   await AsyncStorage.setItem('refreshToken', credentials.refreshToken);
@@ -52,15 +53,10 @@ const loginRequest = (credentials, errorType) => async dispatch => {
   }
 };
 
-const isNotConnected = async () => {
-  const connectionInfo = await NetInfo.getConnectionInfo();
-  return connectionInfo.type === 'none';
-};
-
-export const loginWithCredentials = (username, password) => async dispatch => {
+export const internalLogin = (username, password) => async dispatch => {
   dispatch(actions.loginPage.loginRequest());
   if (await isNotConnected()) {
-    return dispatch(loginError('conection'));
+    return dispatch(loginError('connection'));
   }
   if (!isLoginFormValid(username, password)) return;
 
@@ -81,87 +77,25 @@ export const loginWithCredentials = (username, password) => async dispatch => {
   }
 };
 
-export const loginWithGoogle = () => async dispatch => {
+export const externalLogin = (connection) => async dispatch => {
   dispatch(actions.loginPage.toggleLoading(true));
   if (await isNotConnected()) {
-    return dispatch(loginError('conection'));
+    return dispatch(loginError('connection'));
   }
 
   auth0.webAuth
-    .authorize({
-      scope: 'openid email profile offline_access',
-      audience: 'https://' + auth0Config.domain + '/userinfo',
-      connection: 'google-oauth2'
-    })
-    .then(credentials => {
-      return loginRequest(credentials, 'externalError')(dispatch);
-    })
-    .catch(error => {
-      console.log('AuthorizeActionError:', error);
-      dispatch(loginError('externalError'));
-    });
-};
-
-export const loginWithFacebook = () => async dispatch => {
-  dispatch(actions.loginPage.toggleLoading(true));
-  if (await isNotConnected()) {
-    return dispatch(loginError('conection'));
-  }
-
-  auth0.webAuth
-    .authorize({
-      scope: 'openid email profile offline_access',
-      audience: 'https://' + auth0Config.domain + '/userinfo',
-      connection: 'facebook'
-    })
-    .then(credentials => {
-      return loginRequest(credentials, 'externalError')(dispatch);
-    })
-    .catch(error => {
-      console.log('AuthorizeActionError:', error);
-      dispatch(loginError('externalError'));
-    });
-};
-
-export const dbSignUp = (email, password) => {
-  return dispatch => {
-    dispatch(applicationActions.showLoading());
-
-    const url = 'https://ynpl.auth0.com/dbconnections/signup';
-    const data = {
-      client_id: 'BBLp6dT9ug1mxY5UI3xwld6cA3Ukn8aH',
-      email: email,
-      password: password,
-      connection: 'Username-Password-Authentication'
-    };
-
-    return fetch(url, {
-      method: 'POST',
-      body: JSON.stringify(data),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(r => r.json())
-      .then(responseData => {
-        if (responseData) {
-          console.log('responseData', responseData);
-          const resetAction = NavigationActions.navigate({
-            routeName: 'Login'
-          });
-          dispatch(resetAction);
-          alert('Successfully! Please log in');
-          dispatch(applicationActions.hideLoading());
-        } else {
-          alert('Sorry, there was a sign up error');
-          dispatch(applicationActions.hideLoading());
-        }
-      })
-      .catch(error => {
-        console.log('AuthorizeActionError:', error);
-        dispatch(applicationActions.hideLoading());
-      });
-  };
+  .authorize({
+    scope: 'openid email profile offline_access',
+    audience: 'https://' + auth0Config.domain + '/userinfo',
+    connection
+  })
+  .then(credentials => {
+    return loginRequest(credentials, 'externalError')(dispatch);
+  })
+  .catch(error => {
+    console.log('AuthorizeActionError:', error);
+    dispatch(loginError('externalError'));
+  });
 };
 
 export const login = ({ userId, email, profile }) => {

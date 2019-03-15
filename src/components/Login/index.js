@@ -5,19 +5,39 @@ import {
   View,
   Text,
   Image,
-  Linking,
   KeyboardAvoidingView
 } from 'react-native';
 import { Button } from 'react-native-elements';
 import { TextField } from 'react-native-material-textfield';
 
 import actions from 'src/data/actions';
-import config from 'src/config';
 import LoadingButton from 'src/pureComponents/Button/LoadingButton';
 import i18n from 'src/framework/i18n';
 import { getPhoneJJLocale } from 'src/framework/i18n/getPhoneLocale';
+import { externalLoginTypes } from 'src/data/authorization/constants';
 
 import styles from './styles';
+
+const SocialButton = ({ icon, title, buttonStyle, onPress }) => {
+  return (
+    <Button
+      icon={
+        <View style={styles.icon_aria}>
+          <Image
+            style={{ width: 24, height: 24 }}
+            source={{
+              uri: icon
+            }}
+          />
+        </View>
+      }
+      title={title}
+      titleStyle={{ flex: 1 }}
+      buttonStyle={[styles.social_button, { marginBottom: 24 }, buttonStyle]}
+      onPress={onPress}
+    />
+  );
+};
 
 class Login extends Component {
   phoneLocale = getPhoneJJLocale();
@@ -29,47 +49,26 @@ class Login extends Component {
   }
 
   renderSocialButtons() {
-    const { loginViaFacebook, loginViaGoogle } = this.props;
+    const { externalLogin } = this.props;
 
     return (
       <View>
-        <Button
+        <SocialButton
           icon={
-            <View style={styles.icon_aria}>
-              <Image
-                style={{ width: 24, height: 24 }}
-                source={{
-                  uri:
-                    'https://s3-eu-west-1.amazonaws.com/jj-files/icons/google-icon.png'
-                }}
-              />
-            </View>
+            'https://s3-eu-west-1.amazonaws.com/jj-files/icons/google-icon.png'
           }
           title={this.i18n('google_log_in')}
-          titleStyle={{ flex: 1 }}
-          buttonStyle={[
-            styles.social_button,
-            { backgroundColor: '#dc4e41', marginBottom: 24 }
-          ]}
-          onPress={() => loginViaGoogle()}
+          buttonStyle={{ backgroundColor: '#dc4e41' }}
+          onPress={() => externalLogin(externalLoginTypes.google)}
         />
 
-        <Button
+        <SocialButton
           icon={
-            <View style={styles.icon_aria}>
-              <Image
-                style={{ width: 25, height: 25 }}
-                source={{
-                  uri:
-                    'https://s3-eu-west-1.amazonaws.com/jj-files/icons/facebook-icon.png'
-                }}
-              />
-            </View>
+            'https://s3-eu-west-1.amazonaws.com/jj-files/icons/facebook-icon.png'
           }
           title={this.i18n('facebook_log_in')}
-          titleStyle={{ flex: 1 }}
-          buttonStyle={[styles.social_button, { backgroundColor: '#5e81a8' }]}
-          onPress={() => loginViaFacebook()}
+          buttonStyle={{ backgroundColor: '#5e81a8' }}
+          onPress={() => externalLogin(externalLoginTypes.facebook)}
         />
       </View>
     );
@@ -108,32 +107,34 @@ class Login extends Component {
           secureTextEntry
           labelHeight={15}
         />
-        {error === 'conection' ? (
-          <Text style={{ color: 'red', textAlign: 'center' }}>
-            {this.i18n('login_page_connection_problems_warning')}
-          </Text>
-        ) : null}
-        {error === 'credentials' ? (
-          <Text style={{ color: 'red', textAlign: 'center' }}>
-            {this.i18n('login_page_wrong_credentials_warning')}
-          </Text>
-        ) : null}
-        {error === 'externalError' ? (
-          <Text style={{ color: 'red', textAlign: 'center' }}>
-            {this.i18n('login_page_external_error_warning')}
-          </Text>
-        ) : null}
+        <View style={styles.errorView}>
+          {error === 'connection' ? (
+            <Text style={styles.errorText}>
+              {this.i18n('login_page_connection_problems_warning')}
+            </Text>
+          ) : null}
+          {error === 'credentials' ? (
+            <Text style={styles.errorText}>
+              {this.i18n('login_page_wrong_credentials_warning')}
+            </Text>
+          ) : null}
+          {error === 'externalError' ? (
+            <Text style={styles.errorText}>
+              {this.i18n('login_page_external_error_warning')}
+            </Text>
+          ) : null}
+        </View>
       </View>
     );
   }
 
   renderLoginButton() {
-    const { loading, loginWithCredentials, email, password } = this.props;
+    const { loading, internalLogin, email, password } = this.props;
 
     return (
       <View>
         <LoadingButton
-          onPress={() => loginWithCredentials(email, password)}
+          onPress={() => internalLogin(email, password)}
           loading={loading}
           title={this.i18n('log_in_button')}
           height={40}
@@ -144,17 +145,6 @@ class Login extends Component {
         />
       </View>
     );
-  }
-
-  goToSignIn() {
-    let url = config.client + '/login';
-    Linking.canOpenURL(url).then(supported => {
-      if (supported) {
-        Linking.openURL(url);
-      } else {
-        console.log("Don't know how to open URI: " + url);
-      }
-    });
   }
 
   render() {
@@ -204,14 +194,9 @@ export default connect(
     const { email, password, validation, error, loading } = loginPage;
     return { email, password, validation, error, loading };
   },
-  dispatch => {
-    return {
-      loginWithCredentials: (email, password) =>
-        dispatch(actions.authorization.loginWithCredentials(email, password)),
-      loginViaFacebook: () =>
-        dispatch(actions.authorization.loginWithFacebook()),
-      loginViaGoogle: () => dispatch(actions.authorization.loginWithGoogle()),
-      changeField: payload => dispatch(actions.loginPage.changeField(payload))
-    };
+  {
+    internalLogin: actions.authorization.internalLogin,
+    externalLogin: actions.authorization.externalLogin,
+    changeField: actions.loginPage.changeField
   }
 )(Login);
