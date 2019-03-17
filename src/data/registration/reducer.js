@@ -1,6 +1,5 @@
 import types from 'src/constants/actionTypes';
 import { merge, append, without, includes, uniq, concat, keys } from 'ramda';
-// import { isFieldNotValid } from 'src/data/registration/selector.js';
 
 const defaultState = {
   tabIndex: 0,
@@ -22,9 +21,9 @@ const defaultState = {
     languages: [{ value: 'English' }, { value: 'Norway' }, { value: 'Russian' }]
   },
   registrationForm: {
-    email: 'fsdad@asd',
-    password: 'wqerr',
-    confirmPassword: 'qwerasd'
+    email: '',
+    password: '',
+    confirmPassword: ''
   },
   personalDataForm: {
     firstName: '',
@@ -73,9 +72,3 @@ export const registration = (state = defaultState, action) => {
       return state;
   }
 };
-
-//       const key = Object.keys(payload.fields);
-//       return merge(state, {
-//         [payload.formId]: merge(state[payload.formId], payload.fields),
-//         [payload.validationId]: without(key, state[payload.validationId])
-//       });

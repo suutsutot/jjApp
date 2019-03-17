@@ -6,7 +6,7 @@ import { values } from 'ramda';
 import actions from 'src/data/actions';
 import i18n from 'src/framework/i18n';
 import Icon from 'src/config/icon-font.js';
-import { activitiesData } from 'src/api/registrationAPI.js';
+// import { activitiesData } from 'src/api/registrationAPI.js';
 
 import styles from './styles';
 
@@ -42,15 +42,15 @@ class RegistrationActivities extends Component {
     super(props);
   }
 
-  componentDidMount() {
-    this.fetchActivities();
-  }
+  // componentDidMount() {
+  //   this.fetchActivities();
+  // }
 
-  fetchActivities() {
-    activitiesData().then(data => {
-      console.log('data', data)
-    });
-  }
+  // fetchActivities() {
+  //   activitiesData().then(data => {
+  //     console.log('data', data)
+  //   });
+  // }
 
   render() {
     const { selectedActivities, activities, toogleActivity } = this.props;

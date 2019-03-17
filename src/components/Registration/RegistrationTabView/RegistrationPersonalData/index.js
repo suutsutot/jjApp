@@ -9,9 +9,10 @@ import moment from 'moment';
 import LoadingButton from 'src/pureComponents/Button/LoadingButton';
 import actions from 'src/data/actions';
 import i18n from 'src/framework/i18n';
+import { isFieldNotValid } from 'src/data/registration/selector';
 
 import styles from './styles';
-import { isFieldNotValid } from '../../../../data/registration/selector';
+
 class RegistrationPersonalData extends Component {
   constructor(props) {
     super(props);
@@ -129,7 +130,6 @@ class RegistrationPersonalData extends Component {
             <View style={styles.nextButton}>
               <LoadingButton title="NEXT" onPress={() => changeTabIndex(2)} />
             </View>
-            <Text>{JSON.stringify(this.props, null, 2)}</Text>
           </View>
         </ScrollView>
       </View>
