@@ -49,6 +49,7 @@ const sharedLogin = (credentials, errorType) => async dispatch => {
       );
     } catch (e) {}
   } else {
+    console.log('AuthorizeActionError:', response.error);
     dispatch(loginError(errorType));
   }
 };
@@ -89,6 +90,7 @@ export const externalLogin = connection => async dispatch => {
     .authorize({
       scope: 'openid email profile offline_access',
       audience: 'https://' + auth0Config.domain + '/userinfo',
+      prompt: 'select_account',
       connection
     })
     .then(credentials => {
