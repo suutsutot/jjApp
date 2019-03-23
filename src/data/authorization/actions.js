@@ -1,65 +1,78 @@
-import { AsyncStorage, Platform, NetInfo } from 'react-native';
+import { AsyncStorage, Platform } from 'react-native';
 import { NavigationActions } from 'react-navigation';
+import * as R_ from 'ramda-extension';
 
 import { refreshByCredentials } from 'src/api/refreshTokenAPI';
 import { setPushNotificationToken } from 'src/api/userApi';
 import types from 'src/constants/actionTypes';
 import actions from 'src/data/actions';
 import auth0 from 'src/framework/auth0';
-import auth0Config from 'src/config/auth0Config';
+import config from 'src/config';
 import { isLoginFormValid } from 'src/data/loginPage/selector';
 import { postUserData } from 'src/api/authorizationAPI';
 import { isNotConnected } from 'src/framework/connection';
 
-const sharedLogin = (credentials, errorType) => async dispatch => {
+const baseLogin = credentials => async dispatch => {
   await AsyncStorage.setItem('refreshToken', credentials.refreshToken);
-  const { accessToken, idToken } = await refreshByCredentials(credentials);
-  AsyncStorage.setItem('accessToken', accessToken);
-  AsyncStorage.setItem('idToken', idToken);
+
+  const { accessToken } = await refreshByCredentials(credentials);
+
   const profile = await auth0.auth.userInfo({ token: accessToken });
+  const response = await postUserData(profile.email);
 
-  const response = await postUserData(idToken, profile.email);
+  if (response.error) {
+    return response;
+  }
 
-  if (response && response.user && !response.error) {
-    const userInfo = response.user;
+  if (R_.isNilOrEmpty(response.user)) {
+    return { error: 'response is null' };
+  }
 
-    AsyncStorage.setItem('userId', userInfo._id);
-    AsyncStorage.setItem('email', userInfo.email);
+  const { user } = response;
 
-    dispatch(
-      actions.authorization.login({
-        userId: userInfo._id,
-        email: userInfo.email,
-        profile: userInfo
+  AsyncStorage.setItem('userId', user._id);
+
+  dispatch(
+    actions.authorization.login({
+      userId: user._id,
+      email: user.email,
+      profile: user
+    })
+  );
+
+  dispatch(NavigationActions.navigate({ routeName: 'Notifications' }));
+  try {
+    const pushNotificationToken = await AsyncStorage.getItem(
+      'pushNotificationToken'
+    );
+    const fcmToken = await AsyncStorage.getItem('fcmToken');
+    setPushNotificationToken(
+      user._id,
+      Platform.select({
+        ios: { apnsToken: pushNotificationToken, fcmToken },
+        android: { fcmToken: pushNotificationToken }
       })
     );
+  } catch (e) {}
 
-    dispatch(NavigationActions.navigate({ routeName: 'Notifications' }));
-    try {
-      const pushNotificationToken = await AsyncStorage.getItem(
-        'pushNotificationToken'
-      );
-      const fcmToken = await AsyncStorage.getItem('fcmToken');
-      setPushNotificationToken(
-        userInfo._id,
-        Platform.select({
-          ios: { apnsToken: pushNotificationToken, fcmToken },
-          android: { fcmToken: pushNotificationToken }
-        })
-      );
-    } catch (e) {}
-  } else {
-    console.log('AuthorizeActionError:', response.error);
-    dispatch(loginError(errorType));
-  }
+  return response;
+};
+
+export const handleError = (errorType, response) => dispatch => {
+  console.log(errorType, JSON.stringify(response));
+  return dispatch(loginError(errorType, response.error));
 };
 
 export const internalLogin = (username, password) => async dispatch => {
   dispatch(actions.authorization.loginRequest());
+
   if (await isNotConnected()) {
-    return dispatch(loginError('connection'));
+    return dispatch(handleError('connection'));
   }
-  if (!isLoginFormValid(username, password)) return;
+
+  if (!isLoginFormValid(username, password)) {
+    return;
+  }
 
   dispatch(actions.loginPage.toggleLoading(true));
 
@@ -71,35 +84,41 @@ export const internalLogin = (username, password) => async dispatch => {
       scope: 'openid offline_access'
     });
 
-    await sharedLogin(credentials, 'credentials')(dispatch);
-  } catch (error) {
-    console.log('AuthorizeActionError:', error);
-    dispatch(loginError('credentials'));
+    const result = await dispatch(baseLogin(credentials));
+
+    if (result && result.error) {
+      dispatch(handleError('credentials', result));
+    }
+  } catch (result) {
+    dispatch(handleError('credentials', result));
   }
 };
 
 export const externalLogin = connection => async dispatch => {
   dispatch(actions.authorization.externalLoginRequest());
+
   if (await isNotConnected()) {
-    return dispatch(loginError('connection'));
+    return dispatch(handleError('connection'));
   }
 
   dispatch(actions.loginPage.toggleLoading(true));
 
-  auth0.webAuth
-    .authorize({
+  try {
+    const credentials = await auth0.webAuth.authorize({
       scope: 'openid email profile offline_access',
-      audience: 'https://' + auth0Config.domain + '/userinfo',
+      audience: 'https://' + config.auth0.domain + '/userinfo',
       prompt: 'select_account',
       connection
-    })
-    .then(credentials => {
-      return sharedLogin(credentials, 'externalError')(dispatch);
-    })
-    .catch(error => {
-      console.log('AuthorizeActionError:', error);
-      dispatch(loginError('externalError', error));
     });
+
+    const result = await dispatch(baseLogin(credentials));
+
+    if (result && result.error) {
+      dispatch(handleError('externalError', result));
+    }
+  } catch (result) {
+    dispatch(handleError('externalError', result));
+  }
 };
 
 export const externalLoginRequest = () => {

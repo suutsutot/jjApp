@@ -32,6 +32,8 @@ export default (url, options) =>
         ]);
       })
       .then(response => {
+        console.log(url, options);
+        console.log('\n');
         if (response.error && response.timeout) {
           return resolve(response);
         }
@@ -39,6 +41,9 @@ export default (url, options) =>
         return response.json().then(resolve);
       })
       .catch(error => {
+        console.log(url, options);
+        console.log(error);
+        console.log('\n');
         resolve({ error });
       });
   });

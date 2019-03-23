@@ -1,17 +1,21 @@
 import googleServices from '../android/app/google-services';
 
 const config = {
-  'local': {
-    server: 'http://10.0.3.2:3000',
-    client: 'http://10.0.3.2:8080',
-  },
-  'dev': {
+  dev: {
     server: 'https://api.justjoin1.ru',
-    client: 'https://justjoin1.ru'
+    client: 'https://justjoin1.ru',
+    auth0: {
+      clientId: 'BBLp6dT9ug1mxY5UI3xwld6cA3Ukn8aH',
+      domain: 'ynpl.auth0.com'
+    }
   },
-  'prod': {
+  prod: {
     server: 'https://api.justjoin.com',
-    client: 'https://justjoin.com'
+    client: 'https://justjoin.com',
+    auth0: {
+      clientId: 'XGuZrlmsgbqVC1NwH9EV69_Ab5Ztuqe3',
+      domain: 'justjoin.eu.auth0.com'
+    }
   }
 };
 
