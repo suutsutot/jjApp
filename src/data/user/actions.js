@@ -1,9 +1,9 @@
 import types from 'src/constants/actionTypes';
-import { userData } from '../../api/userApi';
+import { getUserData } from '../../api/userApi';
 
 export const fetchUserProfile = () => async (dispatch, getState) => {
   const { userId } = getState().user;
-  const data = await userData(userId);
+  const data = await getUserData(userId);
   dispatch(setUserProfile(data.user));
 };
 

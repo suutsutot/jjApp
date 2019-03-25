@@ -89,8 +89,8 @@ class RegistrationTab extends Component {
 
 export default connect(
   ({ registration }) => {
-    const { registrationForm, registrationValidation } = registration;
-    return { registrationForm, registrationValidation };
+    const { registrationForm, registrationValidation, userInfo, data } = registration;
+    return { registrationForm, registrationValidation, userInfo, data };
   },
   dispatch => {
     return {

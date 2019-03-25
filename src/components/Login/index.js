@@ -5,135 +5,139 @@ import {
   View,
   Text,
   Image,
-  Linking,
   KeyboardAvoidingView,
   TouchableOpacity
 } from 'react-native';
-import { SocialIcon, Button, Icon } from 'react-native-elements';
+import { Button } from 'react-native-elements';
 import { TextField } from 'react-native-material-textfield';
-import actions from 'src/data/actions';
-import { trim } from 'lodash';
-import styles from './styles';
-import config from 'src/config';
 
+import actions from 'src/data/actions';
 import LoadingButton from 'src/pureComponents/Button/LoadingButton';
+import i18n from 'src/framework/i18n';
+import { getPhoneJJLocale } from 'src/framework/i18n/getPhoneLocale';
+import { externalLoginTypes } from 'src/data/authorization/constants';
+
+import styles from './styles';
+
+const SocialButton = ({ icon, title, buttonStyle, onPress }) => {
+  return (
+    <Button
+      icon={
+        <View style={styles.icon_aria}>
+          <Image
+            style={{ width: 24, height: 24 }}
+            source={{
+              uri: icon
+            }}
+          />
+        </View>
+      }
+      title={title}
+      titleStyle={{ flex: 1 }}
+      buttonStyle={[styles.social_button, { marginBottom: 24 }, buttonStyle]}
+      onPress={onPress}
+    />
+  );
+};
 
 class Login extends Component {
-  constructor(props) {
-    super(props);
+  phoneLocale = getPhoneJJLocale();
 
-    this.state = {
-      emailInput: '',
-      emailInputError: '',
-      passwordInput: '',
-      passwordInputError: '',
-      loading: false,
-      isLogin: false
-    };
-  }
+  i18n = key => i18n(key, 'general', this.phoneLocale);
 
   redirect(route) {
     this.props.navigation.navigate(route);
   }
 
   renderSocialButtons() {
+    const { externalLogin } = this.props;
+
     return (
       <View>
-        <Button
+        <SocialButton
           icon={
-            <View style={styles.icon_aria}>
-              <Image
-                style={{ width: 24, height: 24 }}
-                source={{
-                  uri:
-                    'https://s3-eu-west-1.amazonaws.com/jj-files/icons/google-icon.png'
-                }}
-              />
-            </View>
+            'https://s3-eu-west-1.amazonaws.com/jj-files/icons/google-icon.png'
           }
-          title="Log In With Google"
-          titleStyle={{ flex: 1 }}
-          buttonStyle={[
-            styles.social_button,
-            { backgroundColor: '#dc4e41', marginBottom: 24 }
-          ]}
-          onPress={this.onLoginWithGoogle.bind(this)}
+          title={this.i18n('google_log_in')}
+          buttonStyle={{ backgroundColor: '#dc4e41' }}
+          onPress={() => externalLogin(externalLoginTypes.google)}
         />
 
-        <Button
+        <SocialButton
           icon={
-            <View style={styles.icon_aria}>
-              <Image
-                style={{ width: 25, height: 25 }}
-                source={{
-                  uri:
-                    'https://s3-eu-west-1.amazonaws.com/jj-files/icons/facebook-icon.png'
-                }}
-              />
-            </View>
+            'https://s3-eu-west-1.amazonaws.com/jj-files/icons/facebook-icon.png'
           }
-          title="Log In With Facebook"
-          titleStyle={{ flex: 1 }}
-          buttonStyle={[styles.social_button, { backgroundColor: '#5e81a8' }]}
-          onPress={this.onLoginWithFacebook.bind(this)}
+          title={this.i18n('facebook_log_in')}
+          buttonStyle={{ backgroundColor: '#5e81a8' }}
+          onPress={() => externalLogin(externalLoginTypes.facebook)}
         />
       </View>
     );
   }
 
   renderInputs() {
-    const {
-      emailInput,
-      emailInputError,
-      passwordInput,
-      passwordInputError
-    } = this.state;
-    const { wrongCredentials, errorUserGet } = this.props;
+    const { email, password, error, validation, changeField } = this.props;
 
     return (
       <View>
         <TextField
-          label="Email"
+          label={this.i18n('email_label')}
+          tintColor="#00bcd4"
           keyboardType="email-address"
-          tintColor="#00bcd4"
-          onChangeText={this.onEmailChange.bind(this)}
-          value={emailInput}
-          error={emailInputError}
-          labelHeight={15}
-        />
-        <TextField
-          secureTextEntry
-          label="Password"
-          tintColor="#00bcd4"
-          onChangeText={this.onPasswordChange.bind(this)}
-          value={passwordInput}
-          error={passwordInputError}
+          onChangeText={value => changeField({ email: value })}
+          value={email}
+          error={
+            validation.indexOf('email') !== -1
+              ? this.i18n('email_required')
+              : null
+          }
           autoCapitalize="none"
           labelHeight={15}
         />
-        {wrongCredentials ? (
-          <Text style={{ color: 'red', textAlign: 'center' }}>
-            Wrong email or password.
-          </Text>
-        ) : null}
-        {errorUserGet ? (
-          <Text style={{ color: 'red', textAlign: 'center' }}>
-            Sorry, there was an authorization error
-          </Text>
-        ) : null}
+        <TextField
+          label={this.i18n('password_label')}
+          tintColor="#00bcd4"
+          onChangeText={value => changeField({ password: value })}
+          value={password}
+          error={
+            validation.indexOf('password') !== -1
+              ? this.i18n('password_required')
+              : null
+          }
+          autoCapitalize="none"
+          secureTextEntry
+          labelHeight={15}
+        />
+        <View style={styles.errorView}>
+          {error === 'connection' ? (
+            <Text style={styles.errorText}>
+              {this.i18n('login_page_connection_problems_warning')}
+            </Text>
+          ) : null}
+          {error === 'credentials' ? (
+            <Text style={styles.errorText}>
+              {this.i18n('login_page_wrong_credentials_warning')}
+            </Text>
+          ) : null}
+          {error === 'externalError' ? (
+            <Text style={styles.errorText}>
+              {this.i18n('login_page_external_error_warning')}
+            </Text>
+          ) : null}
+        </View>
       </View>
     );
   }
 
   renderLoginButton() {
-    const { loading } = this.props;
+    const { loading, internalLogin, email, password } = this.props;
 
     return (
       <View>
         <LoadingButton
-          onPress={this.onLoginWithCredentials.bind(this)}
+          onPress={() => internalLogin(email, password)}
           loading={loading}
-          title="LOG IN"
+          title={this.i18n('log_in_button')}
           height={40}
           width={340}
           titleFontSize={16}
@@ -143,64 +147,6 @@ class Login extends Component {
       </View>
     );
   }
-
-  onLoginWithFacebook() {
-    const { loginViaFacebook } = this.props;
-    loginViaFacebook();
-    console.log('facebook');
-  }
-
-  onLoginWithGoogle() {
-    const { loginViaGoogle } = this.props;
-    loginViaGoogle();
-    console.log('google');
-  }
-
-  onEmailChange(text) {
-    this.setState({
-      emailInput: text,
-      emailInputError: ''
-    });
-  }
-
-  onPasswordChange(text) {
-    this.setState({
-      passwordInput: text,
-      passwordInputError: ''
-    });
-  }
-
-  onLoginWithCredentials() {
-    const { LoginWithCredentials, wrongCredentials, errorUserGet } = this.props;
-    const { emailInput, passwordInput } = this.state;
-
-    if (trim(emailInput) === '') {
-      this.setState({
-        emailInputError: 'Field is required.'
-      });
-      return;
-    }
-
-    if (trim(passwordInput) === '') {
-      this.setState({
-        passwordInputError: 'Field is required.'
-      });
-      return;
-    }
-
-    LoginWithCredentials(emailInput, passwordInput);
-  }
-
-  // goToSignIn() {
-  //   let url = config.client + '/login';
-  //   Linking.canOpenURL(url).then(supported => {
-  //     if (supported) {
-  //       Linking.openURL(url);
-  //     } else {
-  //       console.log("Don't know how to open URI: " + url);
-  //     }
-  //   });
-  // }
 
   goToRegistration = () => {
     this.props.navigation.navigate('Registration');
@@ -223,7 +169,7 @@ class Login extends Component {
               }}
             />
             <View style={{ height: 10 }} />
-            <Text style={styles.logo_title}>Login</Text>
+            <Text style={styles.logo_title}>{this.i18n('login_title')}</Text>
             <View style={{ height: 10 }} />
             {this.renderSocialButtons()}
             <Text
@@ -235,7 +181,7 @@ class Login extends Component {
                 color: '#b0bec5'
               }}
             >
-              or
+              {this.i18n('or')}
             </Text>
             {this.renderInputs()}
             <View style={{ height: 15 }} />
@@ -266,23 +212,14 @@ class Login extends Component {
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    LoginWithCredentials: (email, password) =>
-      dispatch(actions.authorization.dbLoginWithCredentials(email, password)),
-    loginViaFacebook: () =>
-      dispatch(actions.authorization.dbLoginViaFacebook()),
-    loginViaGoogle: () => dispatch(actions.authorization.dbLoginViaGoogle())
-  };
-};
-
-const mapStateToProps = ({ application, authorize }) => {
-  const { wrongCredentials, errorUserGet } = authorize;
-  const { error, loading } = application;
-  return { error, loading, wrongCredentials, errorUserGet };
-};
-
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+  ({ loginPage }) => {
+    const { email, password, validation, error, loading } = loginPage;
+    return { email, password, validation, error, loading };
+  },
+  {
+    internalLogin: actions.authorization.internalLogin,
+    externalLogin: actions.authorization.externalLogin,
+    changeField: actions.loginPage.changeField
+  }
 )(Login);

@@ -628,7 +628,14 @@
   "empty_notifications": "У Вас пока нет новых уведомлений",
   "go_to_web_profile": "Перейти в профиль (веб версия)",
   "go_to_profile": "Перейти в профиль",
-  "notification_action_error": "Произошла ошибка",
   "general_information": "Основная информация",
-  "choose_date_birthday": "Выберите дату своего дня рождения"
+  "choose_date_birthday": "Выберите дату своего дня рождения",
+  "google_log_in": "Войти через Google",
+  "facebook_log_in": "Войти через Facebook",
+  "login_page_connection_problems_warning": "Пожалуйста, проверьте соединение с интернетом.",
+  "login_page_wrong_credentials_warning": "Неверный email или пароль.",
+  "login_page_external_error_warning": "Внешняя ошибка входа.",
+  "log_in_button": "ВОЙТИ",
+  "login_title": "Войти",
+  "notification_action_error": "Произошла ошибка"
 }

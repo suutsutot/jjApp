@@ -32,13 +32,14 @@ export default compose(
   withStore(store, Provider),
   connect(
     state => ({
-      locale: path(['user', 'profile', 'language'], state)
+      locale: path(['user', 'profile', 'language'], state) || 'en'
     })
   ),
   lifecycle({
 
     componentDidMount() {
-      console.log(this.props.locale);
+      const { locale } = this.props;
+      moment.locale(locale);
     },
 
     componentDidUpdate(prevProps) {

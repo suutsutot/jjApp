@@ -1,37 +1,46 @@
-import {combineReducers} from 'redux';
+import { combineReducers } from 'redux';
 import { persistReducer } from 'redux-persist';
 import { AsyncStorage } from 'react-native';
 
 import types from 'src/constants/actionTypes';
-import {activityReducer} from './activity/activityReducer';
-import {authorize} from './authorization/reducer';
-import {applicationReducer} from './application/reducer';
-import {user} from './user/reducer';
-import {navReducer} from './nav/navReducer';
-import {events} from './event/reducer';
-import {notifications} from './notifications/reducer';
-import {registration} from './registration/reducer'
+import { activityReducer } from './activity/activityReducer';
+import { authorize } from './authorization/reducer';
+import { user } from './user/reducer';
+import { navReducer } from './nav/navReducer';
+import { events } from './event/reducer';
+import { notifications } from './notifications/reducer';
+import { registration } from './registration/reducer';
+import { loginPage } from './loginPage/reducer';
 
 const appReducer = combineReducers({
   nav: navReducer,
   activity: activityReducer,
-  authorize: persistReducer({
-    key: 'authorize',
-    storage: AsyncStorage,
-    whitelist: ['profile', 'auth0Id']
-  }, authorize),
-  application: applicationReducer,
-  user: persistReducer({
-    key: 'user',
-    storage: AsyncStorage,
-    whitelist: ['userId', 'email', 'profile']
-  }, user),
+  authorize: persistReducer(
+    {
+      key: 'authorize',
+      storage: AsyncStorage,
+      whitelist: ['profile', 'auth0Id']
+    },
+    authorize
+  ),
+  user: persistReducer(
+    {
+      key: 'user',
+      storage: AsyncStorage,
+      whitelist: ['userId', 'email', 'profile']
+    },
+    user
+  ),
   events,
-  notifications: persistReducer({
-    key: 'notifications',
-    storage: AsyncStorage,
-    whitelist: ['list', 'data']
-  }, notifications),
+  notifications: persistReducer(
+    {
+      key: 'notifications',
+      storage: AsyncStorage,
+      whitelist: ['list', 'data']
+    },
+    notifications
+  ),
+  loginPage,
   registration
 });
 
@@ -41,4 +50,4 @@ export default (state, action) => {
   }
 
   return appReducer(state, action);
-}
+};

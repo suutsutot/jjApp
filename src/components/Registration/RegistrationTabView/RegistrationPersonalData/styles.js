@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   },
   dateView: {
     flex: 1,
-    paddingTop: 5
+    paddingTop: 15
   },
   birthdayView: {
     flexDirection: 'column',
@@ -37,8 +37,9 @@ const styles = StyleSheet.create({
     fontSize: 15
   },
   chooseDateText: {
-    fontSize: 15,
-    paddingBottom: 10
+    fontSize: 16,
+    paddingBottom: 10,
+    color: '#707070'
   }
 });
 

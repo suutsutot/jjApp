@@ -1,4 +1,4 @@
-import { merge } from 'ramda';
+import { mergeRight } from 'ramda';
 
 import types from 'src/constants/actionTypes';
 
@@ -13,10 +13,10 @@ export let user = (state = defaultState, action) => {
   switch (action.type) {
     case types.AUTHORIZATION.LOGIN: {
       const { userId, email, profile } = payload;
-      return merge(state, { userId, email, profile });
+      return mergeRight(state, { userId, email, profile });
     }
     case types.USER.SET_USER_PROFILE: {
-      return merge(state, { profile: payload });
+      return mergeRight(state, { profile: payload });
     }
     default:
       return state;

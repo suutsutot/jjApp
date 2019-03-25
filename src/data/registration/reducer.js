@@ -1,25 +1,19 @@
 import types from 'src/constants/actionTypes';
-import { merge, append, without, includes, uniq, concat, keys } from 'ramda';
+import {
+  mergeRight,
+  append,
+  without,
+  includes,
+  uniq,
+  concat,
+  keys
+} from 'ramda';
 
 const defaultState = {
   tabIndex: 0,
-  data: {
-    activities: {
-      ROWING: {
-        type: 'CHECKERS',
-        name: 'Академическая гребля Rowing Rowing',
-        level: 'No experience',
-        interest: 'Middle'
-      },
-      ATHLETICS: {
-        type: 'ATHLETICS',
-        name: 'Атлетика Athletics Athletics',
-        level: 'No experience',
-        interest: 'Middle'
-      }
-    },
-    languages: [{ value: 'English' }, { value: 'Norway' }, { value: 'Russian' }]
-  },
+  userInfo: null,
+  loading: false,
+  error: '',
   registrationForm: {
     email: '',
     password: '',
@@ -27,13 +21,17 @@ const defaultState = {
   },
   personalDataForm: {
     firstName: '',
-    lastName: 'Mane',
-    birthday: 'Wed Feb 20 2019 16:50:00 GMT+0300',
-    gender: 'male',
-    location: 'Los Angeles, CA, USA',
-    language: 'English'
+    lastName: '',
+    birthday: '',
+    gender: '',
+    location: '',
+    language: ''
   },
-  selectedActivities: ['ROWING'],
+  data: {
+    activities: [],
+    languages: [{ value: 'English' }, { value: 'Norway' }, { value: 'Russian' }]
+  },
+  selectedActivities: [],
   personalDataValidation: [],
   registrationValidation: []
 };
@@ -41,34 +39,57 @@ const defaultState = {
 export const registration = (state = defaultState, action) => {
   const { payload } = action;
   switch (action.type) {
+    case types.REGISTRATION.CREDENTIALS_INFO: {
+      return mergeRight(state, { userInfo: payload });
+    }
+    case types.REGISTRATION.FETCH_ACTIVITIES_REQUEST: {
+      return mergeRight(state, { loading: true });
+    }
+    case types.REGISTRATION.FETCH_ACTIVITIES_SUCESS: {
+      return mergeRight(state, {
+        data: mergeRight(state.data, { activities: payload }),
+        loading: false
+      });
+    }
+    case types.REGISTRATION.FETCH_ACTIVITIES_ERROR: {
+      return mergeRight(state, { error: payload, loading: false });
+    }
     case types.REGISTRATION.CHANGE_FIELD: {
       const validationId = {
         personalDataForm: 'personalDataValidation',
         registrationForm: 'registrationValidation'
       }[payload.formId];
-      return merge(state, {
-        [payload.formId]: merge(state[payload.formId], payload.fields),
+      return mergeRight(state, {
+        [payload.formId]: mergeRight(state[payload.formId], payload.fields),
         [validationId]: uniq(concat(keys(payload.fields), state[validationId]))
       });
     }
     case types.REGISTRATION.VALIDATE_FIELD: {
       const validationId = payload.validationId;
-      return merge(state, {
+      return mergeRight(state, {
         [validationId]: uniq(concat(payload.fields, state[validationId]))
       });
     }
     case types.REGISTRATION.CHANGE_TAB_INDEX:
-      return merge(state, { tabIndex: payload });
+      return mergeRight(state, { tabIndex: payload });
     case types.REGISTRATION.TOGGLE_ACTIVITY:
       if (!includes(payload, state.selectedActivities)) {
-        return merge(state, {
+        return mergeRight(state, {
           selectedActivities: append(payload, state.selectedActivities)
         });
       } else
-        return merge(state, {
+        return mergeRight(state, {
           selectedActivities: without(payload, state.selectedActivities)
         });
     default:
       return state;
   }
 };
+
+//1 валидация по кнопке некст 
+//2 смена табы при успешном реквесте и подгрузка активностей
+//3 переводы активностей
+//4 картинки активностей найти какие не загрузились
+//5 сделать отправку формы второй табы
+//6 добавить валидацию которой не хватает
+//7 добавить 4 экшена при реквесте профиль формы

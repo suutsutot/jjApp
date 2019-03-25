@@ -6,24 +6,24 @@ import { values } from 'ramda';
 import actions from 'src/data/actions';
 import i18n from 'src/framework/i18n';
 import Icon from 'src/config/icon-font.js';
-// import { activitiesData } from 'src/api/registrationAPI.js';
 
 import styles from './styles';
 
 const ActivityView = ({ item, toogleActivity, selectedActivities }) => {
   const activityTitle =
-    i18n(item.type)
+    i18n(item.id)
       .charAt(0)
-      .toUpperCase() + i18n(item.type).slice(1);
-  const noActivity = selectedActivities.indexOf(item.type) === -1;
+      .toUpperCase() + i18n(item.id).slice(1);
+
+  const noActivity = selectedActivities.indexOf(item.id) === -1;
 
   return (
     <TouchableOpacity
       style={noActivity ? styles.notActiveView : styles.activeView}
-      onPress={() => toogleActivity(item.type)}
+      onPress={() => toogleActivity(item.id)}
     >
       <Icon
-        name={item.type.toLowerCase()}
+        name={item.id.replace('_', '-').toLowerCase()}
         size={40}
         style={noActivity ? styles.notActiveLogo : styles.activeLogo}
       />
@@ -38,20 +38,6 @@ const ActivityView = ({ item, toogleActivity, selectedActivities }) => {
   );
 };
 class RegistrationActivities extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  // componentDidMount() {
-  //   this.fetchActivities();
-  // }
-
-  // fetchActivities() {
-  //   activitiesData().then(data => {
-  //     console.log('data', data)
-  //   });
-  // }
-
   render() {
     const { selectedActivities, activities, toogleActivity } = this.props;
 

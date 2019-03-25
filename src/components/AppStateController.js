@@ -5,10 +5,13 @@ import { connect } from 'react-redux';
 import { AppState } from 'react-native';
 
 import actions from 'src/data/actions';
+import { isUserLoggedIn } from '../data/user/selector';
 
 const AppStateController = compose(
   connect(
-    undefined,
+    state => ({
+      loggedIn: isUserLoggedIn(state)
+    }),
     {
       fetchList: actions.notifications.fetchList
     }
@@ -16,11 +19,16 @@ const AppStateController = compose(
   withState('appState', 'setAppState', 'active'),
   withHandlers({
     handleAppStateChange: ({
+      loggedIn,
       fetchList,
       appState,
       setAppState
     }) => nextAppState => {
-      if (appState.match(/inactive|background/) && nextAppState === 'active') {
+      if (
+        loggedIn &&
+        appState.match(/inactive|background/) &&
+        nextAppState === 'active'
+      ) {
         fetchList();
       }
       setAppState(nextAppState);

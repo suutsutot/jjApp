@@ -590,5 +590,12 @@
   "registration_tab": "Registration",
   "confirm_password": "Confirm password",
   "email_password_title": "Type your email and password",
-  "confirm_password_required": "Confirm password is required"
+  "confirm_password_required": "Confirm password is required",
+  "google_log_in": "Log In With Google",
+  "facebook_log_in": "Log In With Facebook",
+  "login_page_connection_problems_warning": "You're offline. Please, check your connection.",
+  "login_page_wrong_credentials_warning": "Wrong email or password.",
+  "login_page_external_error_warning": "External login error.",
+  "log_in_button": "LOG IN",
+  "login_title": "Login"
 }

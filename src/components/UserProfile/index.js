@@ -8,7 +8,7 @@ import { isEmpty, isNil, compose } from 'ramda';
 import withBackHandler from 'src/hocs/withBackHandler';
 import { HeaderSection } from 'src/pureComponents/HeaderSection';
 import { ArrowBackIcon } from 'src/pureComponents/ArrowBackIcon';
-import { userData } from 'src/api/userApi';
+import { getUserData } from 'src/api/userApi';
 import i18n from 'src/framework/i18n';
 import actions from 'src/data/actions';
 
@@ -32,7 +32,7 @@ class UserProfile extends Component {
 
   fetchUserData() {
     const userId = this.props.navigation.state.params.userId;
-    userData(userId).then(data => {
+    getUserData(userId).then(data => {
       this.props.setUserProfile(data.user);
       this.setState({ refreshing: false });
     });
@@ -101,9 +101,9 @@ export default compose(
       loaded: !isNil(user.profile) && !isEmpty(user.profile),
       profile: user.profile
     }),
-    dispatch => ({
-      setUserProfile: user => dispatch(actions.user.setUserProfile(user))
-    })
+    {
+      setUserProfile: actions.user.setUserProfile
+    }
   ),
   withBackHandler(({ navigation }) => navigation.goBack())
 )(UserProfile);

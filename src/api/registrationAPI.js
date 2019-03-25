@@ -1,11 +1,5 @@
-// import request from './request';
-// import config from 'src/config';
-
-// export const activitiesData = () => {
-//   return request(`${config.server}/api/activities`, {
-//     method: 'GET'
-//   });
-// };
+import request from './request';
+import config from 'src/config';
 
 export const postRegistrationData = data => {
   return fetch('https://ynpl.auth0.com/dbconnections/signup', {
@@ -19,4 +13,16 @@ export const postRegistrationData = data => {
     .catch(error => {
       return { error };
     });
+};
+
+export const getActivities = () => {
+  return request(`${config.server}/api/activities`, {
+    method: 'GET'
+  });
+};
+
+export const putPersonalData = (responseData) => {
+  return request(`${config.server}/api/users`, {
+    method: 'PUT'
+  }, responseData);
 };

@@ -25,7 +25,8 @@ class RegistrationPersonalData extends Component {
     const {
       changeField,
       validateField,
-      changeTabIndex,
+      postPersonalData,
+      personalDataForm,
       personalDataForm: {
         firstName,
         lastName,
@@ -128,7 +129,10 @@ class RegistrationPersonalData extends Component {
               onChangeText={value => changeField({ language: value })}
             />
             <View style={styles.nextButton}>
-              <LoadingButton title="NEXT" onPress={() => changeTabIndex(2)} />
+              <LoadingButton
+                title="NEXT"
+                onPress={() => postPersonalData(personalDataForm)}
+              />
             </View>
           </View>
         </ScrollView>
@@ -150,8 +154,8 @@ export default connect(
         dispatch(
           actions.registration.validateField('personalDataValidation', payload)
         ),
-      changeTabIndex: payload =>
-        dispatch(actions.registration.changeTabIndex(payload))
+      postPersonalData: personalDataForm =>
+        dispatch(actions.registration.postPersonalData(personalDataForm))
     };
   }
 )(RegistrationPersonalData);

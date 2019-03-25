@@ -17,8 +17,8 @@ const translations = {
 };
 const defaultLanguage = 'en';
 
-export default function i18n(key, namespace = 'general') {
-  const language = path(['user', 'profile', 'language'], store.getState());
+export default function i18n(key, namespace = 'general', lang) {
+  const language = lang || path(['user', 'profile', 'language'], store.getState());
 
   if (!key) return '';
   return (

@@ -4,13 +4,6 @@ import config from 'src/config';
 import request from './request';
 
 export const setPushNotificationToken = (userId, tokenData) => {
-  // Alert.alert(JSON.stringify({
-  //   id: userId,
-  //   tokenData: {
-  //     ...tokenData,
-  //     os: Platform.OS
-  //   }
-  // }, null, 2));
   return request(`${config.server}/api/users/set-push-token`, {
     method: 'POST',
     body: JSON.stringify({
@@ -23,8 +16,8 @@ export const setPushNotificationToken = (userId, tokenData) => {
   });
 };
 
-export const userData = (userId) => {
+export const getUserData = (userId) => {
   return request(`${config.server}/api/users/profile/${userId}`, {
     method: 'GET'
   })
-}
+};
