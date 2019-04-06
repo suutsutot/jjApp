@@ -7,11 +7,13 @@ import { isUserLoggedIn } from 'src/data/user/selector';
 
 export default compose(
   connect(state => ({
+    email: state.user.email,
     loggedIn: isUserLoggedIn(state)
   })),
   lifecycle({
     componentDidMount() {
-      const { loggedIn } = this.props;
+      const { email, loggedIn } = this.props;
+      console.log('EMAIL', email);
       setTimeout(
         () =>
           this.props.navigation.navigate(loggedIn ? 'Notifications' : 'Login'),

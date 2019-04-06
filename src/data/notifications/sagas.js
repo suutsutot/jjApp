@@ -30,6 +30,8 @@ function* fetchList(action) {
     const {
       routes: [StartScreen, { index }]
     } = navState;
+    console.log('index', index);
+    console.log('navState', navState);
     // TODO: make it more explicit
     if (index == 0) {
       yield call(postViewed);

@@ -1,12 +1,11 @@
-import { AsyncStorage } from 'react-native';
-const getUserId = () => AsyncStorage.getItem('userId');
+const getUserId = (getState) => getState().user.userId;
 import { refresh } from 'src/api/refreshTokenAPI';
 import config from 'src/config';
 import types from 'src/constants/actionTypes';
 
 export const dbGetEventsList = () => {
   return (dispatch, getState) => {
-    getUserId().then(userId => {
+    getUserId(getState).then(userId => {
       refresh().then(newToken => {
         console.log('dbGetEventsList');
 
@@ -38,7 +37,7 @@ export const dbGetEventsList = () => {
 
 export const dbGetRecommendedEvents = () => {
   return (dispatch, getState) => {
-    getUserId().then(userId => {
+    getUserId(getState).then(userId => {
       refresh().then(newToken => {
         console.log('dbGetRecommendedEvents');
 

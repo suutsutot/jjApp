@@ -12,7 +12,7 @@ import { isLoginFormValid } from 'src/data/loginPage/selector';
 import { postUserData } from 'src/api/authorizationAPI';
 import { isNotConnected } from 'src/framework/connection';
 
-const baseLogin = credentials => async dispatch => {
+const baseLogin = credentials => async (dispatch, getState) => {
   await AsyncStorage.setItem('refreshToken', credentials.refreshToken);
 
   const { accessToken } = await refreshByCredentials(credentials);
@@ -30,8 +30,6 @@ const baseLogin = credentials => async dispatch => {
 
   const { user } = response;
 
-  AsyncStorage.setItem('userId', user._id);
-
   dispatch(
     actions.authorization.login({
       userId: user._id,
@@ -42,10 +40,11 @@ const baseLogin = credentials => async dispatch => {
 
   dispatch(NavigationActions.navigate({ routeName: 'Notifications' }));
   try {
-    const pushNotificationToken = await AsyncStorage.getItem(
-      'pushNotificationToken'
-    );
-    const fcmToken = await AsyncStorage.getItem('fcmToken');
+    const {
+      user: {
+        notificationsInfo: { pushNotificationToken, fcmToken }
+      }
+    } = getState();
     setPushNotificationToken(
       user._id,
       Platform.select({
@@ -151,7 +150,18 @@ const loginError = (errorType, error = {}) => {
   };
 };
 
-export const logout = () => dispatch => {
+export const logout = () => (dispatch, getState) => {
+  const { userId } = getState().user;
+
+  const newToken = 'unset'; // workaround
+
+  userId && setPushNotificationToken(
+    userId,
+    Platform.select({
+      ios: { apnsToken: newToken, fcmToken: newToken },
+      android: { fcmToken: newToken }
+    })
+  );
   dispatch(NavigationActions.navigate({ routeName: 'Login' }));
   AsyncStorage.clear();
   dispatch({ type: types.AUTHORIZATION.LOGOUT });

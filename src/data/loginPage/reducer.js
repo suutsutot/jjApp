@@ -37,7 +37,7 @@ export const loginPage = (state = defaultState, action) => {
     case types.AUTHORIZATION.LOGIN_ERROR:
       return mergeRight(state, {
         error:
-          payload.error.error === 'a0.session.user_cancelled'
+          payload.error === 'a0.session.user_cancelled'
             ? ''
             : payload.errorType,
         loading: false
