@@ -44,13 +44,12 @@ const baseLogin = credentials => async (dispatch, getState) => {
   );
 
   dispatch(NavigationActions.navigate({ routeName: 'Notifications' }));
-  const state = getState();
+  const {
+    user: {
+      notificationsInfo: { pushNotificationToken, fcmToken }
+    }
+  } = getState();
   try {
-    const {
-      user: {
-        notificationsInfo: { pushNotificationToken, fcmToken }
-      }
-    } = state;
     setPushNotificationToken(
       user._id,
       Platform.select({
@@ -61,7 +60,7 @@ const baseLogin = credentials => async (dispatch, getState) => {
   } catch (result) {
     serverLog(SEND_PUSH_NOTIFICATIONS_INFO_ERROR, {
       result,
-      userId,
+      userId: user._id,
       pushNotificationToken,
       fcmToken
     });
