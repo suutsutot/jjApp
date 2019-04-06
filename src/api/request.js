@@ -2,6 +2,8 @@ import { mergeRight } from 'ramda';
 
 import { delayPayload } from 'src/utils/asyncUtils';
 import { refresh } from './refreshTokenAPI';
+import { serverLog } from '../framework/logging';
+import { REQUEST_ERROR } from '../constants/errors';
 
 const log = (...args) => {
   console.log('\n');
@@ -43,13 +45,23 @@ export default (url, options) =>
         log('success', url, options);
 
         if (response.error && response.timeout) {
-          return resolve(response);
+          const payload = {
+            error: response.error,
+            timeout: true,
+            url,
+            options
+          };
+
+          return resolve(payload);
         }
 
         return response.json().then(resolve);
       })
       .catch(error => {
-        log('error', url, options, error);
-        resolve({ error });
+        const payload = { error, timeout: false, url, options };
+
+        log('error', payload);
+        serverLog(REQUEST_ERROR, payload);
+        resolve(payload);
       });
   });

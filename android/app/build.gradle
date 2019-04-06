@@ -101,7 +101,7 @@ android {
         applicationId "com.justjoinapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 02151
+        versionCode 040601
         versionName "1.0"
         ndk {
             abiFilters "armeabi-v7a", "x86"
@@ -163,6 +163,7 @@ dependencies {
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.6@aar') {
         transitive = true;
     }
+    implementation project(':react-native-fabric')
 }
 
 // Run this once to be able to run the application with BUCK

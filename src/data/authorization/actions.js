@@ -11,6 +11,11 @@ import config from 'src/config';
 import { isLoginFormValid } from 'src/data/loginPage/selector';
 import { postUserData } from 'src/api/authorizationAPI';
 import { isNotConnected } from 'src/framework/connection';
+import { serverLog } from 'src/framework/logging';
+import {
+  LOGIN_ERROR,
+  SEND_PUSH_NOTIFICATIONS_INFO_ERROR
+} from 'src/constants/errors';
 
 const baseLogin = credentials => async (dispatch, getState) => {
   await AsyncStorage.setItem('refreshToken', credentials.refreshToken);
@@ -39,12 +44,13 @@ const baseLogin = credentials => async (dispatch, getState) => {
   );
 
   dispatch(NavigationActions.navigate({ routeName: 'Notifications' }));
+  const state = getState();
   try {
     const {
       user: {
         notificationsInfo: { pushNotificationToken, fcmToken }
       }
-    } = getState();
+    } = state;
     setPushNotificationToken(
       user._id,
       Platform.select({
@@ -52,13 +58,21 @@ const baseLogin = credentials => async (dispatch, getState) => {
         android: { fcmToken: pushNotificationToken }
       })
     );
-  } catch (e) {}
+  } catch (result) {
+    serverLog(SEND_PUSH_NOTIFICATIONS_INFO_ERROR, {
+      result,
+      userId,
+      pushNotificationToken,
+      fcmToken
+    });
+  }
 
   return response;
 };
 
 export const handleError = (errorType, response) => dispatch => {
   console.log(errorType, JSON.stringify(response));
+  serverLog(LOGIN_ERROR, { errorType, response });
   return dispatch(loginError(errorType, response.error));
 };
 
@@ -86,10 +100,10 @@ export const internalLogin = (username, password) => async dispatch => {
     const result = await dispatch(baseLogin(credentials));
 
     if (result && result.error) {
-      dispatch(handleError('credentials', result));
+      throw result;
     }
   } catch (result) {
-    dispatch(handleError('credentials', result));
+    dispatch(handleError('credentials', { ...result, username }));
   }
 };
 
@@ -113,7 +127,7 @@ export const externalLogin = connection => async dispatch => {
     const result = await dispatch(baseLogin(credentials));
 
     if (result && result.error) {
-      dispatch(handleError('externalError', result));
+      throw result;
     }
   } catch (result) {
     dispatch(handleError('externalError', result));
@@ -155,13 +169,14 @@ export const logout = () => (dispatch, getState) => {
 
   const newToken = 'unset'; // workaround
 
-  userId && setPushNotificationToken(
-    userId,
-    Platform.select({
-      ios: { apnsToken: newToken, fcmToken: newToken },
-      android: { fcmToken: newToken }
-    })
-  );
+  userId &&
+    setPushNotificationToken(
+      userId,
+      Platform.select({
+        ios: { apnsToken: newToken, fcmToken: newToken },
+        android: { fcmToken: newToken }
+      })
+    );
   dispatch(NavigationActions.navigate({ routeName: 'Login' }));
   AsyncStorage.clear();
   dispatch({ type: types.AUTHORIZATION.LOGOUT });
