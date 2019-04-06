@@ -49,15 +49,16 @@ const baseLogin = credentials => async (dispatch, getState) => {
       notificationsInfo: { pushNotificationToken, fcmToken }
     }
   } = getState();
-  try {
-    setPushNotificationToken(
-      user._id,
-      Platform.select({
-        ios: { apnsToken: pushNotificationToken, fcmToken },
-        android: { fcmToken: pushNotificationToken }
-      })
-    );
-  } catch (result) {
+
+  const result = await setPushNotificationToken(
+    user._id,
+    Platform.select({
+      ios: { apnsToken: pushNotificationToken, fcmToken },
+      android: { fcmToken: pushNotificationToken }
+    })
+  );
+
+  if (result.error) {
     serverLog(SEND_PUSH_NOTIFICATIONS_INFO_ERROR, {
       result,
       userId: user._id,
