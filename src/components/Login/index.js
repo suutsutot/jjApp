@@ -10,26 +10,24 @@ import {
 } from 'react-native';
 import { Button } from 'react-native-elements';
 import { TextField } from 'react-native-material-textfield';
+import * as R from 'ramda';
 
 import actions from 'src/data/actions';
 import LoadingButton from 'src/pureComponents/Button/LoadingButton';
 import i18n from 'src/framework/i18n';
 import { getPhoneJJLocale } from 'src/framework/i18n/getPhoneLocale';
 import { externalLoginTypes } from 'src/data/authorization/constants';
+import withBackHandler from 'src/hocs/withBackHandler';
 
 import styles from './styles';
+import { ArrowBackIcon } from '../../pureComponents/ArrowBackIcon';
 
-const SocialButton = ({ icon, title, buttonStyle, onPress }) => {
+const SocialButton = ({ source, title, buttonStyle, onPress }) => {
   return (
     <Button
       icon={
         <View style={styles.icon_aria}>
-          <Image
-            style={{ width: 24, height: 24 }}
-            source={{
-              uri: icon
-            }}
-          />
+          <Image style={{ width: 24, height: 24 }} source={source} />
         </View>
       }
       title={title}
@@ -55,18 +53,14 @@ class Login extends Component {
     return (
       <View>
         <SocialButton
-          icon={
-            'https://s3-eu-west-1.amazonaws.com/jj-files/icons/google-icon.png'
-          }
+          source={require('src/assets/google-icon.png')}
           title={this.i18n('google_log_in')}
           buttonStyle={{ backgroundColor: '#dc4e41' }}
           onPress={() => externalLogin(externalLoginTypes.google)}
         />
 
         <SocialButton
-          icon={
-            'https://s3-eu-west-1.amazonaws.com/jj-files/icons/facebook-icon.png'
-          }
+          source={require('src/assets/facebook-icon.png')}
           title={this.i18n('facebook_log_in')}
           buttonStyle={{ backgroundColor: '#5e81a8' }}
           onPress={() => externalLogin(externalLoginTypes.facebook)}
@@ -137,7 +131,7 @@ class Login extends Component {
         <LoadingButton
           onPress={() => internalLogin(email, password)}
           loading={loading}
-          title={this.i18n('log_in_button')}
+          title={R.toUpper(this.i18n('log_in_button'))}
           height={40}
           width={340}
           titleFontSize={16}
@@ -153,8 +147,10 @@ class Login extends Component {
   };
 
   render() {
+    const { navigation } = this.props;
+
     return (
-      <View style={[styles.container]}>
+      <View style={styles.container}>
         <ScrollView style={styles.auth_content}>
           <KeyboardAvoidingView
             style={{ flex: 1 }}
@@ -163,10 +159,7 @@ class Login extends Component {
           >
             <Image
               style={styles.logo}
-              source={{
-                uri:
-                  'https://s3-eu-west-1.amazonaws.com/jj-files/logo/Logo_colored.png'
-              }}
+              source={require('src/assets/textLogo.png')}
             />
             <View style={{ height: 10 }} />
             <Text style={styles.logo_title}>{this.i18n('login_title')}</Text>
@@ -187,39 +180,27 @@ class Login extends Component {
             <View style={{ height: 15 }} />
             {this.renderLoginButton()}
             <View style={{ height: 25 }} />
-            <Text
-              style={{ fontSize: 20, color: '#37474f', textAlign: 'center' }}
-            >
-              Are you not registered?
-            </Text>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center'
-              }}
-            >
-              <TouchableOpacity onPress={() => this.goToRegistration()}>
-                <Text style={{ fontSize: 20, color: '#00bcd4', marginTop: 15 }}>
-                  Sign up now
-                </Text>
-              </TouchableOpacity>
-            </View>
           </KeyboardAvoidingView>
         </ScrollView>
+        <View style={styles.arrowBackIcon}>
+          <ArrowBackIcon color="#00bcd4" onPress={() => navigation.goBack()} />
+        </View>
       </View>
     );
   }
 }
 
-export default connect(
-  ({ loginPage }) => {
-    const { email, password, validation, error, loading } = loginPage;
-    return { email, password, validation, error, loading };
-  },
-  {
-    internalLogin: actions.authorization.internalLogin,
-    externalLogin: actions.authorization.externalLogin,
-    changeField: actions.loginPage.changeField
-  }
+export default R.compose(
+  connect(
+    ({ loginPage }) => {
+      const { email, password, validation, error, loading } = loginPage;
+      return { email, password, validation, error, loading };
+    },
+    {
+      internalLogin: actions.authorization.internalLogin,
+      externalLogin: actions.authorization.externalLogin,
+      changeField: actions.loginPage.changeField
+    }
+  ),
+  withBackHandler(({ navigation }) => navigation.goBack())
 )(Login);

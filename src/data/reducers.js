@@ -41,7 +41,8 @@ const appReducer = combineReducers({
     },
     notifications
   ),
-  loginPage
+  loginPage,
+  registration
 });
 
 export default (state, action) => {

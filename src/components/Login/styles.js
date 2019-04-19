@@ -56,7 +56,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#00bcd4'
   },
   errorView: { height: 14 },
-  errorText: { color: 'red', textAlign: 'center' }
+  errorText: { color: 'red', textAlign: 'center' },
+  arrowBackIcon: {
+    position: 'absolute',
+    top: 15,
+    left: 15,
+    width: 30,
+    height: 30
+  }
 });
 
 export default styles;

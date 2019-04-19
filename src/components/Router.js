@@ -12,6 +12,7 @@ import Communities from 'src/components/Communities';
 import Notifications from 'src/components/Notifications';
 import Settings from 'src/components/Settings';
 import Login from 'src/components/Login';
+import SplashScreen from 'src/components/SplashScreen';
 import StartScreen from 'src/components/StartScreen';
 import UserProfile from 'src/components/UserProfile';
 import Registration from 'src/components/Registration';
@@ -90,8 +91,9 @@ export const Tabs = createMaterialBottomTabNavigator(routes, config);
 
 export const Navigator = StackNavigator(
   {
-    StartScreen,
+    SplashScreen,
     Tabs,
+    StartScreen,
     Login,
     Registration,
     UserProfile
@@ -99,7 +101,7 @@ export const Navigator = StackNavigator(
   {
     mode: 'card',
     headerMode: 'none',
-    initialRouteName: 'StartScreen',
+    initialRouteName: 'SplashScreen',
     navigationOptions: {
       gesturesEnabled: false
     }

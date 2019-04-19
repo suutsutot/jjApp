@@ -177,7 +177,6 @@ export const logout = () => (dispatch, getState) => {
         android: { fcmToken: newToken }
       })
     );
-  dispatch(NavigationActions.navigate({ routeName: 'Login' }));
   AsyncStorage.clear();
   dispatch({ type: types.AUTHORIZATION.LOGOUT });
 };

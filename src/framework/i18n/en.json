@@ -596,6 +596,8 @@
   "login_page_connection_problems_warning": "You're offline. Please, check your connection.",
   "login_page_wrong_credentials_warning": "Wrong email or password.",
   "login_page_external_error_warning": "External login error.",
-  "log_in_button": "LOG IN",
-  "login_title": "Login"
+  "log_in_button": "Log in",
+  "sign_up_button": "Sign up",
+  "login_title": "Login",
+  "log_in_tip": "Already have JJ account?"
 }
