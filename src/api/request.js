@@ -42,8 +42,6 @@ export default (url, options) =>
         ]);
       })
       .then(response => {
-        log('success', url, options);
-
         if (response.error && response.timeout) {
           const payload = {
             error: response.error,
@@ -52,9 +50,11 @@ export default (url, options) =>
             options
           };
 
+          log('error', payload);
           return resolve(payload);
         }
 
+        log('success', url, options);
         return response.json().then(resolve);
       })
       .catch(error => {
