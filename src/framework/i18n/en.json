@@ -591,13 +591,16 @@
   "confirm_password": "Confirm password",
   "email_password_title": "Type your email and password",
   "confirm_password_required": "Confirm password is required",
-  "google_log_in": "Log In With Google",
-  "facebook_log_in": "Log In With Facebook",
+  "google_log_in": "Log in with Google",
+  "facebook_log_in": "Log in with Facebook",
+  "google_sign_up": "Sign up with Google",
+  "facebook_sign_up": "Sign up With Facebook",
   "login_page_connection_problems_warning": "You're offline. Please, check your connection.",
   "login_page_wrong_credentials_warning": "Wrong email or password.",
   "login_page_external_error_warning": "External login error.",
   "log_in_button": "Log in",
   "sign_up_button": "Sign up",
   "login_title": "Login",
+  "signup_title": "Sign up",
   "log_in_tip": "Already have JJ account?"
 }

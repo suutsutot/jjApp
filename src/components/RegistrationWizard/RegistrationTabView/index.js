@@ -2,9 +2,9 @@ import * as React from 'react';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { connect } from 'react-redux';
 
-import RegistrationPersonalData from 'src/components/Registration/RegistrationTabView/RegistrationPersonalData';
-import RegistrationActities from 'src/components/Registration/RegistrationTabView/RegistrationActities';
-import RegistrationTab from 'src/components/Registration/RegistrationTabView/RegistrationTab';
+import RegistrationPersonalData from 'src/components/RegistrationWizard/RegistrationTabView/RegistrationPersonalData';
+import RegistrationActities from 'src/components/RegistrationWizard/RegistrationTabView/RegistrationActities';
+import RegistrationTab from 'src/components/RegistrationWizard/RegistrationTabView/RegistrationTab';
 import actions from 'src/data/actions';
 import i18n from 'src/framework/i18n';
 

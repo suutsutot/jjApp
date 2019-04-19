@@ -143,7 +143,7 @@ class Login extends Component {
   }
 
   goToRegistration = () => {
-    this.props.navigation.navigate('Registration');
+    this.props.navigation.navigate('RegistrationWizard');
   };
 
   render() {

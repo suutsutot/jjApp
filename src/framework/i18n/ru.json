@@ -632,12 +632,15 @@
   "choose_date_birthday": "Выберите дату своего дня рождения",
   "google_log_in": "Войти через Google",
   "facebook_log_in": "Войти через Facebook",
+  "google_sign_up": "Регистрация через Google",
+  "facebook_sign_up": "Регистрация через Facebook",
   "login_page_connection_problems_warning": "Пожалуйста, проверьте соединение с интернетом.",
   "login_page_wrong_credentials_warning": "Неверный email или пароль.",
   "login_page_external_error_warning": "Внешняя ошибка входа.",
   "log_in_button": "Войти",
   "sign_up_button": "Зарегистрироваться",
   "login_title": "Войти",
+  "signup_title": "Регистрация",
   "notification_action_error": "Произошла ошибка",
   "log_in_tip": "У Вас уже есть аккаунт?"
 }

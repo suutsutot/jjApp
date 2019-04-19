@@ -635,12 +635,15 @@
   "go_to_profile": "Gå til profil",
   "google_log_in": "Logg på med Google",
   "facebook_log_in": "Logg inn med Facebook",
+  "google_sign_up": "",
+  "facebook_sign_up": "",
   "login_page_connection_problems_warning": "Du er frakoblet. Vennligst sjekk forbindelsen din.",
   "login_page_wrong_credentials_warning": "Feil e-post eller passord.",
   "login_page_external_error_warning": "Ekstern påloggingsfeil.",
   "log_in_button": "Logg inn",
   "sign_up_button": "",
   "login_title": "Logg inn",
+  "signup_title": "",
   "notification_action_error": "Det har oppstått en feil",
   "log_in_tip": ""
 }
