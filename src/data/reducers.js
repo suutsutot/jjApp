@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import { persistReducer } from 'redux-persist';
 import { AsyncStorage } from 'react-native';
+import * as R from 'ramda';
 
 import types from 'src/constants/actionTypes';
 import { activityReducer } from './activity/activityReducer';
@@ -27,7 +28,7 @@ const appReducer = combineReducers({
     {
       key: 'user',
       storage: AsyncStorage,
-      whitelist: ['userId', 'email', 'profile']
+      whitelist: ['userId', 'email', 'notificationsInfo', 'profile']
     },
     user
   ),
@@ -40,13 +41,18 @@ const appReducer = combineReducers({
     },
     notifications
   ),
-  loginPage,
-  registration
+  loginPage
 });
 
 export default (state, action) => {
   if (action.type === types.AUTHORIZATION.LOGOUT) {
-    return appReducer(undefined, action);
+    const defaultState = appReducer(undefined, action);
+    return R.mergeDeepLeft(
+      {
+        user: { notificationsInfo: state.user.notificationsInfo }
+      },
+      defaultState
+    );
   }
 
   return appReducer(state, action);

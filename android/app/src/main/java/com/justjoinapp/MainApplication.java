@@ -12,6 +12,7 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
+import com.smixx.fabric.FabricPackage;
 
 import io.fabric.sdk.android.Fabric;
 import java.util.Arrays;
@@ -32,7 +33,8 @@ public class MainApplication extends Application implements ReactApplication {
             new SnackbarPackage(),
             new ReactNativePushNotificationPackage(),
             new VectorIconsPackage(),
-            new A0Auth0Package()
+            new A0Auth0Package(),
+            new FabricPackage()
       );
     }
 

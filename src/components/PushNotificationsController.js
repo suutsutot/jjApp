@@ -1,41 +1,47 @@
 import React, { Component } from 'react';
 import PushNotification from 'react-native-push-notification';
 import { connect } from 'react-redux';
-import { AsyncStorage, Platform } from 'react-native';
+import { Platform } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 
+import store from 'src/store';
 import config from 'src/config';
 import actions from 'src/data/actions';
 import { setPushNotificationToken } from '../api/userApi';
+import { isUserLoggedIn } from 'src/data/user/selector';
 
 class PushNotificationsController extends Component {
   componentDidMount() {
-    const { navigate, fetchList } = this.props;
+    const { fcmToken, navigate, fetchList, setNotificationsInfo } = this.props;
 
-    this.setFCMTokenIOS(this.props.fcmToken);
+    this.setFCMTokenIOS(fcmToken);
 
     PushNotification.configure({
-      onRegister: async ({ token, os }) => {
+      onRegister: ({ token, os }) => {
         console.log('TOKEN:', token);
         console.log('OS:', os);
 
-        AsyncStorage.setItem('pushNotificationToken', token);
+        setNotificationsInfo({ pushNotificationToken: token });
 
-        const userId = await AsyncStorage.getItem('userId');
-        userId && setPushNotificationToken(
-          userId,
-          Platform.select({
-            ios: { apnsToken: token },
-            android: { fcmToken: token }
-          })
-        );
+        const { userId } = store.getState().user;
+
+        userId &&
+          setPushNotificationToken(
+            userId,
+            Platform.select({
+              ios: { apnsToken: token },
+              android: { fcmToken: token }
+            })
+          );
       },
       onNotification: notification => {
         console.log('NOTIFICATION:', notification);
 
+        const isLoggedIn = isUserLoggedIn(store.getState());
+
         const { foreground } = notification;
         fetchList({ silent: foreground });
-        if (!foreground) {
+        if (isLoggedIn && !foreground) {
           navigate({ routeName: 'Notifications' });
         }
       },
@@ -54,9 +60,11 @@ class PushNotificationsController extends Component {
   async setFCMTokenIOS(fcmToken) {
     if (Platform.OS !== 'ios' || !fcmToken) return;
 
-    AsyncStorage.setItem('fcmToken', this.props.fcmToken);
+    const { setNotificationsInfo } = this.props;
 
-    const userId = await AsyncStorage.getItem('userId');
+    setNotificationsInfo({ fcmToken });
+    const { userId } = store.getState().user;
+
     userId && setPushNotificationToken(userId, { fcmToken });
   }
 
@@ -69,6 +77,7 @@ export default connect(
   undefined,
   {
     navigate: NavigationActions.navigate,
-    fetchList: actions.notifications.fetchList
+    fetchList: actions.notifications.fetchList,
+    setNotificationsInfo: actions.user.setNotificationsInfo
   }
 )(PushNotificationsController);

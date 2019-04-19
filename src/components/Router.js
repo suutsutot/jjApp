@@ -99,7 +99,10 @@ export const Navigator = StackNavigator(
   {
     mode: 'card',
     headerMode: 'none',
-    initialRouteName: 'StartScreen'
+    initialRouteName: 'StartScreen',
+    navigationOptions: {
+      gesturesEnabled: false
+    }
   }
 );
 

@@ -1,5 +1,8 @@
 import Auth0 from 'react-native-auth0';
 
-import credentials from 'src/config/auth0Config';
+import config from 'src/config';
 
-export default new Auth0(credentials);
+export default new Auth0({
+  clientId: config.auth0.clientId,
+  domain: config.auth0.domain
+});

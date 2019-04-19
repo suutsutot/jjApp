@@ -2,6 +2,14 @@ import { mergeRight } from 'ramda';
 
 import { delayPayload } from 'src/utils/asyncUtils';
 import { refresh } from './refreshTokenAPI';
+import { serverLog } from '../framework/logging';
+import { REQUEST_ERROR } from '../constants/errors';
+
+const log = (...args) => {
+  console.log('\n');
+  console.log(...args);
+  console.log('========= \n');
+};
 
 export default (url, options) =>
   new Promise(resolve => {
@@ -14,6 +22,8 @@ export default (url, options) =>
         return newToken;
       })
       .then(newToken => {
+        log('request', url, options);
+
         return Promise.race([
           delayPayload(5000, { error: 'timeout', timeout: true }),
           fetch(
@@ -33,13 +43,25 @@ export default (url, options) =>
       })
       .then(response => {
         if (response.error && response.timeout) {
-          return resolve(response);
+          const payload = {
+            error: response.error,
+            timeout: true,
+            url,
+            options
+          };
+
+          log('error', payload);
+          return resolve(payload);
         }
 
+        log('success', url, options);
         return response.json().then(resolve);
       })
       .catch(error => {
-        console.log('error', error);
-        resolve({ error });
+        const payload = { error, timeout: false, url, options };
+
+        log('error', payload);
+        serverLog(REQUEST_ERROR, payload);
+        resolve(payload);
       });
   });
