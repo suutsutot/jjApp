@@ -200,8 +200,6 @@ export const signUp = (username, password) => async dispatch => {
     });
 
     await AsyncStorage.setItem('refreshToken', credentials.refreshToken);
-
-    console.log('credentials.refreshToken', credentials.refreshToken);
     
     dispatch(NavigationActions.navigate({ routeName: 'RegistrationWizard' }));
     dispatch(signUpSuccess({}));

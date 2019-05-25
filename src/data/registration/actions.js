@@ -1,76 +1,44 @@
-import { AsyncStorage } from 'react-native';
+import { indexBy, map, prop } from 'ramda';
 
 import types from 'src/constants/actionTypes';
-import auth0 from 'src/framework/auth0';
 import { getActivities, putPersonalData } from 'src/api/registrationApi';
-import { postRegistrationData } from 'src/api/registrationApi';
-import { refreshByCredentials } from 'src/api/refreshTokenApi';
-// import { isNotConnected } from 'src/framework/connection';
-
-export const signUp = (email, password) => async dispatch => {
-  // if (await isNotConnected()) {
-  //   return dispatch(signUpError('connection'));
-  // }
-  try {
-    const responseData = await postRegistrationData({
-      client_id: 'BBLp6dT9ug1mxY5UI3xwld6cA3Ukn8aH',
-      email: email,
-      password: password,
-      connection: 'Username-Password-Authentication'
-    });
-
-    const credentials = await auth0.auth.passwordRealm({
-      username: email,
-      password: password,
-      realm: 'Username-Password-Authentication',
-      scope: 'openid offline_access'
-    });
-    await AsyncStorage.setItem('refreshToken', credentials.refreshToken);
-
-    const { idToken } = await refreshByCredentials(credentials);
-    AsyncStorage.setItem('idToken', idToken);
-
-    dispatch(setUserCredentialsInfo(responseData));
-    dispatch(changeTabIndex(1));
-    dispatch(fetchActivities())
-  } catch (error) {
-    // dispatch(signUpError('connection'));
-    console.log('AuthorizeActionError:', error);
-  }
-};
 
 export const fetchActivities = () => async dispatch => {
   dispatch(fetchActivitiesRequest());
   const activities = await getActivities();
-  if (activities) {
-    dispatch(fetchActivitiesSucess(activities));
+  const { error } = activities;
+
+  if (!error) {
+    const list = map(x => x.id, activities);
+    const data = indexBy(prop('id'), activities);
+
+    dispatch(fetchActivitiesSuccess(list, data));
   } else {
     dispatch(fetchActivitiesError('error'));
   }
 };
 
-
-export const postPersonalData = (personalDataForm) => async dispatch => {
-  console.log('personalDataForm', personalDataForm)
+export const postPersonalData = personalDataForm => async dispatch => {
   try {
     const responseData = await putPersonalData(personalDataForm);
-    console.log('responseData', responseData)
-  } catch(error) {
+  } catch (error) {
     console.log('Error:', error);
   }
-
-}
+};
 
 const fetchActivitiesRequest = () => {
   return {
-    type: types.REGISTRATION.FETCH_ACTIVITIES_REQUEST,
+    type: types.REGISTRATION.FETCH_ACTIVITIES_REQUEST
   };
 };
 
-const fetchActivitiesSucess = payload => {
+const fetchActivitiesSuccess = (list, data) => {
   return {
     type: types.REGISTRATION.FETCH_ACTIVITIES_SUCCESS,
-    payload
+    payload: {
+      list,
+      data
+    }
   };
 };
 

@@ -14,11 +14,6 @@ const defaultState = {
   userInfo: null,
   loading: false,
   error: '',
-  registrationForm: {
-    email: '',
-    password: '',
-    confirmPassword: ''
-  },
   personalDataForm: {
     firstName: '',
     lastName: '',
@@ -28,12 +23,12 @@ const defaultState = {
     language: ''
   },
   data: {
-    activities: [],
+    activities: {},
     languages: [{ value: 'English' }, { value: 'Norway' }, { value: 'Russian' }]
   },
+  activitiesList: [],
   selectedActivities: [],
-  personalDataValidation: [],
-  registrationValidation: []
+  personalDataValidation: []
 };
 
 export const registration = (state = defaultState, action) => {
@@ -46,8 +41,11 @@ export const registration = (state = defaultState, action) => {
       return mergeRight(state, { loading: true });
     }
     case types.REGISTRATION.FETCH_ACTIVITIES_SUCCESS: {
+      const { list, data } = payload;
+      
       return mergeRight(state, {
-        data: mergeRight(state.data, { activities: payload }),
+        activitiesList: list,
+        data: mergeRight(state.data, { activities: data }),
         loading: false
       });
     }
@@ -56,8 +54,7 @@ export const registration = (state = defaultState, action) => {
     }
     case types.REGISTRATION.CHANGE_FIELD: {
       const validationId = {
-        personalDataForm: 'personalDataValidation',
-        registrationForm: 'registrationValidation'
+        personalDataForm: 'personalDataValidation'
       }[payload.formId];
       return mergeRight(state, {
         [payload.formId]: mergeRight(state[payload.formId], payload.fields),
