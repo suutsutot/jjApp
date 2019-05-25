@@ -1,5 +1,5 @@
 const getUserId = (getState) => getState().user.userId;
-import { refresh } from 'src/api/refreshTokenAPI';
+import { refresh } from 'src/api/refreshTokenApi';
 import config from 'src/config';
 import types from 'src/constants/actionTypes';
 

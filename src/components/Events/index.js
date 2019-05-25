@@ -10,7 +10,7 @@ import {
   ScrollView
 } from 'react-native';
 import moment from 'moment';
-import { refresh } from 'src/api/refreshTokenAPI';
+import { refresh } from 'src/api/refreshTokenApi';
 import config from 'src/config';
 import { HeaderSection } from 'src/pureComponents';
 import { eventActions } from 'src/data/event';

@@ -1,7 +1,7 @@
 import { mergeRight } from 'ramda';
 
 import { delayPayload } from 'src/utils/asyncUtils';
-import { refresh } from './refreshTokenAPI';
+import { refresh } from './refreshTokenApi';
 import { serverLog } from '../framework/logging';
 import { REQUEST_ERROR } from '../constants/errors';
 

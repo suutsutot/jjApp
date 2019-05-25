@@ -15,7 +15,7 @@ let defaultState = {
 export let user = (state = defaultState, action) => {
   const { payload } = action;
   switch (action.type) {
-    case types.AUTHORIZATION.LOGIN: {
+    case types.AUTHORIZATION.LOGIN_SUCCESS: {
       const { userId, email, profile } = payload;
       return mergeRight(state, { userId, email, profile });
     }

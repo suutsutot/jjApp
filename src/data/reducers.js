@@ -12,6 +12,7 @@ import { events } from './event/reducer';
 import { notifications } from './notifications/reducer';
 import { registration } from './registration/reducer';
 import { loginPage } from './loginPage/reducer';
+import { registrationPage } from './registrationPage/reducer';
 
 const appReducer = combineReducers({
   nav: navReducer,
@@ -42,6 +43,7 @@ const appReducer = combineReducers({
     notifications
   ),
   loginPage,
+  registrationPage,
   registration
 });
 

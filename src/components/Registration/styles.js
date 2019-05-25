@@ -34,22 +34,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  icon_aria: {
-    height: 38,
-    width: 38,
-    backgroundColor: '#fff',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 2
-  },
-  social_button: {
-    height: 48,
-    borderRadius: 2,
-    paddingLeft: 5,
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
   login_button: {
     height: 40,
     borderRadius: 20,

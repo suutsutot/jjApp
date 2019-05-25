@@ -6,6 +6,7 @@ import * as users from './users/actions';
 import * as communities from './communities/actions';
 import * as registration from './registration/actions';
 import * as loginPage from './loginPage/actions';
+import * as registrationPage from './registrationPage/actions';
 
 export default {
   authorization,
@@ -15,5 +16,6 @@ export default {
   user,
   registration,
   communities,
-  loginPage
+  loginPage,
+  registrationPage
 };

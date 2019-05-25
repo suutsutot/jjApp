@@ -9,6 +9,6 @@ export const HeaderSection = ({ leftComponent, title, rightComponent }) => (
     containerStyle={styles.containerStyle}
     leftComponent={leftComponent}
     rightComponent={rightComponent}
-    centerComponent={{ text: title || 'JustJoin', style: styles.header }}
+    centerComponent={{ text: title, style: styles.header }}
   />
 );

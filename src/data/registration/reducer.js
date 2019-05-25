@@ -45,7 +45,7 @@ export const registration = (state = defaultState, action) => {
     case types.REGISTRATION.FETCH_ACTIVITIES_REQUEST: {
       return mergeRight(state, { loading: true });
     }
-    case types.REGISTRATION.FETCH_ACTIVITIES_SUCESS: {
+    case types.REGISTRATION.FETCH_ACTIVITIES_SUCCESS: {
       return mergeRight(state, {
         data: mergeRight(state.data, { activities: payload }),
         loading: false
@@ -85,11 +85,3 @@ export const registration = (state = defaultState, action) => {
       return state;
   }
 };
-
-//1 валидация по кнопке некст 
-//2 смена табы при успешном реквесте и подгрузка активностей
-//3 переводы активностей
-//4 картинки активностей найти какие не загрузились
-//5 сделать отправку формы второй табы
-//6 добавить валидацию которой не хватает
-//7 добавить 4 экшена при реквесте профиль формы

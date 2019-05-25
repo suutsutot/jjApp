@@ -2,9 +2,9 @@ import { AsyncStorage } from 'react-native';
 
 import types from 'src/constants/actionTypes';
 import auth0 from 'src/framework/auth0';
-import { getActivities, putPersonalData } from 'src/api/registrationAPI';
-import { postRegistrationData } from 'src/api/registrationAPI';
-import { refreshByCredentials } from 'src/api/refreshTokenAPI';
+import { getActivities, putPersonalData } from 'src/api/registrationApi';
+import { postRegistrationData } from 'src/api/registrationApi';
+import { refreshByCredentials } from 'src/api/refreshTokenApi';
 // import { isNotConnected } from 'src/framework/connection';
 
 export const signUp = (email, password) => async dispatch => {
@@ -69,7 +69,7 @@ const fetchActivitiesRequest = () => {
 
 const fetchActivitiesSucess = payload => {
   return {
-    type: types.REGISTRATION.FETCH_ACTIVITIES_SUCESS,
+    type: types.REGISTRATION.FETCH_ACTIVITIES_SUCCESS,
     payload
   };
 };
@@ -109,7 +109,7 @@ export const changeTabIndex = payload => {
   };
 };
 
-export const toogleActivity = payload => {
+export const toggleActivity = payload => {
   return {
     type: types.REGISTRATION.TOGGLE_ACTIVITY,
     payload

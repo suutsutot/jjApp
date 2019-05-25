@@ -17,7 +17,6 @@ class Registration extends React.Component {
       <View style={styles.view}>
         <HeaderSection
           leftComponent={<ArrowBackIcon onPress={() => navigation.goBack()} />}
-          title={' '}
           rightComponent={<Image style={styles.logo} source={{ uri }} />}
         />
         <RegistrationTabView />

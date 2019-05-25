@@ -5,11 +5,12 @@ import { connect } from 'react-redux';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import { Dropdown } from 'react-native-material-dropdown';
 import moment from 'moment';
+import * as R from 'ramda';
 
 import LoadingButton from 'src/pureComponents/Button/LoadingButton';
 import actions from 'src/data/actions';
-import i18n from 'src/framework/i18n';
 import { isFieldNotValid } from 'src/data/registration/selector';
+import withPhoneTranslations from 'src/hocs/withPhoneTranslations';
 
 import styles from './styles';
 
@@ -36,7 +37,8 @@ class RegistrationPersonalData extends Component {
         language
       },
       data,
-      personalDataValidation
+      personalDataValidation,
+      i18n
     } = this.props;
     const genderData = [{ value: i18n('male') }, { value: i18n('female') }];
 
@@ -114,13 +116,13 @@ class RegistrationPersonalData extends Component {
               labelHeight={15}
               onChangeText={value => changeField({ gender: value })}
             />
-            <TextField
-              label={i18n('choose_location')}
-              tintColor="#00bcd4"
-              onChangeText={value => changeField({ location: value })}
-              value={location}
-              labelHeight={15}
-            />
+            {/*<TextField*/}
+            {/*  label={i18n('choose_location')}*/}
+            {/*  tintColor="#00bcd4"*/}
+            {/*  onChangeText={value => changeField({ location: value })}*/}
+            {/*  value={location}*/}
+            {/*  labelHeight={15}*/}
+            {/*/>*/}
             <Dropdown
               label={i18n('language')}
               data={data.languages}
@@ -130,7 +132,7 @@ class RegistrationPersonalData extends Component {
             />
             <View style={styles.nextButton}>
               <LoadingButton
-                title="NEXT"
+                title={R.toUpper(i18n('next_button'))}
                 onPress={() => postPersonalData(personalDataForm)}
               />
             </View>
@@ -141,21 +143,29 @@ class RegistrationPersonalData extends Component {
   }
 }
 
-export default connect(
-  ({ registration }) => {
-    const { personalDataForm, data, personalDataValidation } = registration;
-    return { personalDataForm, data, personalDataValidation };
-  },
-  dispatch => {
-    return {
-      changeField: payload =>
-        dispatch(actions.registration.changeField('personalDataForm', payload)),
-      validateField: payload =>
-        dispatch(
-          actions.registration.validateField('personalDataValidation', payload)
-        ),
-      postPersonalData: personalDataForm =>
-        dispatch(actions.registration.postPersonalData(personalDataForm))
-    };
-  }
+export default R.compose(
+  connect(
+    ({ registration }) => {
+      const { personalDataForm, data, personalDataValidation } = registration;
+      return { personalDataForm, data, personalDataValidation };
+    },
+    dispatch => {
+      return {
+        changeField: payload =>
+          dispatch(
+            actions.registration.changeField('personalDataForm', payload)
+          ),
+        validateField: payload =>
+          dispatch(
+            actions.registration.validateField(
+              'personalDataValidation',
+              payload
+            )
+          ),
+        postPersonalData: personalDataForm =>
+          dispatch(actions.registration.postPersonalData(personalDataForm))
+      };
+    }
+  ),
+  withPhoneTranslations
 )(RegistrationPersonalData);

@@ -7,7 +7,7 @@ import io from 'socket.io-client';
 import config from 'src/config';
 import { setList } from 'src/data/notifications/actions';
 import {getNotifications} from 'src/api/notificationsApi';
-import {refresh} from 'src/api/refreshTokenAPI';
+import {refresh} from 'src/api/refreshTokenApi';
 
 const socket = io(config.server, {jsonp: false, transports: ['websocket']});
 

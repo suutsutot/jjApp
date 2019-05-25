@@ -1,67 +1,42 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { lifecycle } from 'recompose';
 import {
   ScrollView,
   View,
   Text,
   Image,
-  KeyboardAvoidingView,
-  TouchableOpacity
+  KeyboardAvoidingView
 } from 'react-native';
-import { Button } from 'react-native-elements';
 import { TextField } from 'react-native-material-textfield';
 import * as R from 'ramda';
 
 import actions from 'src/data/actions';
 import LoadingButton from 'src/pureComponents/Button/LoadingButton';
-import i18n from 'src/framework/i18n';
-import { getPhoneJJLocale } from 'src/framework/i18n/getPhoneLocale';
 import { externalLoginTypes } from 'src/data/authorization/constants';
 import withBackHandler from 'src/hocs/withBackHandler';
+import withPhoneTranslations from 'src/hocs/withPhoneTranslations';
+import { ArrowBackIcon } from 'src/pureComponents/ArrowBackIcon';
+import SocialButton from 'src/pureComponents/SocialButton';
 
 import styles from './styles';
-import { ArrowBackIcon } from '../../pureComponents/ArrowBackIcon';
-
-const SocialButton = ({ source, title, buttonStyle, onPress }) => {
-  return (
-    <Button
-      icon={
-        <View style={styles.icon_aria}>
-          <Image style={{ width: 24, height: 24 }} source={source} />
-        </View>
-      }
-      title={title}
-      titleStyle={{ flex: 1 }}
-      buttonStyle={[styles.social_button, { marginBottom: 24 }, buttonStyle]}
-      onPress={onPress}
-    />
-  );
-};
 
 class Registration extends Component {
-  phoneLocale = getPhoneJJLocale();
-
-  i18n = key => i18n(key, 'general', this.phoneLocale);
-
-  redirect(route) {
-    this.props.navigation.navigate(route);
-  }
-
   renderSocialButtons() {
-    const { externalLogin } = this.props;
+    const { externalLogin, i18n } = this.props;
 
     return (
       <View>
         <SocialButton
           source={require('src/assets/google-icon.png')}
-          title={this.i18n('google_sign_up')}
+          title={i18n('google_sign_up')}
           buttonStyle={{ backgroundColor: '#dc4e41' }}
           onPress={() => externalLogin(externalLoginTypes.google)}
         />
 
         <SocialButton
           source={require('src/assets/facebook-icon.png')}
-          title={this.i18n('facebook_sign_up')}
+          title={i18n('facebook_sign_up')}
           buttonStyle={{ backgroundColor: '#5e81a8' }}
           onPress={() => externalLogin(externalLoginTypes.facebook)}
         />
@@ -70,32 +45,37 @@ class Registration extends Component {
   }
 
   renderInputs() {
-    const { email, password, error, validation, changeField } = this.props;
+    const {
+      email,
+      password,
+      error,
+      validation,
+      changeField,
+      i18n
+    } = this.props;
 
     return (
       <View>
         <TextField
-          label={this.i18n('email_label')}
+          label={i18n('email_label')}
           tintColor="#00bcd4"
           keyboardType="email-address"
           onChangeText={value => changeField({ email: value })}
           value={email}
           error={
-            validation.indexOf('email') !== -1
-              ? this.i18n('email_required')
-              : null
+            validation.indexOf('email') !== -1 ? i18n('email_required') : null
           }
           autoCapitalize="none"
           labelHeight={15}
         />
         <TextField
-          label={this.i18n('password_label')}
+          label={i18n('password_label')}
           tintColor="#00bcd4"
           onChangeText={value => changeField({ password: value })}
           value={password}
           error={
             validation.indexOf('password') !== -1
-              ? this.i18n('password_required')
+              ? i18n('password_required')
               : null
           }
           autoCapitalize="none"
@@ -105,17 +85,17 @@ class Registration extends Component {
         <View style={styles.errorView}>
           {error === 'connection' ? (
             <Text style={styles.errorText}>
-              {this.i18n('login_page_connection_problems_warning')}
+              {i18n('login_page_connection_problems_warning')}
             </Text>
           ) : null}
           {error === 'credentials' ? (
             <Text style={styles.errorText}>
-              {this.i18n('login_page_wrong_credentials_warning')}
+              {i18n('login_page_wrong_credentials_warning')}
             </Text>
           ) : null}
           {error === 'externalError' ? (
             <Text style={styles.errorText}>
-              {this.i18n('login_page_external_error_warning')}
+              {i18n('login_page_external_error_warning')}
             </Text>
           ) : null}
         </View>
@@ -124,14 +104,14 @@ class Registration extends Component {
   }
 
   renderLoginButton() {
-    const { loading, email, password } = this.props;
+    const { loading, email, password, signUp, i18n } = this.props;
 
     return (
       <View>
         <LoadingButton
-          onPress={() => this.goToRegistration(email, password)}
+          onPress={() => signUp(email, password)}
           loading={loading}
-          title={R.toUpper(this.i18n('sign_up_button'))}
+          title={R.toUpper(i18n('sign_up_button'))}
           height={40}
           width={340}
           titleFontSize={16}
@@ -147,7 +127,7 @@ class Registration extends Component {
   };
 
   render() {
-    const { navigation } = this.props;
+    const { navigation, i18n } = this.props;
 
     return (
       <View style={styles.container}>
@@ -162,7 +142,7 @@ class Registration extends Component {
               source={require('src/assets/textLogo.png')}
             />
             <View style={{ height: 10 }} />
-            <Text style={styles.logo_title}>{this.i18n('signup_title')}</Text>
+            <Text style={styles.logo_title}>{i18n('signup_title')}</Text>
             <View style={{ height: 10 }} />
             {this.renderSocialButtons()}
             <Text
@@ -174,7 +154,7 @@ class Registration extends Component {
                 color: '#b0bec5'
               }}
             >
-              {this.i18n('or')}
+              {i18n('or')}
             </Text>
             {this.renderInputs()}
             <View style={{ height: 15 }} />
@@ -192,15 +172,23 @@ class Registration extends Component {
 
 export default R.compose(
   connect(
-    ({ loginPage }) => {
-      const { email, password, validation, error, loading } = loginPage;
+    ({ registrationPage }) => {
+      const { email, password, validation, error, loading } = registrationPage;
       return { email, password, validation, error, loading };
     },
     {
-      internalLogin: actions.authorization.internalLogin,
+      signUp: actions.authorization.signUp,
       externalLogin: actions.authorization.externalLogin,
-      changeField: actions.loginPage.changeField
+      changeField: actions.registrationPage.changeField,
+      fetchActivities: actions.registration.fetchActivities
     }
   ),
-  withBackHandler(({ navigation }) => navigation.goBack())
+  lifecycle({
+    componentDidMount() {
+      const { fetchActivities } = this.props;
+      fetchActivities();
+    }
+  }),
+  withBackHandler(({ navigation }) => navigation.goBack()),
+  withPhoneTranslations
 )(Registration);

@@ -1,36 +1,32 @@
-import * as React from 'react';
+import React from 'react';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { connect } from 'react-redux';
+import * as R from 'ramda';
 
 import RegistrationPersonalData from 'src/components/RegistrationWizard/RegistrationTabView/RegistrationPersonalData';
-import RegistrationActities from 'src/components/RegistrationWizard/RegistrationTabView/RegistrationActities';
-import RegistrationTab from 'src/components/RegistrationWizard/RegistrationTabView/RegistrationTab';
+import RegistrationActivities from 'src/components/RegistrationWizard/RegistrationTabView/RegistrationActivities';
 import actions from 'src/data/actions';
-import i18n from 'src/framework/i18n';
+import withPhoneTranslations from 'src/hocs/withPhoneTranslations';
 
 import styles from './styles';
 
 const PersonalData = () => <RegistrationPersonalData />;
-const Activities = () => <RegistrationActities />;
-const Registration = () => <RegistrationTab />;
+const Activities = () => <RegistrationActivities />;
 
 class RegistrationTabView extends React.Component {
-  state = {
-    routes: [
-      { key: 'Registration', title: i18n('registration_tab') },
-      { key: 'PersonalData', title: i18n('general_tab') },
-      { key: 'Activities', title: i18n('activities_tab') }
-    ]
-  };
-
   render() {
-    const { changeTabIndex, tabIndex } = this.props;
+    const { changeTabIndex, tabIndex, i18n } = this.props;
 
     return (
       <TabView
-        navigationState={{ index: tabIndex, routes: this.state.routes }}
+        navigationState={{
+          index: tabIndex,
+          routes: [
+            { key: 'PersonalData', title: i18n('general_tab') },
+            { key: 'Activities', title: i18n('activities_tab') }
+          ]
+        }}
         renderScene={SceneMap({
-          Registration,
           PersonalData,
           Activities
         })}
@@ -49,15 +45,18 @@ class RegistrationTabView extends React.Component {
   }
 }
 
-export default connect(
-  ({ registration }) => {
-    const { tabIndex } = registration;
-    return { tabIndex };
-  },
-  dispatch => {
-    return {
-      changeTabIndex: payload =>
-        dispatch(actions.registration.changeTabIndex(payload))
-    };
-  }
+export default R.compose(
+  connect(
+    ({ registration }) => {
+      const { tabIndex } = registration;
+      return { tabIndex };
+    },
+    dispatch => {
+      return {
+        changeTabIndex: payload =>
+          dispatch(actions.registration.changeTabIndex(payload))
+      };
+    }
+  ),
+  withPhoneTranslations
 )(RegistrationTabView);
