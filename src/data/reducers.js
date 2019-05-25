@@ -4,7 +4,6 @@ import { AsyncStorage } from 'react-native';
 import * as R from 'ramda';
 
 import types from 'src/constants/actionTypes';
-import { activityReducer } from './activity/activityReducer';
 import { authorize } from './authorization/reducer';
 import { user } from './user/reducer';
 import { navReducer } from './nav/navReducer';
@@ -16,7 +15,6 @@ import { registrationPage } from './registrationPage/reducer';
 
 const appReducer = combineReducers({
   nav: navReducer,
-  activity: activityReducer,
   authorize: persistReducer(
     {
       key: 'authorize',

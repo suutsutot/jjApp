@@ -2,7 +2,7 @@ import request from './request';
 import config from 'src/config';
 
 export const postRegistrationData = data => {
-  return fetch('https://ynpl.auth0.com/dbconnections/signup', {
+  return fetch(`${config.auth0.domain}/dbconnections/signup`, {
     method: 'POST',
     body: JSON.stringify(data),
     headers: {
@@ -21,8 +21,12 @@ export const getActivities = () => {
   });
 };
 
-export const putPersonalData = (responseData) => {
-  return request(`${config.server}/api/users`, {
-    method: 'PUT'
-  }, responseData);
+export const putPersonalData = responseData => {
+  return request(
+    `${config.server}/api/users`,
+    {
+      method: 'PUT'
+    },
+    responseData
+  );
 };

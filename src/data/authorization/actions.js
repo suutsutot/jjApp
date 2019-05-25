@@ -9,7 +9,7 @@ import actions from 'src/data/actions';
 import auth0 from 'src/framework/auth0';
 import config from 'src/config';
 import { isLoginFormValid } from 'src/data/loginPage/selector';
-import { postUserData } from 'src/api/authorizationAPI';
+import { postUserData, signUpUser } from 'src/api/authorizationAPI';
 import { isNotConnected } from 'src/framework/connection';
 import { serverLog } from 'src/framework/logging';
 import {
@@ -83,14 +83,14 @@ export const handleSignUpError = (errorType, response) => dispatch => {
   return dispatch(signUpError(errorType, response.error));
 };
 
-export const internalLogin = (username, password) => async dispatch => {
+export const internalLogin = (email, password) => async dispatch => {
   dispatch(actions.authorization.loginRequest());
 
   if (await isNotConnected()) {
     return dispatch(handleLoginError('connection'));
   }
 
-  if (!isLoginFormValid(username, password)) {
+  if (!isLoginFormValid(email, password)) {
     return;
   }
 
@@ -98,7 +98,7 @@ export const internalLogin = (username, password) => async dispatch => {
 
   try {
     const credentials = await auth0.auth.passwordRealm({
-      username,
+      username: email,
       password,
       realm: 'Username-Password-Authentication',
       scope: 'openid offline_access'
@@ -110,7 +110,7 @@ export const internalLogin = (username, password) => async dispatch => {
       throw result;
     }
   } catch (result) {
-    dispatch(handleLoginError('credentials', { ...result, username }));
+    dispatch(handleLoginError('credentials', { ...result, username: email }));
   }
 };
 
@@ -171,14 +171,14 @@ const loginError = (errorType, error = {}) => {
   };
 };
 
-export const signUp = (username, password) => async dispatch => {
+export const signUp = (email, password) => async dispatch => {
   dispatch(actions.authorization.signUpRequest());
 
   if (await isNotConnected()) {
     return dispatch(handleSignUpError('connection'));
   }
 
-  if (!isSignUpFormValid(username, password)) {
+  if (!isSignUpFormValid(email, password)) {
     return;
   }
 
@@ -186,25 +186,29 @@ export const signUp = (username, password) => async dispatch => {
 
   try {
     const responseData = await postRegistrationData({
-      client_id: 'BBLp6dT9ug1mxY5UI3xwld6cA3Ukn8aH',
-      email: username,
+      client_id: config.auth0.clientId,
+      email: email,
       password: password,
       connection: 'Username-Password-Authentication'
     });
 
     const credentials = await auth0.auth.passwordRealm({
-      username: username,
+      username: email,
       password: password,
       realm: 'Username-Password-Authentication',
       scope: 'openid offline_access'
     });
+
+    //https://ynpl.auth0.com/userinfo
+
+    // const response = await postUserData(email);
 
     await AsyncStorage.setItem('refreshToken', credentials.refreshToken);
     
     dispatch(NavigationActions.navigate({ routeName: 'RegistrationWizard' }));
     dispatch(signUpSuccess({}));
   } catch (result) {
-    dispatch(handleSignUpError('credentials', { ...result, username }));
+    dispatch(handleSignUpError('credentials', { ...result, username: email }));
   }
 };
 

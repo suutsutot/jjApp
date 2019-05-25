@@ -14,15 +14,7 @@ export const fetchActivities = () => async dispatch => {
 
     dispatch(fetchActivitiesSuccess(list, data));
   } else {
-    dispatch(fetchActivitiesError('error'));
-  }
-};
-
-export const postPersonalData = personalDataForm => async dispatch => {
-  try {
-    const responseData = await putPersonalData(personalDataForm);
-  } catch (error) {
-    console.log('Error:', error);
+    dispatch(fetchActivitiesError(error));
   }
 };
 
@@ -45,6 +37,39 @@ const fetchActivitiesSuccess = (list, data) => {
 const fetchActivitiesError = payload => {
   return {
     type: types.REGISTRATION.FETCH_ACTIVITIES_REQUEST,
+    payload
+  };
+};
+
+export const postPersonalData = personalDataForm => async dispatch => {
+  dispatch(postPersonalDataRequest());
+  const response = await putPersonalData(personalDataForm);
+  const { error } = response;
+
+  if (!error) {
+    dispatch(postPersonalDataSuccess());
+    dispatch(changeTabIndex(1));
+  } else {
+    dispatch(postPersonalDataError(error));
+  }
+};
+
+const postPersonalDataRequest = () => {
+  return {
+    type: types.REGISTRATION.POST_PERSONAL_DATA_REQUEST
+  };
+};
+
+const postPersonalDataSuccess = payload => {
+  return {
+    type: types.REGISTRATION.POST_PERSONAL_DATA_SUCCESS,
+    payload
+  };
+};
+
+const postPersonalDataError = payload => {
+  return {
+    type: types.REGISTRATION.POST_PERSONAL_DATA_ERROR,
     payload
   };
 };
@@ -83,10 +108,3 @@ export const toggleActivity = payload => {
     payload
   };
 };
-
-// const signUpError = (errorType, error = {}) => {
-//   return {
-//     type: types.AUTHORIZATION.REGISTRATION_ERROR,
-//     payload: { errorType, error }
-//   };
-// };

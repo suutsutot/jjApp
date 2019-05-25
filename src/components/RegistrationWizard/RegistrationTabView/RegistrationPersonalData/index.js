@@ -40,7 +40,6 @@ class RegistrationPersonalData extends Component {
       personalDataValidation,
       i18n
     } = this.props;
-    const genderData = [{ value: i18n('male') }, { value: i18n('female') }];
 
     return (
       <View style={styles.view}>
@@ -111,7 +110,10 @@ class RegistrationPersonalData extends Component {
             </View>
             <Dropdown
               label={i18n('gender')}
-              data={genderData}
+              data={[
+                { value: 'male', label: i18n('male') },
+                { value: 'female', label: i18n('female') }
+              ]}
               value={gender}
               labelHeight={15}
               onChangeText={value => changeField({ gender: value })}
