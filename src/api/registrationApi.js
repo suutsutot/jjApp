@@ -1,7 +1,7 @@
 import request from './request';
 import config from 'src/config';
 
-export const postRegistrationData = data => {
+export const registerUserAuth0 = data => {
   return fetch(`${config.auth0.domain}/dbconnections/signup`, {
     method: 'POST',
     body: JSON.stringify(data),
@@ -21,12 +21,9 @@ export const getActivities = () => {
   });
 };
 
-export const putPersonalData = responseData => {
-  return request(
-    `${config.server}/api/users`,
-    {
-      method: 'PUT'
-    },
-    responseData
-  );
+export const putPersonalData = data => {
+  return request(`${config.server}/api/users`, {
+    method: 'PUT',
+    body: JSON.stringify(data)
+  });
 };

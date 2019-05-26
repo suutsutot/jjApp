@@ -1,5 +1,7 @@
 import { indexBy, map, prop } from 'ramda';
+import * as R from 'ramda';
 
+import { getProfile, getPersonalDataForm } from './selectors';
 import types from 'src/constants/actionTypes';
 import { getActivities, putPersonalData } from 'src/api/registrationApi';
 
@@ -41,9 +43,19 @@ const fetchActivitiesError = payload => {
   };
 };
 
-export const postPersonalData = personalDataForm => async dispatch => {
+export const postPersonalData = () => async (dispatch, getState) => {
   dispatch(postPersonalDataRequest());
-  const response = await putPersonalData(personalDataForm);
+
+  const state = getState();
+  const form = getPersonalDataForm(state);
+  const data = R.mergeRight(getProfile(state), {
+    firstName: form.firstName,
+    lastName: form.lastName,
+    gender: form.gender,
+    languages: [form.language]
+  });
+
+  const response = await putPersonalData(data);
   const { error } = response;
 
   if (!error) {
@@ -70,13 +82,6 @@ const postPersonalDataSuccess = payload => {
 const postPersonalDataError = payload => {
   return {
     type: types.REGISTRATION.POST_PERSONAL_DATA_ERROR,
-    payload
-  };
-};
-
-const setUserCredentialsInfo = payload => {
-  return {
-    type: types.REGISTRATION.CREDENTIALS_INFO,
     payload
   };
 };

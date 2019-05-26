@@ -11,15 +11,17 @@ import {
 
 const defaultState = {
   tabIndex: 0,
-  userInfo: null,
   loading: false,
   error: '',
+  userId: null,
+  email: null,
+  profile: null,
   personalDataForm: {
     firstName: '',
     lastName: '',
-    birthday: '',
+    // birthday: '',
     gender: '',
-    location: '',
+    // location: '',
     language: ''
   },
   data: {
@@ -34,15 +36,16 @@ const defaultState = {
 export const registration = (state = defaultState, action) => {
   const { payload } = action;
   switch (action.type) {
-    case types.REGISTRATION.CREDENTIALS_INFO: {
-      return mergeRight(state, { userInfo: payload });
+    case types.AUTHORIZATION.SIGN_UP_SUCCESS: {
+      const { userId, email, profile } = payload;
+      return mergeRight(state, { userId, email, profile });
     }
     case types.REGISTRATION.FETCH_ACTIVITIES_REQUEST: {
       return mergeRight(state, { loading: true });
     }
     case types.REGISTRATION.FETCH_ACTIVITIES_SUCCESS: {
       const { list, data } = payload;
-      
+
       return mergeRight(state, {
         activitiesList: list,
         data: mergeRight(state.data, { activities: data }),

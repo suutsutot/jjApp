@@ -1,5 +1,6 @@
 import { AsyncStorage, Platform } from 'react-native';
 import { NavigationActions } from 'react-navigation';
+import * as R from 'ramda';
 import * as R_ from 'ramda-extension';
 
 import { refreshByCredentials } from 'src/api/refreshTokenApi';
@@ -9,7 +10,10 @@ import actions from 'src/data/actions';
 import auth0 from 'src/framework/auth0';
 import config from 'src/config';
 import { isLoginFormValid } from 'src/data/loginPage/selector';
-import { postUserData, signUpUser } from 'src/api/authorizationAPI';
+import {
+  duplicateAuth0Login,
+  duplicateAuth0SignUp
+} from 'src/api/authorizationAPI';
 import { isNotConnected } from 'src/framework/connection';
 import { serverLog } from 'src/framework/logging';
 import {
@@ -17,7 +21,7 @@ import {
   SEND_PUSH_NOTIFICATIONS_INFO_ERROR
 } from 'src/constants/errors';
 import { isSignUpFormValid } from 'src/data/registrationPage/selector';
-import { postRegistrationData } from 'src/api/registrationApi';
+import { registerUserAuth0 } from 'src/api/registrationApi';
 
 const baseLogin = credentials => async (dispatch, getState) => {
   await AsyncStorage.setItem('refreshToken', credentials.refreshToken);
@@ -25,7 +29,7 @@ const baseLogin = credentials => async (dispatch, getState) => {
   const { accessToken } = await refreshByCredentials(credentials);
 
   const profile = await auth0.auth.userInfo({ token: accessToken });
-  const response = await postUserData(profile.email);
+  const response = await duplicateAuth0Login(profile.email);
 
   if (response.error) {
     return response;
@@ -185,7 +189,7 @@ export const signUp = (email, password) => async dispatch => {
   dispatch(actions.registrationPage.toggleLoading(true));
 
   try {
-    const responseData = await postRegistrationData({
+    const registerData = await registerUserAuth0({
       client_id: config.auth0.clientId,
       email: email,
       password: password,
@@ -199,14 +203,27 @@ export const signUp = (email, password) => async dispatch => {
       scope: 'openid offline_access'
     });
 
-    //https://ynpl.auth0.com/userinfo
-
-    // const response = await postUserData(email);
-
     await AsyncStorage.setItem('refreshToken', credentials.refreshToken);
-    
+
+    const { accessToken } = await refreshByCredentials(credentials);
+    const userInfo = await auth0.auth.userInfo({ token: accessToken });
+    const userInfoPrepared = R.mergeRight(userInfo, {
+      auth0Id: userInfo.sub,
+      user_id: userInfo.sub
+    });
+    const response = await duplicateAuth0SignUp(userInfoPrepared);
+    const response1 = await duplicateAuth0SignUp(userInfoPrepared);
+
+    const profile = response1.user;
+
     dispatch(NavigationActions.navigate({ routeName: 'RegistrationWizard' }));
-    dispatch(signUpSuccess({}));
+    dispatch(
+      signUpSuccess({
+        userId: profile._id,
+        email,
+        profile
+      })
+    );
   } catch (result) {
     dispatch(handleSignUpError('credentials', { ...result, username: email }));
   }

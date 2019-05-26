@@ -9,7 +9,7 @@ import * as R from 'ramda';
 
 import LoadingButton from 'src/pureComponents/Button/LoadingButton';
 import actions from 'src/data/actions';
-import { isFieldNotValid } from 'src/data/registration/selector';
+import { isFieldNotValid } from 'src/data/registration/selectors';
 import withPhoneTranslations from 'src/hocs/withPhoneTranslations';
 
 import styles from './styles';
@@ -27,7 +27,6 @@ class RegistrationPersonalData extends Component {
       changeField,
       validateField,
       postPersonalData,
-      personalDataForm,
       personalDataForm: {
         firstName,
         lastName,
@@ -78,36 +77,36 @@ class RegistrationPersonalData extends Component {
                   : null
               }
             />
-            <View style={styles.dateView}>
-              <TouchableOpacity
-                onPress={() => this.setState({ isDateTimePickerVisible: true })}
-              >
-                {birthday ? (
-                  <View style={styles.birthdayView}>
-                    <Text style={styles.birthdayText}>
-                      {i18n('date_of_birthday')}
-                    </Text>
-                    <Text style={styles.birthdayDate}>
-                      {moment(birthday).format('l')}
-                    </Text>
-                  </View>
-                ) : (
-                  <Text style={styles.chooseDateText}>
-                    {i18n('choose_date_birthday')}
-                  </Text>
-                )}
-              </TouchableOpacity>
-              <DateTimePicker
-                isVisible={this.state.isDateTimePickerVisible}
-                onConfirm={date => {
-                  changeField({ birthday: date });
-                  this.setState({ isDateTimePickerVisible: false });
-                }}
-                onCancel={() =>
-                  this.setState({ isDateTimePickerVisible: false })
-                }
-              />
-            </View>
+            {/*<View style={styles.dateView}>*/}
+            {/*  <TouchableOpacity*/}
+            {/*    onPress={() => this.setState({ isDateTimePickerVisible: true })}*/}
+            {/*  >*/}
+            {/*    {birthday ? (*/}
+            {/*      <View style={styles.birthdayView}>*/}
+            {/*        <Text style={styles.birthdayText}>*/}
+            {/*          {i18n('date_of_birthday')}*/}
+            {/*        </Text>*/}
+            {/*        <Text style={styles.birthdayDate}>*/}
+            {/*          {moment(birthday).format('l')}*/}
+            {/*        </Text>*/}
+            {/*      </View>*/}
+            {/*    ) : (*/}
+            {/*      <Text style={styles.chooseDateText}>*/}
+            {/*        {i18n('choose_date_birthday')}*/}
+            {/*      </Text>*/}
+            {/*    )}*/}
+            {/*  </TouchableOpacity>*/}
+            {/*  <DateTimePicker*/}
+            {/*    isVisible={this.state.isDateTimePickerVisible}*/}
+            {/*    onConfirm={date => {*/}
+            {/*      changeField({ birthday: date });*/}
+            {/*      this.setState({ isDateTimePickerVisible: false });*/}
+            {/*    }}*/}
+            {/*    onCancel={() =>*/}
+            {/*      this.setState({ isDateTimePickerVisible: false })*/}
+            {/*    }*/}
+            {/*  />*/}
+            {/*</View>*/}
             <Dropdown
               label={i18n('gender')}
               data={[
@@ -135,7 +134,7 @@ class RegistrationPersonalData extends Component {
             <View style={styles.nextButton}>
               <LoadingButton
                 title={R.toUpper(i18n('next_button'))}
-                onPress={() => postPersonalData(personalDataForm)}
+                onPress={() => postPersonalData()}
               />
             </View>
           </View>
