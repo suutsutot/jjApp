@@ -27,3 +27,10 @@ export const putPersonalData = data => {
     body: JSON.stringify(data)
   });
 };
+
+export const postUserActivities = data => {
+  return request(`${config.server}/api/users`, {
+    method: 'PUT',
+    body: JSON.stringify(data)
+  });
+};

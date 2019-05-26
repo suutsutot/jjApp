@@ -6,6 +6,8 @@ import DateTimePicker from 'react-native-modal-datetime-picker';
 import { Dropdown } from 'react-native-material-dropdown';
 import moment from 'moment';
 import * as R from 'ramda';
+import ActionButton from 'react-native-action-button';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import LoadingButton from 'src/pureComponents/Button/LoadingButton';
 import actions from 'src/data/actions';
@@ -131,14 +133,19 @@ class RegistrationPersonalData extends Component {
               labelHeight={15}
               onChangeText={value => changeField({ language: value })}
             />
-            <View style={styles.nextButton}>
-              <LoadingButton
-                title={R.toUpper(i18n('next_button'))}
-                onPress={() => postPersonalData()}
-              />
-            </View>
           </View>
         </ScrollView>
+        <ActionButton
+          renderIcon={() => (
+            <MaterialIcons
+              name="check"
+              color="white"
+              size={24}
+            />
+          )}
+          buttonColor="#00bcd4"
+          onPress={() => postPersonalData()}
+        />
       </View>
     );
   }

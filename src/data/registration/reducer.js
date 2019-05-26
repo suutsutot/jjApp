@@ -55,6 +55,10 @@ export const registration = (state = defaultState, action) => {
     case types.REGISTRATION.FETCH_ACTIVITIES_ERROR: {
       return mergeRight(state, { error: payload, loading: false });
     }
+    case types.REGISTRATION.POST_ACTIVITIES_SUCCESS:
+    case types.REGISTRATION.POST_PERSONAL_DATA_SUCCESS: {
+      return mergeRight(state, { profile: payload });
+    }
     case types.REGISTRATION.CHANGE_FIELD: {
       const validationId = {
         personalDataForm: 'personalDataValidation'
