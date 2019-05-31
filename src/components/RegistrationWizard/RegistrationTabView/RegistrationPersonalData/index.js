@@ -115,6 +115,7 @@ class RegistrationPersonalData extends Component {
                 { value: 'male', label: i18n('male') },
                 { value: 'female', label: i18n('female') }
               ]}
+
               value={gender}
               labelHeight={15}
               onChangeText={value => changeField({ gender: value })}

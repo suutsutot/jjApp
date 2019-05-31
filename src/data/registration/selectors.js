@@ -1,6 +1,7 @@
 import * as R from 'ramda';
 
 export const isFieldNotValid = value => R.isNil(value) || R.isEmpty(value);
+
 export const getProfile = state => state.registration.profile;
 export const getPersonalDataForm = state => state.registration.personalDataForm;
 export const getSelectedActivitiesIds = state =>
