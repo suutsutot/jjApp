@@ -10,12 +10,11 @@ import {
   ScrollView
 } from 'react-native';
 import moment from 'moment';
-import { refresh } from 'src/api/refreshTokenAPI';
+import { refresh } from 'src/api/refreshTokenApi';
 import config from 'src/config';
 import { HeaderSection } from 'src/pureComponents';
 import { eventActions } from 'src/data/event';
 import { actions } from 'src/data/actions';
-import { activityActions } from 'src/data/activity';
 import styles from './styles';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 

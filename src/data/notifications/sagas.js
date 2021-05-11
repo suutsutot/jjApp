@@ -28,7 +28,7 @@ function* fetchList(action) {
 
     const navState = yield select(state => state.nav);
     const {
-      routes: [StartScreen, { index }]
+      routes: [SplashScreen, { index }]
     } = navState;
     console.log('index', index);
     console.log('navState', navState);

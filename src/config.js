@@ -6,7 +6,7 @@ const config = {
     client: 'https://justjoin1.ru',
     auth0: {
       clientId: 'BBLp6dT9ug1mxY5UI3xwld6cA3Ukn8aH',
-      domain: 'ynpl.auth0.com'
+      domain: 'https://ynpl.auth0.com'
     }
   },
   prod: {

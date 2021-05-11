@@ -12,8 +12,11 @@ import Communities from 'src/components/Communities';
 import Notifications from 'src/components/Notifications';
 import Settings from 'src/components/Settings';
 import Login from 'src/components/Login';
+import Registration from 'src/components/Registration';
+import SplashScreen from 'src/components/SplashScreen';
 import StartScreen from 'src/components/StartScreen';
 import UserProfile from 'src/components/UserProfile';
+import RegistrationWizard from 'src/components/RegistrationWizard';
 import { getNotViewedNotificationsCount } from 'src/data/notifications/selectors';
 import BottomTabsBadge from 'src/pureComponents/BottomTabsBadge';
 import i18n from 'src/framework/i18n';
@@ -89,15 +92,18 @@ export const Tabs = createMaterialBottomTabNavigator(routes, config);
 
 export const Navigator = StackNavigator(
   {
-    StartScreen,
+    SplashScreen,
     Tabs,
+    StartScreen,
     Login,
+    Registration,
+    RegistrationWizard,
     UserProfile
   },
   {
     mode: 'card',
     headerMode: 'none',
-    initialRouteName: 'StartScreen',
+    initialRouteName: 'SplashScreen',
     navigationOptions: {
       gesturesEnabled: false
     }

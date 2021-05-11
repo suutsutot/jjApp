@@ -19,7 +19,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import i18n from 'src/framework/i18n';
 import { Button, HeaderSection } from 'src/pureComponents';
 import config from 'src/config';
-import { refresh } from 'src/api/refreshTokenAPI';
+import { refresh } from 'src/api/refreshTokenApi';
 import actions from 'src/data/actions';
 import {
   getNotification,

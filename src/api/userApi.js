@@ -16,7 +16,7 @@ export const setPushNotificationToken = (userId, tokenData) => {
   });
 };
 
-export const userData = (userId) => {
+export const getUserData = (userId) => {
   return request(`${config.server}/api/users/profile/${userId}`, {
     method: 'GET'
   })

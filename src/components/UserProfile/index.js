@@ -4,11 +4,12 @@ import { Avatar } from 'react-native-elements';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { isEmpty, isNil, compose } from 'ramda';
+import * as R from 'ramda';
 
 import withBackHandler from 'src/hocs/withBackHandler';
 import { HeaderSection } from 'src/pureComponents/HeaderSection';
 import { ArrowBackIcon } from 'src/pureComponents/ArrowBackIcon';
-import { userData } from 'src/api/userApi';
+import { getUserData } from 'src/api/userApi';
 import i18n from 'src/framework/i18n';
 import actions from 'src/data/actions';
 
@@ -32,7 +33,7 @@ class UserProfile extends Component {
 
   fetchUserData() {
     const userId = this.props.navigation.state.params.userId;
-    userData(userId).then(data => {
+    getUserData(userId).then(data => {
       this.props.setUserProfile(data.user);
       this.setState({ refreshing: false });
     });
@@ -68,25 +69,29 @@ class UserProfile extends Component {
               <Text style={styles.nameBlock}>
                 {profile.firstName + ' ' + profile.lastName}
               </Text>
-              <Text>
-                <Text style={styles.textBlock}>{i18n('city')} </Text>
-                <Text style={styles.blackTextBlock}>
-                  {profile.location.details.city ||
-                    profile.location.details.state}
+              {profile.location && profile.location.details && (
+                <Text>
+                  <Text style={styles.textBlock}>{i18n('city')} </Text>
+                  <Text style={styles.blackTextBlock}>
+                    {profile.location.details.city ||
+                      profile.location.details.state}
+                  </Text>
                 </Text>
-              </Text>
+              )}
               <Text>
                 <Text style={styles.textBlock}>{i18n('gender')} </Text>
                 <Text style={styles.blackTextBlock}>
                   {i18n(profile.gender)}
                 </Text>
               </Text>
-              <Text>
-                <Text style={styles.textBlock}>{i18n('age')} </Text>
-                <Text style={styles.blackTextBlock}>
-                  {moment().diff(profile.birthday, 'years', false)}
+              {profile.birthday && (
+                <Text>
+                  <Text style={styles.textBlock}>{i18n('age')} </Text>
+                  <Text style={styles.blackTextBlock}>
+                    {moment().diff(profile.birthday, 'years', false)}
+                  </Text>
                 </Text>
-              </Text>
+              )}
             </View>
           )}
         </ScrollView>

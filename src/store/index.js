@@ -1,4 +1,5 @@
-import { createStore, compose, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import { persistStore } from 'redux-persist';
 import thunk from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
@@ -8,7 +9,7 @@ import sagas from 'src/data/sagas';
 import {navigationMiddleware} from 'src/config/navigationHelpers';
 const sagaMiddleware = createSagaMiddleware();
 
-const store = createStore(reducers, {}, compose(
+const store = createStore(reducers, {}, composeWithDevTools(
   applyMiddleware(thunk, navigationMiddleware, sagaMiddleware)
 ));
 

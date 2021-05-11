@@ -19,8 +19,10 @@ import i18n from 'src/framework/i18n';
 import styles from './styles';
 
 export class Settings extends Component {
+
   render() {
     const { loaded, name, avatar, userId, logout } = this.props;
+
     return (
       <View style={{ flex: 1 }}>
         <HeaderSection title={i18n('settings')} />
